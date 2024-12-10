@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDMC | Quality Metric Analysis</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+        .navbar {
+            z-index: 1;
+            background-color: #1E2337;
+            color: ivory !important;
+            box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6);
+        }
+        .main-content {
+            display: flex;
+            height: calc(100vh - 56px);
+        }
+        .file-display, .analysis-display {
+            flex: 1;
+            padding: 10px;
+            overflow-y: auto;
+            overflow-y: auto; 
+            max-height: calc(100vh - 26px);
+        }
+        .drag-drop-container {
+            flex: 1;
+            padding: 20px;
+            margin: 10px;
+            margin-top: 20px;
+            border: 2px dashed #4CAF50;
+            color: white;
+            border-radius: 10px;
+        }
+        .drag-drop-container.dragging {
+            background-color: #444;
+        }
+        .fl-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+        }
+        .fl-table th, .fl-table td {
+            text-align: left;
+            padding: 5px;
+            font-size: 10px;
+            border: 1px solid #ddd;
+        }
+        .fl-table th {
+            background-color: #1E2337;
+            font-variant-caps: titling-caps;
+            font-size: 12px;
+            color: white;
+        }
+        .section-title {
+            margin-top: 10px;
+            color: #1E2337;
+        }
+        .fileInput{
+
+            display:none;
+        }
+    </style>
+</head>
+<body>
+  
+            <!-- Navbar -->
+            <nav class="navbar navbar-expand-lg">
+                <div class="container-fluid">
+                    <a class="navbar-brand text-white" href="#">EDMC | Quality Metric Analysis</a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse" id="navbarNav">
+                        <ul class="navbar-nav ms-auto">
+                            <li class="nav-item">
+                                <a class="nav-link active text-white" href="#">Home</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-white" href="#">Settings</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+        
+            <!-- Main Content -->
+            <div class="main-content">
+                <!-- Left Section: File Display -->
+                <div class="file-display">
+                    <h2>Uploaded Files</h2>
+                    <table class="fl-table" id="fileTable">
+                        <thead>
+                            <tr>
+                                <th>File Name</th>
+                                <th>File Size</th>
+                                <th>Last Modified</th>
+                                <th>MIME Type</th>
+                                <th>Extension</th>
+                                <th>Encoding</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Example Output -->
+                            <tr>
+                                <td>example.mp3</td>
+                                <td>5.4 MB</td>
+                                <td>12/08/2024, 14:23</td>
+                                <td>audio/mpeg</td>
+                                <td>.mp3</td>
+                                <td>UTF-8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    <h2 class="section-title">Audio File Properties</h2>
+                    <table class="fl-table" id="audioPropertiesTable">
+                        <thead>
+                            <tr>
+                                <th>Property</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Sample Rate</td>
+                                <td>44,100 Hz</td>
+                            </tr>
+                            <tr>
+                                <td>Channels</td>
+                                <td>2</td>
+                            </tr>
+                            <tr>
+                                <td>Duration</td>
+                                <td>3 min 45 sec</td>
+                            </tr>
+                            <tr>
+                                <td>Bit Depth</td>
+                                <td>16-bit</td>
+                            </tr>
+                            <tr>
+                                <td>Length (Samples)</td>
+                                <td>165,000</td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    <h2 class="section-title">Spectral Features</h2>
+                    <table class="fl-table" id="spectralFeaturesTable">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>Spectral Centroid</td>
+                                <td>3450 Hz</td>
+                            </tr>
+                            <tr>
+                                <td>Spectral Flatness</td>
+                                <td>0.8</td>
+                            </tr>
+                        </tbody>
+                    </table>
+        
+                    <h2 class="section-title">Temporal Features</h2>
+                    <table class="fl-table" id="temporalFeaturesTable">
+                        <thead>
+                            <tr>
+                                <th>Feature</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>RMS</td>
+                                <td>0.25</td>
+                            </tr>
+                            <tr>
+                                <td>Peak Amplitude</td>
+                                <td>1.0</td>
+                            </tr>
+                            <tr>
+                                <td>Zero Crossing Rate</td>
+                                <td>12.5%</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            <!-- Right Section: Drag-and-Drop -->
+            <div class="drag-drop-container" id="dragDropContainer">
+                <h2>Drag & Drop Your Files Here</h2>
+                <p>Or click to select files.</p>
+                <input type="file" id="fileInput" multiple >
+                <button class="btn btn-primary" onclick="document.getElementById('fileInput').click()">Select Files</button>
+            </div>
+        </div>
+
+    
+    <script>
+      const fs = require('fs');
+const crypto = require('crypto');
+const mm = require('music-metadata');
+const { FFT } = require('fft.js');
+const { writeFile } = require('fs/promises');
+const winston = require('winston'); // For logging
+const path = require('path');
+
+// Configure Logger
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'app.log' }),
+    ],
+});
+
+// Configuration
+const config = {
+    allowedExtensions: ['.mp3', '.wav', '.flac'], // Supported file types
+    outputFileName: 'audio_analysis_results.json',
+};
+
+// Helper: Validate file type
+function isValidFile(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    return config.allowedExtensions.includes(ext);
+}
+
+// Helper: Extract file metadata
+async function extractFileMetadata(filePath) {
+    try {
+        const stats = fs.statSync(filePath);
+        const hash = crypto.createHash('md5').update(fs.readFileSync(filePath)).digest('hex');
+
+        return {
+            fileName: path.basename(filePath),
+            fileSizeBytes: stats.size,
+            fileSizeHuman: (stats.size / 1024).toFixed(2) + ' KB',
+            lastModified: stats.mtime.toISOString(),
+            fileHashMD5: hash,
+        };
+    } catch (error) {
+        logger.error(`Error extracting file metadata: ${error.message}`);
+        throw new Error('File metadata extraction failed.');
+    }
+}
+
+// Helper: Extract audio metadata
+async function extractAudioMetadata(filePath) {
+    try {
+        const metadata = await mm.parseFile(filePath);
+        return {
+            format: metadata.format.container || 'Unknown',
+            durationSeconds: metadata.format.duration || 'N/A',
+            bitrate: metadata.format.bitrate || 'N/A',
+            sampleRate: metadata.format.sampleRate || 'N/A',
+            channels: metadata.format.numberOfChannels || 'N/A',
+            codec: metadata.format.codec || 'Unknown',
+        };
+    } catch (error) {
+        logger.error(`Error extracting audio metadata: ${error.message}`);
+        throw new Error('Audio metadata extraction failed.');
+    }
+}
+
+// Helper: Analyze audio signal
+async function analyzeAudio(filePath) {
+    try {
+        const audioBuffer = fs.readFileSync(filePath);
+        const samples = new Uint8Array(audioBuffer);
+
+        // RMS Calculation
+        const rms = Math.sqrt(samples.reduce((sum, value) => sum + value ** 2, 0) / samples.length);
+
+        // Zero-Crossing Rate
+        let zcr = 0;
+        for (let i = 1; i < samples.length; i++) {
+            if ((samples[i - 1] > 0 && samples[i] <= 0) || (samples[i - 1] <= 0 && samples[i] > 0)) {
+                zcr++;
+            }
+        }
+        zcr /= samples.length;
+
+        // FFT Analysis
+        const fft = new FFT(samples.length);
+        const out = fft.createComplexArray();
+        fft.realTransform(out, samples);
+        fft.completeSpectrum(out);
+
+        const spectralCentroid = out.reduce((sum, value, index) => sum + index * Math.abs(value), 0) / out.length;
+
+        return {
+            rmsAmplitude: rms,
+            zeroCrossingRate: zcr,
+            spectralCentroid: spectralCentroid,
+            peakAmplitude: Math.max(...samples),
+            lengthInSamples: samples.length,
+        };
+    } catch (error) {
+        logger.error(`Error analyzing audio: ${error.message}`);
+        throw new Error('Audio analysis failed.');
+    }
+}
+
+// Process a single audio file
+async function processAudioFile(filePath) {
+    if (!isValidFile(filePath)) {
+        logger.warn(`Invalid file type: ${filePath}`);
+        throw new Error('Unsupported file type.');
+    }
+
+    logger.info(`Processing file: ${filePath}`);
+    const fileMetadata = await extractFileMetadata(filePath);
+    const audioMetadata = await extractAudioMetadata(filePath);
+    const audioAnalysis = await analyzeAudio(filePath);
+
+    return { ...fileMetadata, ...audioMetadata, ...audioAnalysis };
+}
+
+// Batch process files
+async function batchProcessAudioFiles(filePaths) {
+    const results = [];
+    for (const file of filePaths) {
+        try {
+            const data = await processAudioFile(file);
+            results.push(data);
+        } catch (error) {
+            logger.error(`Error processing file ${file}: ${error.message}`);
+        }
+    }
+
+    // Save results to JSON and CSV
+    try {
+        await writeFile(config.outputFileName, JSON.stringify(results, null, 2));
+        logger.info(`Analysis results saved to ${config.outputFileName}`);
+    } catch (error) {
+        logger.error(`Error saving results: ${error.message}`);
+        throw new Error('Failed to save analysis results.');
+    }
+
+    return results;
+}
+
+// Example usage
+(async () => {
+    const files = ['audio1.mp3', 'audio2.wav']; // Replace with your actual file paths
+    try {
+        const analysisResults = await batchProcessAudioFiles(files);
+        console.log('Analysis Completed:', analysisResults);
+    } catch (error) {
+        logger.error(`Batch processing failed: ${error.message}`);
+    }
+})();
+const fs = require('fs');
+const crypto = require('crypto');
+const mm = require('music-metadata');
+const { FFT } = require('fft.js');
+const { writeFile } = require('fs/promises');
+const winston = require('winston'); // For logging
+const path = require('path');
+
+// Configure Logger
+const logger = winston.createLogger({
+    level: 'info',
+    format: winston.format.json(),
+    transports: [
+        new winston.transports.Console(),
+        new winston.transports.File({ filename: 'app.log' }),
+    ],
+});
+
+// Configuration
+const config = {
+    allowedExtensions: ['.mp3', '.wav', '.flac'], // Supported file types
+    outputFileName: 'audio_analysis_results.json',
+};
+
+// Helper: Validate file type
+function isValidFile(filePath) {
+    const ext = path.extname(filePath).toLowerCase();
+    return config.allowedExtensions.includes(ext);
+}
+
+// Helper: Extract file metadata
+async function extractFileMetadata(filePath) {
+    try {
+        const stats = fs.statSync(filePath);
+        const hash = crypto.createHash('md5').update(fs.readFileSync(filePath)).digest('hex');
+
+        return {
+            fileName: path.basename(filePath),
+            fileSizeBytes: stats.size,
+            fileSizeHuman: (stats.size / 1024).toFixed(2) + ' KB',
+            lastModified: stats.mtime.toISOString(),
+            fileHashMD5: hash,
+        };
+    } catch (error) {
+        logger.error(`Error extracting file metadata: ${error.message}`);
+        throw new Error('File metadata extraction failed.');
+    }
+}
+
+// Helper: Extract audio metadata
+async function extractAudioMetadata(filePath) {
+    try {
+        const metadata = await mm.parseFile(filePath);
+        return {
+            format: metadata.format.container || 'Unknown',
+            durationSeconds: metadata.format.duration || 'N/A',
+            bitrate: metadata.format.bitrate || 'N/A',
+            sampleRate: metadata.format.sampleRate || 'N/A',
+            channels: metadata.format.numberOfChannels || 'N/A',
+            codec: metadata.format.codec || 'Unknown',
+        };
+    } catch (error) {
+        logger.error(`Error extracting audio metadata: ${error.message}`);
+        throw new Error('Audio metadata extraction failed.');
+    }
+}
+
+// Helper: Analyze audio signal
+async function analyzeAudio(filePath) {
+    try {
+        const audioBuffer = fs.readFileSync(filePath);
+        const samples = new Uint8Array(audioBuffer);
+
+        // RMS Calculation
+        const rms = Math.sqrt(samples.reduce((sum, value) => sum + value ** 2, 0) / samples.length);
+
+        // Zero-Crossing Rate
+        let zcr = 0;
+        for (let i = 1; i < samples.length; i++) {
+            if ((samples[i - 1] > 0 && samples[i] <= 0) || (samples[i - 1] <= 0 && samples[i] > 0)) {
+                zcr++;
+            }
+        }
+        zcr /= samples.length;
+
+        // FFT Analysis
+        const fft = new FFT(samples.length);
+        const out = fft.createComplexArray();
+        fft.realTransform(out, samples);
+        fft.completeSpectrum(out);
+
+        const spectralCentroid = out.reduce((sum, value, index) => sum + index * Math.abs(value), 0) / out.length;
+
+        return {
+            rmsAmplitude: rms,
+            zeroCrossingRate: zcr,
+            spectralCentroid: spectralCentroid,
+            peakAmplitude: Math.max(...samples),
+            lengthInSamples: samples.length,
+        };
+    } catch (error) {
+        logger.error(`Error analyzing audio: ${error.message}`);
+        throw new Error('Audio analysis failed.');
+    }
+}
+
+// Process a single audio file
+async function processAudioFile(filePath) {
+    if (!isValidFile(filePath)) {
+        logger.warn(`Invalid file type: ${filePath}`);
+        throw new Error('Unsupported file type.');
+    }
+
+    logger.info(`Processing file: ${filePath}`);
+    const fileMetadata = await extractFileMetadata(filePath);
+    const audioMetadata = await extractAudioMetadata(filePath);
+    const audioAnalysis = await analyzeAudio(filePath);
+
+    return { ...fileMetadata, ...audioMetadata, ...audioAnalysis };
+}
+
+// Batch process files
+async function batchProcessAudioFiles(filePaths) {
+    const results = [];
+    for (const file of filePaths) {
+        try {
+            const data = await processAudioFile(file);
+            results.push(data);
+        } catch (error) {
+            logger.error(`Error processing file ${file}: ${error.message}`);
+        }
+    }
+
+    // Save results to JSON and CSV
+    try {
+        await writeFile(config.outputFileName, JSON.stringify(results, null, 2));
+        logger.info(`Analysis results saved to ${config.outputFileName}`);
+    } catch (error) {
+        logger.error(`Error saving results: ${error.message}`);
+        throw new Error('Failed to save analysis results.');
+    }
+
+    return results;
+}
+
+// Example usage
+(async () => {
+    const files = ['audio1.mp3', 'audio2.wav']; // Replace with your actual file paths
+    try {
+        const analysisResults = await batchProcessAudioFiles(files);
+        console.log('Analysis Completed:', analysisResults);
+    } catch (error) {
+        logger.error(`Batch processing failed: ${error.message}`);
+    }
+})();
+
+    </script>
+</body>
+</html>
