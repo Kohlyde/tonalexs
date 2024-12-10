@@ -66,9 +66,7 @@
         }
     </style>
 </head>
-<body>
-  
-            <!-- Navbar -->
+<body>            <!-- Navbar -->
             <nav class="navbar navbar-expand-lg">
                 <div class="container-fluid">
                     <a class="navbar-brand text-white" href="#">EDMC | Quality Metric Analysis</a>
@@ -92,6 +90,13 @@
             <div class="main-content">
                 <!-- Left Section: File Display -->
                 <div class="file-display">
+                    <!-- Spectral Analysis Visualization -->
+                    <div class="visualization-container">
+                        <h2>Spectral Analysis Visualization</h2>
+                        <canvas id="spectralCanvas" width="800" height="200"></canvas>
+                        <p class="text-muted">Visual representation of the frequency spectrum.</p>
+                    </div>
+                    
                     <h2>Uploaded Files</h2>
                     <table class="fl-table" id="fileTable">
                         <thead>
@@ -149,49 +154,189 @@
                         </tbody>
                     </table>
         
-                    <h2 class="section-title">Spectral Features</h2>
-                    <table class="fl-table" id="spectralFeaturesTable">
-                        <thead>
-                            <tr>
-                                <th>Feature</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>Spectral Centroid</td>
-                                <td>3450 Hz</td>
-                            </tr>
-                            <tr>
-                                <td>Spectral Flatness</td>
-                                <td>0.8</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="scrollable-metrics">
+                        <h2 class="section-title">Additional Metrics</h2>
+
+                        <div class="metrics-group">
+                            <h3>Group 1: General File Metrics</h3>
+                            <table class="fl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>File Name</td>
+                                        <td>example.mp3</td>
+                                    </tr>
+                                    <tr>
+                                        <td>File Size</td>
+                                        <td>5.4 MB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Last Modified Date</td>
+                                        <td>12/08/2024, 14:23</td>
+                                    </tr>
+                                    <tr>
+                                        <td>MIME Type</td>
+                                        <td>audio/mpeg</td>
+                                    </tr>
+                                    <tr>
+                                        <td>File Extension</td>
+                                        <td>.mp3</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="metrics-group">
+                            <h3>Group 2: Spectral Features</h3>
+                            <table class="fl-table" id="spectralFeaturesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Spectral Centroid</td>
+                                        <td>3450 Hz</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spectral Flatness</td>
+                                        <td>0.8</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spectral Bandwidth</td>
+                                        <td>200 Hz</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Spectral Roll-off</td>
+                                        <td>4500 Hz</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
         
-                    <h2 class="section-title">Temporal Features</h2>
-                    <table class="fl-table" id="temporalFeaturesTable">
-                        <thead>
-                            <tr>
-                                <th>Feature</th>
-                                <th>Value</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr>
-                                <td>RMS</td>
-                                <td>0.25</td>
-                            </tr>
-                            <tr>
-                                <td>Peak Amplitude</td>
-                                <td>1.0</td>
-                            </tr>
-                            <tr>
-                                <td>Zero Crossing Rate</td>
-                                <td>12.5%</td>
-                            </tr>
-                        </tbody>
-                    </table>
+                        <div class="metrics-group">
+                            <h3>Group 3: Temporal Features</h3>
+                            <table class="fl-table" id="temporalFeaturesTable">
+                                <thead>
+                                    <tr>
+                                        <th>Feature</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>RMS</td>
+                                        <td>0.25</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Peak Amplitude</td>
+                                        <td>1.0</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Zero Crossing Rate</td>
+                                        <td>12.5%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Low Energy Ratio</td>
+                                        <td>15%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+        
+                        <div class="metrics-group">
+                            <h3>Group 4: Energy Metrics</h3>
+                            <table class="fl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Total Energy</td>
+                                        <td>125 J</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Mean Energy</td>
+                                        <td>2.5 J</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Energy Distribution (Bass)</td>
+                                        <td>35%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Energy Distribution (Treble)</td>
+                                        <td>40%</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="metrics-group">
+                            <h3>Group 5: Frequency Analysis</h3>
+                            <table class="fl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Frequency Peaks</td>
+                                        <td>1000 Hz, 2000 Hz</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Octave Bands</td>
+                                        <td>90 dB, 80 dB</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Harmonic Ratio</td>
+                                        <td>85%</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dominant Frequency</td>
+                                        <td>1200 Hz</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="metrics-group">
+                            <h3>Group 6: Custom Metrics</h3>
+                            <table class="fl-table">
+                                <thead>
+                                    <tr>
+                                        <th>Metric</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td>Custom Metric A</td>
+                                        <td>Value A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Custom Metric B</td>
+                                        <td>Value B</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Custom Metric C</td>
+                                        <td>Value C</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
                 </div>
 
             <!-- Right Section: Drag-and-Drop -->
@@ -203,7 +348,6 @@
             </div>
         </div>
 
-    
     <script>
       const fs = require('fs');
 const crypto = require('crypto');
