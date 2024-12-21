@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        .drag-drop-container {
+            border: 2px dashed #007bff;
+            padding: 50px;
+            margin: 50px;
+            text-align: center;
+        }
+        .drag-drop-container:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="drag-drop-container" id="dragDropContainer">
+    <h2 style="margin-top:250px" class="text-center">Drag & Drop Your Files Here</h2>
+    <p class="text-center">Or click the button below to select files.</p>
+    <input type="file" id="fileInput" multiple style="display: none;" accept="audio/*">
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-success btn-lg px-4" onclick="document.getElementById('fileInput').click()">
+            <i class="bi bi-upload"></i> Upload Files
+        </button>
+    </div>
+    <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
+</div>
+
+<table class="table">
+    <tr>
+        <td>Encoding</td>
+        <td id="encoding">-</td>
+    </tr>
+</table>
+
+<script>
+    const dropContainer = document.getElementById('dragDropContainer');
+    const encodingElement = document.getElementById('encoding');
+    const fileInput = document.getElementById('fileInput');
+
+    dropContainer.addEventListener('dragover', function (event) {
+        event.preventDefault(); // Allow drop
+        dropContainer.style.backgroundColor = '#f0f8ff';
+    });
+
+    dropContainer.addEventListener('dragleave', function () {
+        dropContainer.style.backgroundColor = '';
+    });
+
+    dropContainer.addEventListener('drop', function (event) {
+        event.preventDefault();
+        dropContainer.style.backgroundColor = '';
+        
+        const files = event.dataTransfer.files;
+        if (files.length > 0) {
+            processFile(files[0]);
+        }
+    });
+
+    fileInput.addEventListener('change', function (event) {
+        const files = event.target.files;
+        if (files.length > 0) {
+            processFile(files[0]);
+        }
+    });
+
+    // Process the dropped or selected file
+    function processFile(file) {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const arrayBuffer = e.target.result;
+
+            // Extract metadata from audio (header info for encoding)
+            const audio = new Audio();
+            audio.src = URL.createObjectURL(file);
+            audio.addEventListener('loadedmetadata', function () {
+                const encoding = audio.mozAudioChannelType || 'Unknown'; // Accessing audio codec (encoding)
+                encodingElement.textContent = encoding; // Set encoding info to the table
+            });
+        };
+
+        reader.readAsArrayBuffer(file); // Read file as array buffer
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

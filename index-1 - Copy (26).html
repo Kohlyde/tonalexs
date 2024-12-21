@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Drag and Drop File Upload</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/css/bootstrap.min.css">
+    <style>
+        .drag-drop-container {
+            border: 2px dashed #007bff;
+            padding: 50px;
+            margin: 50px;
+            text-align: center;
+        }
+        .drag-drop-container:hover {
+            background-color: #f8f9fa;
+        }
+    </style>
+</head>
+<body>
+
+<div class="drag-drop-container" id="dragDropContainer">
+    <h2 style="margin-top:250px" class="text-center">Drag & Drop Your Files Here</h2>
+    <p class="text-center">Or click the button below to select files.</p>
+    <input type="file" id="fileInput" multiple style="display: none;" accept="audio/*">
+    <div class="d-flex justify-content-center">
+        <button class="btn btn-success btn-lg px-4" onclick="document.getElementById('fileInput').click()">
+            <i class="bi bi-upload"></i> Upload Files
+        </button>
+    </div>
+    <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
+</div>
+
+<table class="table">
+    <tr>
+        <td>Encoding</td>
+        <td id="encoding">-</td>
+    </tr>
+</table>
+
+<script>
+    // Wrap everything in a try-catch to catch all errors globally
+    try {
+        const dropContainer = document.getElementById('dragDropContainer');
+        const encodingElement = document.getElementById('encoding');
+        const fileInput = document.getElementById('fileInput');
+
+        // Drag-over and drag-leave event listeners for the drag and drop area
+        dropContainer.addEventListener('dragover', function (event) {
+            try {
+                event.preventDefault(); // Allow the drop
+                dropContainer.style.backgroundColor = '#f0f8ff'; // Highlight the drop area
+            } catch (error) {
+                console.error('Error in dragover event:', error);
+            }
+        });
+
+        dropContainer.addEventListener('dragleave', function () {
+            try {
+                dropContainer.style.backgroundColor = ''; // Reset the drop area highlight
+            } catch (error) {
+                console.error('Error in dragleave event:', error);
+            }
+        });
+
+        // When a file is dropped, process the file
+        dropContainer.addEventListener('drop', function (event) {
+            try {
+                event.preventDefault();
+                dropContainer.style.backgroundColor = ''; // Reset background color
+
+                const files = event.dataTransfer.files;
+                if (files.length > 0) {
+                    processFile(files[0]); // Process the first file dropped
+                }
+            } catch (error) {
+                console.error('Error in drop event:', error);
+            }
+        });
+
+        // Handle file input change event when a file is selected via file picker
+        fileInput.addEventListener('change', function (event) {
+            try {
+                const files = event.target.files;
+                if (files.length > 0) {
+                    processFile(files[0]); // Process the first selected file
+                }
+            } catch (error) {
+                console.error('Error in file input change event:', error);
+            }
+        });
+
+        function processFile(file) {
+        try {
+            const reader = new FileReader(); // Create FileReader instance
+
+            reader.onload = function (e) {
+                try {
+                    const arrayBuffer = e.target.result;
+
+                    // Create an Audio object to access metadata
+                    const audio = new Audio();
+                    audio.src = URL.createObjectURL(file); // Set the source of the audio file
+
+                    audio.addEventListener('loadedmetadata', function () {
+                        try {
+                            // Extract metadata from the audio file
+                            const mimeType = file.type; // MIME type of the file (e.g., "audio/mp3", "audio/wav")
+                            let encoding = mimeType ? mimeType.split('/')[1] : 'Unknown'; // Extract basic encoding type (e.g., "mp3", "wav")
+                            
+                            // Coalesce if the encoding is invalid or "Unknown"
+                            let coalesced = false;
+                            if (encoding === 'Unknown' || encoding === '') {
+                                encoding = 'Found as NULL check metric evaluation';
+                                coalesced = true;  // Flag that the encoding was coalesced
+                            }
+
+                            // Display the encoding info in the table
+                            encodingElement.textContent = encoding;
+
+                            // If encoding was coalesced, log it or handle as needed
+                            if (coalesced) {
+                                console.log('Encoding has been coalesced to:', encoding);
+                            }
+                        } catch (error) {
+                            console.error('Error while processing audio metadata:', error);
+                            encodingElement.textContent = 'Error';
+                        }
+                    });
+                } catch (error) {
+                    console.error('Error in FileReader onload:', error);
+                    encodingElement.textContent = 'Error';
+                }
+            };
+
+            // Read the audio file as an ArrayBuffer
+            reader.readAsArrayBuffer(file);
+        } catch (error) {
+            console.error('Error in processFile function:', error);
+            encodingElement.textContent = 'Error';
+        }
+    }
+</script>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.1.3/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>
