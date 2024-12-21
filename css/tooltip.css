@@ -1,0 +1,108 @@
+/* latex-tooltip.css
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+  }
+   */
+/* Button Styling */
+
+.latex-hover-spectrogram-button {
+    position: absolute;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 4px;
+    color: #000;
+    /* float: auto; */
+    display: flex;
+    top:125px;
+    font-variant-caps: titling-caps;
+    background-color: #fff;
+   right:1300px;
+    border: #1e2337 1px solid;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.53s ease;
+    z-index: 9999999;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.7);;
+
+}
+
+.latex-hover-spectrogram-button:hover {
+    background-color: #fff;
+    color: #ffffff;
+    border: #1e2337 1px solid;
+    background-color: #8f8f8f;
+    padding: 5px 10px;
+    font-size: 16px;
+    box-shadow: 355px 331px 1300px 1300px rgba(255, 255, 255, 0.7);
+    animation: tooltipcanvas 0.5s forwards linear;
+}
+
+@keyframes tooltipcanvas {
+    0% {
+        box-shadow: 0 0 0 0 #000;
+        transition: background-color 0.83s ease;
+    }
+
+    100% {
+        box-shadow: 330px 300px 1300px 1300px rgba(255, 255, 255, 0.7);
+        transition: background-color 0.53s ease;
+    }
+}
+
+/* Tooltip Container */
+.latex-hover-spectrogram-tooltip {
+    position: absolute;
+    top: 40px;
+    left: 100px;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    background: #fff;
+    color: #000;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    font-size: 14px;
+    z-index: 10;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+}
+
+/* Tooltip Animation */
+.latex-hover-spectrogram-button:hover .latex-hover-spectrogram-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 10px);
+}
+
+/* Tooltip Content Styling */
+.latex-hover-spectrogram-content {
+    text-align: right;
+}
+
+.latex-hover-spectrogram-content p {
+    margin: 10px 10px;
+}
+
+.latex-hover-spectrogram-content ul {
+    padding-left: 20px;
+}
+
+.latex-hover-spectrogram-content ul li {
+    margin: 5px 0;
+}
+.latex-render {
+    display: auto !important;
+    float: right !important;
+    position: relative !important;
+    align-items: center !important;
+    top:-20px;
+    gap: 10px !important;
+    right: 60px !important;
+    font-size: 20px !important;
+    transition-duration: 0s;
+    /* animation-duration: 1s !important; */
+}
