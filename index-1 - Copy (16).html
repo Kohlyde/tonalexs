@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendered Character-by-Character LaTeX</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            font-size: 48px;
+            position: relative;
+            gap: 5px;
+        }
+
+        .latex-char {
+            display: inline-block;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="typewriter"></div>
+    <script>
+        let formula;
+        try {
+            formula = "X_k = \\sum_{n=0}^{N-1} x_n \\cdot e^{-i \\frac{2\\pi}{N} k n}";
+        } catch (err) {
+            console.error("Error defining formula:", err);
+        }
+
+        let container;
+        try {
+            container = document.getElementById('typewriter');
+        } catch (err) {
+            console.error("Error fetching container:", err);
+        }
+
+        try {
+            if (!container) throw new Error("Container not found");
+        } catch (err) {
+            console.error("Error validating container existence:", err);
+        }
+
+        let animations;
+        try {
+            animations = [
+                "animate__fadeIn", "animate__fadeInDown", "animate__fadeInLeft", "animate__fadeInRight",
+                "animate__fadeInUp", "animate__bounceIn", "animate__zoomIn", "animate__rotateIn",
+                "animate__slideInUp", "animate__slideInDown", "animate__slideInLeft", "animate__slideInRight"
+            ];
+        } catch (err) {
+            console.error("Error defining animations array:", err);
+        }
+
+        const getRandomAnimation = () => {
+            let animation = "";
+            try {
+                try {
+                    if (!animations || !Array.isArray(animations)) {
+                        throw new Error("Animations array is not defined or not an array");
+                    }
+                } catch (err) {
+                    console.error("Error validating animations array:", err);
+                    return "";
+                }
+
+                let randomIndex;
+                try {
+                    randomIndex = Math.floor(Math.random() * animations.length);
+                    if (isNaN(randomIndex)) throw new Error("Random index is not a number");
+                } catch (err) {
+                    console.error("Error calculating random index:", err);
+                    return "";
+                }
+
+                try {
+                    animation = animations[randomIndex];
+                    if (!animation) throw new Error("No animation found at the calculated index");
+                } catch (err) {
+                    console.error("Error fetching animation from array:", err);
+                    return "";
+                }
+
+                try {
+                    if (!animation || typeof animation !== "string") {
+                        throw new Error("Fetched animation is not valid or not a string");
+                    }
+                } catch (err) {
+                    console.error("Error validating fetched animation:", err);
+                    return "";
+                }
+            } catch (err) {
+                console.error("Unexpected error in getRandomAnimation:", err);
+            }
+
+            return animation;
+        };
+
+        try {
+            formula.split('').forEach((char, index) => {
+                try {
+                    setTimeout(() => {
+                        try {
+                            let span;
+                            try {
+                                span = document.createElement('span');
+                                if (!span) throw new Error("Span creation failed");
+                            } catch (err) {
+                                console.error("Error creating span element:", err);
+                                return;
+                            }
+
+                            try {
+                                span.className = `latex-char animate__animated ${getRandomAnimation()}`;
+                                if (!span.className) throw new Error("Span className assignment failed");
+                            } catch (err) {
+                                console.error("Error assigning className to span:", err);
+                                return;
+                            }
+
+                            try {
+                                span.innerHTML = char === ' ' ? '&nbsp;' : `\\(${char}\\)`;
+                                if (!span.innerHTML) throw new Error("Span innerHTML assignment failed");
+                            } catch (err) {
+                                console.error("Error setting innerHTML for span:", err);
+                                return;
+                            }
+
+                            try {
+                                container.appendChild(span);
+                                if (!container.contains(span)) throw new Error("Span append to container failed");
+                            } catch (err) {
+                                console.error("Error appending span to container:", err);
+                                return;
+                            }
+
+                            try {
+                                MathJax.typesetPromise([span])
+                                    .catch((err) => console.error("MathJax rendering failed:", err));
+                            } catch (err) {
+                                console.error("Error triggering MathJax.typesetPromise:", err);
+                            }
+                        } catch (err) {
+                            console.error(`Error in character processing (index: ${index}, char: ${char}):`, err);
+                        }
+                    }, index * 150);
+                } catch (err) {
+                    console.error(`Error in setTimeout wrapper for index ${index}:`, err);
+                }
+            });
+        } catch (err) {
+            console.error("Error processing formula:", err);
+        }
+    </script>
+</body>
+</html>

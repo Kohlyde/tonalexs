@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAV Metadata Extractor</title>
+</head>
+<body>
+    <button id="fileInputBtn">Select File</button>
+    <input id="fileInput" type="file" accept=".wav" style="display: none;">
+
+    <table>
+        <tr><td>File Name</td><td id="fileName">-</td></tr>
+        <tr><td>File Size</td><td id="fileSize">-</td></tr>
+        <tr><td>MIME Type</td><td id="mimeType">-</td></tr>
+        <tr><td>Last Modified</td><td id="lastModified">-</td></tr>
+        <tr><td>Extension</td><td id="extension">-</td></tr>
+        <tr><td>Encoding</td><td id="encoding">-</td></tr>
+        <tr><td>Title</td><td id="title">-</td></tr>
+        <tr><td>Artist</td><td id="artist">-</td></tr>
+        <tr><td>Album</td><td id="album">-</td></tr>
+        <tr><td>Genre</td><td id="genre">-</td></tr>
+        <tr><td>Year</td><td id="year">-</td></tr>
+        <tr><td>Track Number</td><td id="track">-</td></tr>
+        <tr><td>Composer</td><td id="composer">-</td></tr>
+        <tr><td>Lyrics</td><td id="lyrics">-</td></tr>
+        <tr><td>Publisher</td><td id="publisher">-</td></tr>
+        <tr><td>Disc Number</td><td id="discNumber">-</td></tr>
+        <tr><td>Encoder</td><td id="encoder">-</td></tr>
+        <tr><td>Language</td><td id="language">-</td></tr>
+        <tr><td>Copyright</td><td id="copyright">-</td></tr>
+        <tr><td>ISRC</td><td id="isrc">-</td></tr>
+        <tr><td>BPM</td><td id="bpm">-</td></tr>
+        <tr><td>Album Artist</td><td id="albumArtist">-</td></tr>
+        <tr><td>Key</td><td id="key">-</td></tr>
+        <tr><td>Initial Key</td><td id="initialKey">-</td></tr>
+        <tr><td>Length</td><td id="length">-</td></tr>
+        <tr><td>Comments</td><td id="comments">-</td></tr>
+    </table>
+
+    <script src="js/music-metadata-browser.min.js"></script>
+
+    <script>
+        document.getElementById("fileInputBtn").addEventListener("click", function () {
+            document.getElementById("fileInput").click();
+        });
+
+        async function extractWavMetadata(file) {
+            if (!file) {
+                console.error("No file provided for metadata extraction.");
+                return;
+            }
+
+            try {
+                const metadata = await musicMetadata.parseBlob(file);
+
+                document.getElementById("fileName").innerText = file.name || "Unknown";
+                document.getElementById("fileSize").innerText = `${(file.size / (1024 * 1024)).toFixed(2)} MB` || "Unknown";
+                document.getElementById("mimeType").innerText = file.type || "Unknown";
+                document.getElementById("lastModified").innerText = new Date(file.lastModified).toLocaleString() || "Unknown";
+                document.getElementById("extension").innerText = file.name.split(".").pop() || "Unknown";
+
+                const tags = metadata.common || {};
+                document.getElementById("title").innerText = tags.title || "Unknown";
+                document.getElementById("artist").innerText = tags.artist || "Unknown";
+                document.getElementById("album").innerText = tags.album || "Unknown";
+                document.getElementById("genre").innerText = (tags.genre || []).join(", ") || "Unknown";
+                document.getElementById("year").innerText = tags.year || "Unknown";
+                document.getElementById("track").innerText = tags.track?.no || "Unknown";
+                document.getElementById("composer").innerText = tags.composer || "Unknown";
+                document.getElementById("lyrics").innerText = tags.lyrics || "Not Available";
+                document.getElementById("publisher").innerText = tags.publisher || "Unknown";
+                document.getElementById("language").innerText = tags.language || "Unknown";
+                document.getElementById("copyright").innerText = tags.copyright || "Unknown";
+                document.getElementById("bpm").innerText = tags.bpm || "Unknown";
+                document.getElementById("key").innerText = tags.key || "Unknown";
+                document.getElementById("comments").innerText = tags.comment || "None";
+            } catch (error) {
+                console.error("Error extracting WAV metadata:", error);
+                alert("Failed to extract metadata from the WAV file.");
+            }
+        }
+
+        document.getElementById("fileInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                extractWavMetadata(file);
+            }
+        });
+    </script>
+</body>
+</html>

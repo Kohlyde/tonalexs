@@ -1,0 +1,406 @@
+// Select the canvas element for drawing the spectrogram
+const canvas = document.getElementById('spectrogramCanvas');
+const ctx = canvas.getContext('2d');
+
+// Set up the audio context and analyzer node
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = audioContext.createAnalyser();
+
+// Configure the analyser for the spectrogram
+analyser.fftSize = 256;  // Number of frequency bins
+const bufferLength = analyser.frequencyBinCount;  // This is half of the fftSize
+const dataArray = new Uint8Array(bufferLength);  // Array to hold frequency data
+
+// Set up the audio source (you can use any valid audio file or stream)
+const audioElement = new Audio('your-audio-file.mp3'); // Replace with your audio file path or stream
+const audioSource = audioContext.createMediaElementSource(audioElement);
+
+// Connect the audio source to the analyser and the analyser to the audio context's destination (output)
+audioSource.connect(analyser);
+analyser.connect(audioContext.destination);
+
+// Function to draw the spectrogram on the canvas
+function drawSpectrogram() {
+    // Clear the canvas for each new frame
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Get the frequency data (values between 0 and 255 for each frequency bin)
+    analyser.getByteFrequencyData(dataArray);
+
+    // Calculate the width of each bar in the spectrogram
+    const barWidth = canvas.width / bufferLength; // Divide the canvas width by the number of frequency bins
+    let x = 0; // X-coordinate for drawing each bar
+
+    // Loop through the frequency data and draw each bar representing frequency intensity
+    for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i]; // Get the frequency intensity for this frequency bin
+
+        // Set the fill color for the bars to the desired blue color
+        ctx.fillStyle = '#1E2337';  // SITEE color blue (#1E2337)
+
+        // Draw the bar at position (x, canvas.height - barHeight) with the specified width and height
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+        // Move to the next position on the X-axis
+        x += barWidth;
+    }
+
+    // Use requestAnimationFrame to call this function repeatedly for animation
+    requestAnimationFrame(drawSpectrogram);
+}
+
+// Start the audio and begin the visualization
+audioElement.play(); // Begin playback of the audio file
+
+// Ensure the audio context is resumed (important for user interaction)
+audioContext.resume().then(() => {
+    // Start drawing the spectrogram once the audio context is active
+    drawSpectrogram();
+});
+
+// Drag and Drop functionality
+const dragDropContainer = document.getElementById('dragDropContainer');
+const fileInput = document.getElementById('fileInput');
+let firstFileLoaded = false;
+
+function handleFiles(files) {
+    if (firstFileLoaded) return;
+    const file = files[0];
+    if (!file) return;
+    const fileURL = URL.createObjectURL(file);
+    const audioPlayer = document.getElementById('audioPlayer');
+    const audioSource = document.getElementById('audioSource');
+    audioSource.src = fileURL;
+    audioPlayer.load();
+    firstFileLoaded = true;
+    visualizeAudio(file);
+}
+
+dragDropContainer.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    dragDropContainer.classList.add('dragging');
+});
+
+dragDropContainer.addEventListener('dragleave', () => {
+    dragDropContainer.classList.remove('dragging');
+});
+
+dragDropContainer.addEventListener('drop', (e) => {
+    e.preventDefault();
+    dragDropContainer.classList.remove('dragging');
+    handleFiles(e.dataTransfer.files);
+});
+
+fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+});
+
+// Dummy data for demonstration (replace with actual audio analysis data)
+const frequencies = Array.from({ length: 256 }, (_, i) => i);
+const spectrum = frequencies.map(() => Math.random() * 100);
+const waveform = Array.from({ length: 800 }, (_, i) => Math.sin(i / 10) * 50 + 50);
+
+// Spectrogram (dummy implementation using bars)
+const spectrogramCanvas = document.getElementById('spectrogramCanvas').getContext('2d');
+const spectrogramGradient = spectrogramCanvas.createLinearGradient(0, 0, 0, 200);
+spectrogramGradient.addColorStop(0, 'blue');
+spectrogramGradient.addColorStop(0.5, 'green');
+spectrogramGradient.addColorStop(1, 'red');
+spectrogramCanvas.fillStyle = spectrogramGradient;
+for (let i = 0; i < 256; i++) {
+    spectrogramCanvas.fillRect(i * 3, 200 - spectrum[i], 2, spectrum[i]);
+}
+
+// Waveform (dummy)
+const waveformCanvas = document.getElementById('waveformCanvas').getContext('2d');
+waveformCanvas.beginPath();
+waveformCanvas.moveTo(0, 100);
+for (let i = 0; i < waveform.length; i++) {
+    waveformCanvas.lineTo(i, 100 + waveform[i]);
+}
+waveformCanvas.strokeStyle = '#FF6347'; // Color for the waveform
+waveformCanvas.stroke();
+// Format the duration into minutes:seconds
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// Load and process the audio file
+function loadAudioFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        // Decode the audio data using Web Audio API
+        audioContext.decodeAudioData(event.target.result, function(buffer) {
+            const sampleRate = buffer.sampleRate;
+            const channels = buffer.numberOfChannels;
+            const duration = buffer.duration;
+            const bitDepth = 16;  // Common bit depth for audio files
+            const lengthSamples = buffer.length;
+
+            // Update the audio properties table with these values
+            document.getElementById('audioPropertiesTable').innerHTML = `
+                <tr><td>Sample Rate</td><td>${sampleRate} Hz</td></tr>
+                <tr><td>Channels</td><td>${channels}</td></tr>
+                <tr><td>Duration</td><td>${formatTime(duration)}</td></tr>
+                <tr><td>Bit Depth</td><td>${bitDepth}-bit</td></tr>
+                <tr><td>Length (Samples)</td><td>${lengthSamples}</td></tr>
+            `;
+
+            // Start drawing visualizations
+            visualizeAudio(buffer);
+        });
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+// Event listener for file input change
+fileInput.addEventListener('change', (e) => {
+    handleFiles(e.target.files);
+});
+
+// Handle files being dropped or selected
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        const fileURL = URL.createObjectURL(file);
+        audioElement.src = fileURL;
+        audioElement.load();
+
+        loadAudioFile(file);
+    }
+}
+// Create an analyser node to analyze the audio frequency data
+const analyser = audioContext.createAnalyser();
+analyser.fftSize = 256; // Sets the FFT size (affects resolution)
+const bufferLength = analyser.frequencyBinCount; // Number of frequency bins
+const frequencyData = new Uint8Array(bufferLength); // Array to hold frequency data
+
+// Draw the spectrogram (frequency spectrum)
+function drawSpectrogram() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    // Get frequency data from the analyser
+    analyser.getByteFrequencyData(frequencyData);
+
+    const barWidth = canvas.width / bufferLength;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+        const barHeight = frequencyData[i];
+        ctx.fillStyle = 'rgb(' + barHeight + ', 50, 50)';  // Color based on frequency intensity
+        ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth;
+    }
+
+    requestAnimationFrame(drawSpectrogram); // Call this function recursively to animate
+}
+
+// Draw the waveform
+function drawWaveform(buffer) {
+    const waveformCanvas = document.getElementById('waveformCanvas').getContext('2d');
+    waveformCanvas.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bufferData = buffer.getChannelData(0); // Get data from the first channel
+    waveformCanvas.beginPath();
+    waveformCanvas.moveTo(0, 100);
+
+    for (let i = 0; i < bufferData.length; i++) {
+        const x = (i / bufferData.length) * canvas.width;
+        const y = (bufferData[i] * 50) + 100; // Scaling and positioning the waveform
+        waveformCanvas.lineTo(x, y);
+    }
+
+    waveformCanvas.strokeStyle = '#FF6347'; // Color for the waveform
+    waveformCanvas.stroke();
+}
+
+// Visualize audio using both spectrogram and waveform
+function visualizeAudio(buffer) {
+    // Connect the audio buffer source to the analyser and the context's destination
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    source.start(0); // Start playback immediately
+
+    drawSpectrogram(); // Start drawing the spectrogram
+    drawWaveform(buffer); // Start drawing the waveform
+}
+// Handle drag-and-drop interactions
+const dragDropContainer = document.getElementById('dragDropContainer');
+
+dragDropContainer.addEventListener('dragover', (event) => {
+    event.preventDefault();  // Prevent the default behavior
+    dragDropContainer.classList.add('dragging'); // Show a visual cue when dragging over
+});
+
+dragDropContainer.addEventListener('dragleave', () => {
+    dragDropContainer.classList.remove('dragging'); // Remove the cue when leaving
+});
+
+dragDropContainer.addEventListener('drop', (event) => {
+    event.preventDefault(); // Prevent the default behavior of dropping
+    dragDropContainer.classList.remove('dragging');
+
+    // Get the files from the drop event
+    handleFiles(event.dataTransfer.files);
+});
+
+// Also allow selecting files using the input field
+const fileInput = document.getElementById('fileInput');
+fileInput.addEventListener('change', (event) => {
+    handleFiles(event.target.files);  // Process selected files
+});
+// Get references to the DOM elements
+const fileInput = document.getElementById('fileInput');
+const dragDropContainer = document.getElementById('dragDropContainer');
+const audioElement = document.getElementById('audioElement');
+const canvas = document.getElementById('visualizationCanvas');
+const ctx = canvas.getContext('2d');
+const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+let analyser = audioContext.createAnalyser();
+analyser.fftSize = 256;  // Set FFT size for frequency data resolution
+
+// Format the duration into minutes:seconds
+function formatTime(seconds) {
+    const mins = Math.floor(seconds / 60);
+    const secs = Math.floor(seconds % 60);
+    return `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+}
+
+// Update the audio properties table with metadata
+function updateAudioPropertiesTable(sampleRate, channels, duration, bitDepth, lengthSamples, fileSize) {
+    document.getElementById('audioPropertiesTable').innerHTML = `
+        <tr><td>Sample Rate</td><td>${sampleRate} Hz</td></tr>
+        <tr><td>Channels</td><td>${channels}</td></tr>
+        <tr><td>Duration</td><td>${formatTime(duration)}</td></tr>
+        <tr><td>Bit Depth</td><td>${bitDepth}-bit</td></tr>
+        <tr><td>Length (Samples)</td><td>${lengthSamples}</td></tr>
+        <tr><td>File Size</td><td>${(fileSize / (1024 * 1024)).toFixed(2)} MB</td></tr>
+    `;
+}
+
+// Load and process the audio file
+function loadAudioFile(file) {
+    const reader = new FileReader();
+
+    reader.onload = function(event) {
+        audioContext.decodeAudioData(event.target.result, function(buffer) {
+            const sampleRate = buffer.sampleRate;
+            const channels = buffer.numberOfChannels;
+            const duration = buffer.duration;
+            const bitDepth = 16;  // Assumption: 16-bit depth for common audio formats
+            const lengthSamples = buffer.length;
+            const fileSize = file.size;
+
+            // Update the properties table
+            updateAudioPropertiesTable(sampleRate, channels, duration, bitDepth, lengthSamples, fileSize);
+
+            // Start drawing visualizations
+            visualizeAudio(buffer);
+        }, function(e) {
+            console.error("Error decoding audio data: ", e);
+        });
+    };
+
+    reader.readAsArrayBuffer(file);
+}
+
+// Visualize the audio's waveform and spectrogram
+function visualizeAudio(buffer) {
+    // Connect the audio buffer to the analyser and output
+    const source = audioContext.createBufferSource();
+    source.buffer = buffer;
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+    source.start(0);  // Start playback immediately
+
+    drawWaveform(buffer);
+    drawSpectrogram();
+}
+
+// Draw the audio waveform on the canvas
+function drawWaveform(buffer) {
+    const waveformCanvas = document.getElementById('waveformCanvas').getContext('2d');
+    waveformCanvas.clearRect(0, 0, canvas.width, canvas.height);
+
+    const data = buffer.getChannelData(0);  // Use the first channel for the waveform
+    waveformCanvas.beginPath();
+    waveformCanvas.moveTo(0, canvas.height / 2);
+
+    for (let i = 0; i < data.length; i++) {
+        const x = (i / data.length) * canvas.width;
+        const y = (data[i] * (canvas.height / 2)) + (canvas.height / 2);
+        waveformCanvas.lineTo(x, y);
+    }
+
+    waveformCanvas.strokeStyle = '#FF6347';  // Color of the waveform
+    waveformCanvas.stroke();
+}
+
+// Draw the frequency spectrogram on the canvas
+function drawSpectrogram() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+    const bufferLength = analyser.frequencyBinCount;
+    const frequencyData = new Uint8Array(bufferLength);
+    const barWidth = canvas.width / bufferLength;
+    let x = 0;
+
+    function renderSpectrogram() {
+        analyser.getByteFrequencyData(frequencyData);
+        ctx.fillStyle = '#000000';  // Clear previous data
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        for (let i = 0; i < bufferLength; i++) {
+            const barHeight = frequencyData[i];
+            const colorValue = (barHeight / 255) * 100;  // Color intensity
+            ctx.fillStyle = `rgb(${colorValue}, 50, 50)`;
+            ctx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+            x += barWidth;
+        }
+
+        requestAnimationFrame(renderSpectrogram);  // Continuously animate the spectrogram
+    }
+
+    renderSpectrogram();
+}
+
+// Handle file drag-and-drop
+dragDropContainer.addEventListener('dragover', (event) => {
+    event.preventDefault();
+    dragDropContainer.classList.add('dragging');
+});
+
+dragDropContainer.addEventListener('dragleave', () => {
+    dragDropContainer.classList.remove('dragging');
+});
+
+dragDropContainer.addEventListener('drop', (event) => {
+    event.preventDefault();
+    dragDropContainer.classList.remove('dragging');
+    handleFiles(event.dataTransfer.files);
+});
+
+// Handle file input change
+fileInput.addEventListener('change', (event) => {
+    handleFiles(event.target.files);
+});
+
+// Process files dropped or selected
+function handleFiles(files) {
+    if (files.length > 0) {
+        const file = files[0];
+        const fileURL = URL.createObjectURL(file);
+        audioElement.src = fileURL;
+        audioElement.load();
+        
+        // Load the audio file and display its properties
+        loadAudioFile(file);
+    }
+}

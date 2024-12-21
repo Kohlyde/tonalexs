@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rendered Character-by-Character LaTeX</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            font-size: 48px;
+            position: relative;
+            gap: 5px;
+        }
+
+        .latex-char {
+            display: inline-block;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="typewriter"></div>
+    <script>
+        const formula = "X_k = \\sum_{n=0}^{N-1} x_n \\cdot e^{-i \\frac{2\\pi}{N} k n}";
+        const container = document.getElementById('typewriter');
+        const animations = [
+            "animate__fadeIn", "animate__fadeInDown", "animate__fadeInLeft", "animate__fadeInRight",
+            "animate__fadeInUp", "animate__bounceIn", "animate__zoomIn", "animate__rotateIn",
+            "animate__slideInUp", "animate__slideInDown", "animate__slideInLeft", "animate__slideInRight"
+        ];
+        const getRandomAnimation = () => animations[Math.floor(Math.random() * animations.length)];
+        formula.split('').forEach((char, index) => {
+            setTimeout(() => {
+                const span = document.createElement('span');
+                span.className = `latex-char animate__animated ${getRandomAnimation()}`;
+                span.textContent = char === ' ' ? '\u00A0' : char;
+                container.appendChild(span);
+                if (index === formula.length - 1) {
+                    MathJax.typesetPromise([container]).catch(console.error);
+                }
+            }, index * 150);
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Metadata Tables with Calculations</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/3.2.0/es5/tex-mml-chtml.js" integrity="sha384-GYP2c4X5J9ljObUlubKwRvZ+YCeGhfw4+lORlB5b2J7cSP4eyPI3OUThSkKY2u5E" crossorigin="anonymous"></script>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        th {
+            background-color: #1E2337;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+            color: black;
+        }
+        .high {
+            background-color: #af7a7e; /* Darker red for high values */
+            color: #fff; /* Ensure text is readable */
+        }
+        .medium {
+            background-color: #867a6c; /* Saturated orange for medium values */
+            color: #fff; /* Ensure text is readable */
+        }
+        .low {
+            background-color: #70a7c7; /* Dark green for low values */
+            color: #fff; /* Ensure text is readable */
+        }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            try {
+                const rows = document.querySelectorAll('tbody tr');
+                rows.forEach(row => {
+                    const thresholdCell = row.children[2];
+                    const thresholdText = thresholdCell.textContent.toLowerCase();
+                    if (thresholdText.includes('high')) {
+                        row.classList.add('high');
+                    } else if (thresholdText.includes('medium')) {
+                        row.classList.add('medium');
+                    } else if (thresholdText.includes('low')) {
+                        row.classList.add('low');
+                    }
+                });
+                MathJax.typesetPromise();
+            } catch (error) {
+                console.error('Error applying styles or rendering MathJax:', error);
+            }
+        });
+    </script>
+</head>
+<body>
+    <h2 class="section-title">Audio File Properties (metadata tags)</h2>
+    <table class="fl-table" id="fileTable">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <!-- File metadata table rows... -->
+        </tbody>
+    </table>
+
+    <h3>Group 2: Spectral Features</h3>
+    <table class="fl-table" id="spectralFeaturesTable">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Value</th>
+                <th>Threshold</th>
+                <th>Formula</th> <!-- New column for the formula -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Spectral Centroid</td>
+                <td id="spectralCentroid">-</td>
+                <td>High: &gt; 4000 Hz</td>
+                <td>\( C = \frac{\sum_{f} f \cdot S(f)}{\sum_{f} S(f)} \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Spectral Flatness</td>
+                <td id="spectralFlatness">-</td>
+                <td>High: 0.8–1.0</td>
+                <td>\( SF = \frac{\prod_{f} |S(f)|}{\sum_{f} |S(f)|} \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Spectral Roll-off</td>
+                <td id="spectralRollOff">-</td>
+                <td>High: &gt; 4500 Hz</td>
+                <td>\( R = \frac{\sum_{f=0}^{f_{r}} S(f)}{\sum_{f} S(f)} \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Spectral Contrast</td>
+                <td id="spectralContrast">-</td>
+                <td>High: &gt; 30 dB</td>
+                <td>\( SC = \sum_{i=1}^{N} |S(i) - S(i-1)| \) </td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Spectral Energy</td>
+                <td id="spectralEnergy">-</td>
+                <td>High: &gt; 500</td>
+                <td>\( E = \sum_{f} |S(f)|^2 \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Spectral Flux</td>
+                <td id="spectralFlux">-</td>
+                <td>High: &gt; 0.5</td>
+                <td>\( SF = \sum_{f} (S_t(f) - S_{t-1}(f))^2 \)</td> <!-- Formula -->
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Group 3: Temporal Features</h3>
+    <table class="fl-table" id="temporalFeaturesTable">
+        <thead>
+            <tr>
+                <th>Feature</th>
+                <th>Value</th>
+                <th>Threshold</th>
+                <th>Formula</th> <!-- New column for the formula -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Peak Amplitude</td>
+                <td id="PeakAmplitude">-</td>
+                <td>High: &gt; 1.0</td>
+                <td>\( A = \max(|x(t)|) \)</td> <!-- Formula -->
+            </tr>
+        </tbody>
+    </table>
+
+    <h3>Group 5: Frequency Analysis</h3>
+    <table class="fl-table" id="frequencyAnalysisTable">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Threshold</th>
+                <th>Formula</th> <!-- New column for the formula -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Harmonic Ratio</td>
+                <td id="HarmonicRatio">-</td>
+                <td>High: &gt; 90%</td>
+                <td>\( HR = \frac{\sum_{f \in Harmonic} |S(f)|^2}{\sum_{f} |S(f)|^2} \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Dominant Frequency</td>
+                <td id="DominantFrequency">-</td>
+                <td>High: Strong peak &gt; 1000 Hz</td>
+                <td>\( F_{dom} = \arg \max |S(f)| \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Fundamental Frequency</td>
+                <td id="FundamentalFrequency">-</td>
+                <td>High: &gt; 300 Hz</td>
+                <td>\( f_0 = \frac{1}{T_0} \), where \( T_0 \) is the period of the fundamental</td> <!-- Formula -->
+            </tr>
+        </tbody>
+    </table>
+
+    <h2 class="section-title">Additional Metrics</h2>
+    <h3>Group 4: Energy Metrics</h3>
+    <table class="fl-table" id="energyMetricsTable">
+        <thead>
+            <tr>
+                <th>Metric</th>
+                <th>Value</th>
+                <th>Threshold</th>
+                <th>Formula</th> <!-- New column for the formula -->
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>Crest Factor</td>
+                <td id="CrestFactor">-</td>
+                <td>High: &gt; 3</td>
+                <td>\( CF = \frac{\text{Peak Amplitude}}{\text{RMS}} \)</td> <!-- Formula -->
+            </tr>
+            <tr>
+                <td>Peak-to-Average Ratio (PAR)</td>
+                <td id="PeakToAverageRatio">-</td>
+                <td>High: &gt; 3 dB</td>
+                <td>\( PAR = 20 \log_{10} \left(\frac{\text{Peak Amplitude}}{\text{RMS}}\right) \)</td> <!-- Formula -->
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+Summary of High Threshold Metrics and Their Formulas:
+Spectral Centroid:
+
+𝐶
+=
+∑
+𝑓
+𝑓
+⋅
+𝑆
+(
+𝑓
+)
+∑
+𝑓
+𝑆
+(
+𝑓
+)
+C= 
+∑ 
+f
+​
+ S(f)
+∑ 
+f
+​
+ f⋅S(f)
+​
+ 
+Spectral Flatness:
+
+𝑆
+𝐹
+=
+∏
+𝑓
+∣
+𝑆
+(
+𝑓
+)
+∣
+∑
+𝑓
+∣
+𝑆
+(
+𝑓
+)
+∣
+SF= 
+∑ 
+f
+​
+ ∣S(f)∣
+∏ 
+f
+​
+ ∣S(f)∣
+​
+ 
+Spectral Roll-off:
+
+𝑅
+=
+∑
+𝑓
+=
+0
+𝑓
+𝑟
+𝑆
+(
+𝑓
+)
+∑
+𝑓
+𝑆
+(
+𝑓
+)
+R= 
+∑ 
+f
+​
+ S(f)
+∑ 
+f=0
+f 
+r
+​
+ 
+​
+ S(f)
+​
+ 
+Spectral Contrast:
+
+𝑆
+𝐶
+=
+∑
+𝑖
+=
+1
+𝑁
+∣
+𝑆
+(
+𝑖
+)
+−
+𝑆
+(
+𝑖
+−
+1
+)
+∣
+SC= 
+i=1
+∑
+N
+​
+ ∣S(i)−S(i−1)∣
+Spectral Energy:
+
+𝐸
+=
+∑
+𝑓
+∣
+𝑆
+(
+𝑓
+)
+∣
+2
+E= 
+f
+∑
+​
+ ∣S(f)∣ 
+2
+ 
+Spectral Flux:
+
+𝑆
+𝐹
+=
+∑
+𝑓
+(
+𝑆
+𝑡
+(
+𝑓
+)
+−
+𝑆
+𝑡
+−
+1
+(
+𝑓
+)
+)
+2
+SF= 
+f
+∑
+​
+ (S 
+t
+​
+ (f)−S 
+t−1
+​
+ (f)) 
+2
+ 
+Peak Amplitude:
+
+𝐴
+=
+max
+⁡
+(
+∣
+𝑥
+(
+𝑡
+)
+∣
+)
+A=max(∣x(t)∣)
+Harmonic Ratio:
+
+𝐻
+𝑅
+=
+∑
+𝑓
+∈
+𝐻
+𝑎
+𝑟
+𝑚
+𝑜
+𝑛
+𝑖
+𝑐
+∣
+𝑆
+(
+𝑓
+)
+∣
+2
+∑
+𝑓
+∣
+𝑆
+(
+𝑓
+)
+∣
+2
+HR= 
+∑ 
+f
+​
+ ∣S(f)∣ 
+2
+ 
+∑ 
+f∈Harmonic
+​
+ ∣S(f)∣ 
+2
+ 
+​
+ 
+Dominant Frequency:
+
+𝐹
+𝑑
+𝑜
+𝑚
+=
+arg
+⁡
+max
+⁡
+∣
+𝑆
+(
+𝑓
+)
+∣
+F 
+dom
+​
+ =argmax∣S(f)∣
+Fundamental Frequency:
+
+𝑓
+0
+=
+1
+𝑇
+0
+,
+where 
+𝑇
+0
+ is the period of the fundamental
+f 
+0
+​
+ = 
+T 
+0
+​
+ 
+1
+​
+ ,where T 
+0
+​
+  is the period of the fundamental
+Crest Factor:
+
+𝐶
+𝐹
+=
+Peak Amplitude
+RMS
+CF= 
+RMS
+Peak Amplitude
+​
+ 
+Peak-to-Average Ratio (PAR):
+
+𝑃
+𝐴
+𝑅
+=
+20
+log
+⁡
+10
+(
+Peak Amplitude
+RMS
+)
+PAR=20log 
+10
+​
+ ( 
+RMS
+Peak Amplitude
+​
+ )

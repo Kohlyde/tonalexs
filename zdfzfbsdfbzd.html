@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Metadata Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        .fl-table {
+            border-collapse: collapse;
+            width: 100%;
+            margin-bottom: 20px;
+        }
+        .fl-table th, .fl-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+        .fl-table th {
+            background-color: #f2f2f2;
+        }
+    </style>
+</head>
+<body>
+   
+    <table class="fl-table">
+        <thead>
+            <tr>
+                <th>Property</th>
+                <th>Value</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr><td>File Name</td><td id="fileName">-</td></tr>
+            <tr><td>File Size</td><td id="fileSize">-</td></tr>
+            <tr><td>Last Modified</td><td id="lastModified">-</td></tr>
+            <tr><td>MIME Type</td><td id="mimeType">-</td></tr>
+            <tr><td>Extension</td><td id="extension">-</td></tr>
+            <tr><td>Encoding</td><td id="encoding">-</td></tr>
+            <tr><td>Title</td><td id="title">-</td></tr>
+            <tr><td>Artist</td><td id="artist">-</td></tr>
+            <tr><td>Album</td><td id="album">-</td></tr>
+            <tr><td>Genre</td><td id="genre">-</td></tr>
+            <tr><td>Year</td><td id="year">-</td></tr>
+            <tr><td>Track Number</td><td id="track">-</td></tr>
+            <tr><td>Composer</td><td id="composer">-</td></tr>
+            <tr><td>Lyrics</td><td id="lyrics">-</td></tr>
+            <tr><td>Publisher</td><td id="publisher">-</td></tr>
+            <tr><td>Disc Number</td><td id="discNumber">-</td></tr>
+            <tr><td>Encoder</td><td id="encoder">-</td></tr>
+            <tr><td>Language</td><td id="language">-</td></tr>
+            <tr><td>Copyright</td><td id="copyright">-</td></tr>
+            <tr><td>ISRC</td><td id="isrc">-</td></tr>
+            <tr><td>BPM</td><td id="bpm">-</td></tr>
+            <tr><td>Album Artist</td><td id="albumArtist">-</td></tr>
+            <tr><td>Key</td><td id="key">-</td></tr>
+            <tr><td>Initial Key</td><td id="initialKey">-</td></tr>
+            <tr><td>Length</td><td id="length">-</td></tr>
+            <tr><td>Comments</td><td id="comments">-</td></tr>
+        </tbody>
+    </table>
+    <button id="fileInputBtn">Select File</button>
+    <input id="fileInput" type="file" style="display: none;">
+    <script>
+   document.getElementById("fileInputBtn").addEventListener("click", function () {
+    document.getElementById("fileInput").click();
+});
+
+document.getElementById("fileInput").addEventListener("change", function (event) {
+    const file = event.target.files[0];
+    if (file) {
+        console.log("Selected file:", file.name);
+    } else {
+        console.log("No file selected.");
+    }
+});</script>
+</body>
+</html>

@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Spectrum Analyzer with Metadata</title>
+    <style>
+        canvas {
+            border: 1px solid black;
+            display: block;
+            margin: 20px auto;
+        }
+    </style>
+</head>
+<body>
+    <h1>Spectrum Analyzer with Metadata</h1>
+    <input type="file" id="fileInput" accept="audio/*">
+    <button id="playButton">Play Audio</button>
+    <div id="metadata">
+        <p id="fileName"></p>
+        <p id="fileSize"></p>
+        <p id="fileType"></p>
+        <p id="lastModified"></p>
+        <p id="title"></p>
+        <p id="artist"></p>
+        <p id="album"></p>
+        <p id="genre"></p>
+        <p id="year"></p>
+    </div>
+    <canvas id="spectrumCanvas" width="800" height="300"></canvas>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jsmediatags/3.9.5/jsmediatags.min.js"></script>
+    <script>
+        const fileInput = document.getElementById("fileInput");
+        const playButton = document.getElementById("playButton");
+        const canvas = document.getElementById("spectrumCanvas");
+        const ctx = canvas.getContext("2d");
+        let audioContext;
+        let audioSource;
+        let analyser;
+        let dataArray;
+        let audioBuffer;
+
+        function extractAudioMetadata(file) {
+            const fileReader = new FileReader();
+
+            fileReader.onload = function () {
+                window.jsmediatags.read(file, {
+                    onSuccess: function (tag) {
+                        const metadata = tag.tags;
+                        document.getElementById("fileName").innerText = `File Name: ${file.name}`;
+                        document.getElementById("fileSize").innerText = `File Size: ${(file.size / (1024 * 1024)).toFixed(2)} MB`;
+                        document.getElementById("fileType").innerText = `File Type: ${file.type || "Unknown"}`;
+                        document.getElementById("lastModified").innerText = `Last Modified: ${new Date(file.lastModified).toLocaleString()}`;
+                        document.getElementById("title").innerText = `Title: ${metadata.title || "Unknown"}`;
+                        document.getElementById("artist").innerText = `Artist: ${metadata.artist || "Unknown"}`;
+                        document.getElementById("album").innerText = `Album: ${metadata.album || "Unknown"}`;
+                        document.getElementById("genre").innerText = `Genre: ${metadata.genre || "Unknown"}`;
+                        document.getElementById("year").innerText = `Year: ${metadata.year || "Unknown"}`;
+                    },
+                    onError: function (error) {
+                        console.error("Error extracting metadata:", error);
+                    }
+                });
+            };
+
+            fileReader.readAsArrayBuffer(file);
+        }
+
+        function setupAudio(file) {
+            const fileReader = new FileReader();
+
+            fileReader.onload = function () {
+                audioContext.decodeAudioData(fileReader.result, function (buffer) {
+                    audioBuffer = buffer;
+                });
+            };
+
+            fileReader.readAsArrayBuffer(file);
+        }
+
+        function playAudio() {
+            if (!audioBuffer) {
+                alert("No audio loaded.");
+                return;
+            }
+
+            if (audioSource) {
+                audioSource.stop();
+            }
+
+            audioSource = audioContext.createBufferSource();
+            audioSource.buffer = audioBuffer;
+
+            analyser = audioContext.createAnalyser();
+            analyser.fftSize = 256;
+
+            const bufferLength = analyser.frequencyBinCount;
+            dataArray = new Uint8Array(bufferLength);
+
+            audioSource.connect(analyser);
+            analyser.connect(audioContext.destination);
+
+            audioSource.start();
+            drawSpectrum();
+        }
+
+        function drawSpectrum() {
+            requestAnimationFrame(drawSpectrum);
+            analyser.getByteFrequencyData(dataArray);
+
+            ctx.fillStyle = "black";
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = canvas.width / dataArray.length;
+            let barHeight;
+            let x = 0;
+
+            for (let i = 0; i < dataArray.length; i++) {
+                barHeight = dataArray[i];
+                ctx.fillStyle = "rgb(" + (barHeight + 100) + ",50,50)";
+                ctx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+
+                x += barWidth + 1;
+            }
+        }
+
+        fileInput.addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                extractAudioMetadata(file);
+                if (!audioContext) {
+                    audioContext = new (window.AudioContext || window.webkitAudioContext)();
+                }
+                setupAudio(file);
+            }
+        });
+
+        playButton.addEventListener("click", playAudio);
+    </script>
+</body>
+</html>

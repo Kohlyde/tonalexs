@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Typewriter Hover Effect</title>
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #f8f8f8;
+            color: #333;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .typewriter {
+            font-size: 1.5rem;
+            border-right: 2px solid transparent;
+            white-space: nowrap;
+            overflow: hidden;
+            width: 0;
+            transition: width 0s ease-out; /* Prevents animation on load */
+        }
+
+        .typewriter:hover {
+            width: 20em; /* Set the full width of the text */
+            animation: typing 4s steps(40, end), blink-caret 0.7s step-end infinite;
+        }
+
+        @keyframes typing {
+            from { width: 0; }
+            to { width: 20em; }
+        }
+
+        @keyframes blink-caret {
+            from, to { border-color: transparent; }
+            50% { border-color: #333; }
+        }
+    </style>
+</head>
+<body>
+    <div class="typewriter">Hover over this text for the effect.</div>
+</body>
+</html>

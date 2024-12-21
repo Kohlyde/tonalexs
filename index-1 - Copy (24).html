@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>File Name Without Extension</title>
+</head>
+<body>
+    <button id="fileInputBtn">Select File</button>
+    <input id="fileInput" type="file" style="display: none;">
+    <div>
+        Audio Quality File Name: <span id="audioQualityFileName">None</span>
+    </div>
+
+    <script>
+        document.querySelector("#fileInputBtn").addEventListener("click", function () {
+            document.querySelector("#fileInput").click();
+        });
+
+        document.querySelector("#fileInput").addEventListener("change", function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const fileNameWithoutExtension = file.name.replace(/\.[^/.]+$/, ""); // Remove extension
+                document.querySelector("#audioQualityFileName").innerText = fileNameWithoutExtension;
+            } else {
+                document.querySelector("#audioQualityFileName").innerText = "No file selected.";
+            }
+        });
+    </script>
+</body>
+</html>

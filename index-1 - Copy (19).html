@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Character-by-Character Animated LaTeX</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            font-size: 32px;
+            gap: 2px;
+        }
+
+        .latex-char {
+            display: inline-block;
+            opacity: 0;
+            animation-fill-mode: forwards;
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="latex-container"></div>
+    <script>
+        let formula, container, animations;
+
+        try {
+            formula = "\\(X_k = \\sum_{n=0}^{N-1} x_n \\cdot e^{-i \\frac{2\\pi}{N} k n}\\)";
+        } catch (err) {
+            console.error("Error defining formula:", err);
+        }
+
+        try {
+            container = document.getElementById("latex-container");
+            if (!container) throw new Error("Container element not found");
+        } catch (err) {
+            console.error("Error finding container:", err);
+        }
+
+        try {
+            animations = [
+                "animate__fadeIn", "animate__fadeInDown", "animate__fadeInUp", "animate__fadeInLeft", "animate__fadeInRight",
+                "animate__bounceIn", "animate__zoomIn", "animate__slideInLeft", "animate__slideInRight"
+            ];
+        } catch (err) {
+            console.error("Error defining animations array:", err);
+        }
+
+        const getRandomAnimation = () => {
+            try {
+                const animation = animations[Math.floor(Math.random() * animations.length)];
+                if (!animation) throw new Error("Random animation selection failed");
+                return animation;
+            } catch (err) {
+                console.error("Error in getRandomAnimation:", err);
+                return "animate__fadeIn"; // Default fallback
+            }
+        };
+
+        try {
+            MathJax.typesetPromise([container])
+                .then(() => {
+                    try {
+                        container.innerHTML = formula;
+                    } catch (err) {
+                        console.error("Error setting container innerHTML:", err);
+                    }
+
+                    try {
+                        const rendered = container.innerHTML.split(""); // Split into characters
+                        container.innerHTML = ""; // Clear the container
+
+                        rendered.forEach((char, index) => {
+                            setTimeout(() => {
+                                try {
+                                    const span = document.createElement("span");
+                                    if (!span) throw new Error("Span creation failed");
+
+                                    try {
+                                        span.className = `latex-char animate__animated ${getRandomAnimation()}`;
+                                    } catch (err) {
+                                        console.error("Error assigning className to span:", err);
+                                    }
+
+                                    try {
+                                        span.textContent = char.trim() === "" ? "\u00A0" : char;
+                                    } catch (err) {
+                                        console.error("Error setting span text content:", err);
+                                    }
+
+                                    try {
+                                        container.appendChild(span);
+                                    } catch (err) {
+                                        console.error("Error appending span to container:", err);
+                                    }
+                                } catch (err) {
+                                    console.error(`Error processing character at index ${index}:`, err);
+                                }
+                            }, index * 150); // Delay for animation
+                        });
+                    } catch (err) {
+                        console.error("Error during rendering process:", err);
+                    }
+                })
+                .catch((err) => console.error("Error rendering LaTeX with MathJax:", err));
+        } catch (err) {
+            console.error("Error triggering MathJax typesetPromise:", err);
+        }
+    </script>
+</body>
+</html>

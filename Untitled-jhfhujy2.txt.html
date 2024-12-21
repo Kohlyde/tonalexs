@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EDMC | Quality Metric Analysis</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #111;
+            color: white;
+            padding: 20px;
+        }
+        .stats-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        .stats-table th, .stats-table td {
+            text-align: left;
+            padding: 8px;
+            font-size: 14px;
+            border: 1px solid #ddd;
+        }
+        .stats-table th {
+            background-color: #333;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <h2>Statistical Analysis of Audio Metrics</h2>
+
+    <!-- Statistical Table -->
+    <table class="stats-table">
+        <thead>
+            <tr><th>Metric</th><th>Population Average</th><th>Your Value</th><th>Deviation (%)</th></tr>
+        </thead>
+        <tbody>
+            <tr><td>RMS</td><td id="avgRMS">0.25</td><td id="rmsValue">-</td><td id="rmsDeviation">-</td></tr>
+            <tr><td>Spectral Centroid</td><td id="avgCentroid">5000</td><td id="spectralCentroidValue">-</td><td id="centroidDeviation">-</td></tr>
+            <tr><td>Peak Amplitude</td><td id="avgPeak">1.0</td><td id="peakValue">-</td><td id="peakDeviation">-</td></tr>
+            <tr><td>Zero Crossing Rate</td><td id="avgZCR">10%</td><td id="zcrValue">-</td><td id="zcrDeviation">-</td></tr>
+            <tr><td>Bitrate</td><td id="avgBitrate">320 kbps</td><td id="bitrateValue">-</td><td id="bitrateDeviation">-</td></tr>
+        </tbody>
+    </table>
+
+    <script>
+        // Define population average values for metrics
+        const populationAverages = {
+            rms: 0.25,
+            spectralCentroid: 5000,
+            peakAmplitude: 1.0,
+            zeroCrossingRate: 10,
+            bitrate: 320
+        };
+
+        // Example: raw metrics (these would be dynamically calculated from your data)
+        const rawData = {
+            rms: 0.35, // Example value from audio file
+            spectralCentroid: 5500, // Example value
+            peakAmplitude: 1.2, // Example value
+            zeroCrossingRate: 12, // Example value
+            bitrate: 256 // Example value
+        };
+
+        // Function to calculate deviation as a percentage
+        function calculateDeviation(metricValue, averageValue) {
+            return ((metricValue - averageValue) / averageValue * 100).toFixed(2);
+        }
+
+        // Set the raw values in the table
+        document.getElementById("rmsValue").innerText = rawData.rms;
+        document.getElementById("spectralCentroidValue").innerText = rawData.spectralCentroid;
+        document.getElementById("peakValue").innerText = rawData.peakAmplitude;
+        document.getElementById("zcrValue").innerText = rawData.zeroCrossingRate;
+        document.getElementById("bitrateValue").innerText = rawData.bitrate;
+
+        // Calculate and display deviations
+        document.getElementById("rmsDeviation").innerText = calculateDeviation(rawData.rms, populationAverages.rms) + "%";
+        document.getElementById("centroidDeviation").innerText = calculateDeviation(rawData.spectralCentroid, populationAverages.spectralCentroid) + "%";
+        document.getElementById("peakDeviation").innerText = calculateDeviation(rawData.peakAmplitude, populationAverages.peakAmplitude) + "%";
+        document.getElementById("zcrDeviation").innerText = calculateDeviation(rawData.zeroCrossingRate, populationAverages.zeroCrossingRate) + "%";
+        document.getElementById("bitrateDeviation").innerText = calculateDeviation(rawData.bitrate, populationAverages.bitrate) + "%";
+
+    </script>
+</body>
+</html>

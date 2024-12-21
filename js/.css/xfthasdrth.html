@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fast Sequential Animated LaTeX Entrance</title>
+    <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+    <style>
+        body {
+            font-family: "Courier New", Courier, monospace;
+            background-color: #f8f8f8;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .container {
+            display: flex;
+            font-size: 48px; /* Large font size */
+            position: relative;
+            gap: 20px; /* Space between elements */
+        }
+
+        .latex-piece {
+            display: inline-block;
+            opacity: 0; /* Hide initially */
+        }
+    </style>
+</head>
+<body>
+    <div class="container" id="typewriter"></div>
+    <script>
+        const formula = [
+            "X_k",
+            "=",
+            "\\sum_{n=0}^{N-1}",
+            "x_n",
+            "\\cdot",
+            "e^{-i \\frac{2\\pi}{N} k n}"
+        ];
+
+        const animations = [
+            "animate__fadeIn",
+            "animate__fadeInDown",
+            "animate__fadeInLeft",
+            "animate__fadeInRight",
+            "animate__fadeInUp",
+            "animate__bounceIn",
+            "animate__zoomIn",
+            "animate__rotateIn",
+            "animate__slideInUp",
+            "animate__slideInDown",
+            "animate__slideInLeft",
+            "animate__slideInRight"
+        ];
+
+        const container = document.getElementById('typewriter');
+
+        // Function to get a random animation class
+        const getRandomAnimation = () => animations[Math.floor(Math.random() * animations.length)];
+
+        // Sequentially animate each part of the formula
+        formula.forEach((part, index) => {
+            const span = document.createElement('span');
+            span.className = `latex-piece animate__animated ${getRandomAnimation()}`;
+            span.style.animationDelay = `${index * 0.5}s`; // Half-second gap between each
+            span.style.opacity = "1"; // Ensure it remains visible after animation
+            span.innerHTML = `\\(${part}\\)`; // Render as MathJax inline math
+            container.appendChild(span);
+        });
+
+        // Trigger MathJax rendering after adding elements
+        MathJax.typesetPromise([container]);
+    </script>
+</body>
+</html>

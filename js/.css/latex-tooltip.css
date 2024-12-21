@@ -1,0 +1,70 @@
+/* latex-tooltip.css
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    margin: 20px;
+  }
+   */
+  /* Button Styling */
+  .latex-hover-spectrogram-button {
+    position: relative;
+    display: inline-block;
+    padding: 10px 20px;
+    font-size: 16px;
+    color: #fff;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.3s ease;
+  }
+  
+  .latex-hover-spectrogram-button:hover {
+    background-color: #0056b3;
+  }
+  
+  /* Tooltip Container */
+  .latex-hover-spectrogram-tooltip {
+    position: absolute;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 0;
+    background: #fff;
+    color: #000;
+    padding: 15px;
+    border-radius: 5px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 400px;
+    font-size: 14px;
+    z-index: 10;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+  }
+  
+  /* Tooltip Animation */
+  .latex-hover-spectrogram-button:hover .latex-hover-spectrogram-tooltip {
+    visibility: visible;
+    opacity: 1;
+    transform: translate(-50%, 10px);
+  }
+  
+  /* Tooltip Content Styling */
+  .latex-hover-spectrogram-content {
+    text-align: left;
+  }
+  
+  .latex-hover-spectrogram-content p {
+    margin: 10px 0;
+  }
+  
+  .latex-hover-spectrogram-content ul {
+    padding-left: 20px;
+  }
+  
+  .latex-hover-spectrogram-content ul li {
+    margin: 5px 0;
+  }
+  

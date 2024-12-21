@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>EDMC | Quality Metric Analysis</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    html,
+    body {
+      height: 100%;
+      margin: 0;
+    }
+
+    .navbar {
+      z-index: 1;
+      background-color: #1E2337;
+      color: ivory !important;
+      box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6);
+    }
+
+    .main-content {
+      display: flex;
+      height: calc(100vh - 56px);
+    }
+
+    .file-display,
+    .analysis-display {
+      flex: 1;
+      padding: 10px;
+      overflow-y: auto;
+      overflow-y: auto;
+      max-height: calc(100vh - 26px);
+    }
+
+    .drag-drop-container {
+      flex: 1;
+      padding: 20px;
+      margin: 10px;
+      margin-top: 20px;
+      border: 2px dashed #4CAF50;
+      color: white;
+      border-radius: 10px;
+    }
+
+    .drag-drop-container.dragging {
+      background-color: #444;
+    }
+
+    .fl-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    .fl-table th,
+    .fl-table td {
+      text-align: left;
+      padding: 5px;
+      font-size: 10px;
+      border: 1px solid #ddd;
+    }
+
+    .fl-table th {
+      background-color: #1E2337;
+      font-variant-caps: titling-caps;
+      font-size: 12px;
+      color: white;
+    }
+
+    .section-title {
+      margin-top: 10px;
+      color: #1E2337;
+    }
+
+    .fileInput {
+
+      display: none;
+    }
+  </style>
+  <style>
+    .audio-player {
+      width: 500px;
+      /* Wider player */
+      display: flex;
+      align-items: center;
+      justify-content: flex-start;
+    }
+
+    .audio-control {
+      width: 100%;
+      height: 30px;
+      /* Slightly larger for better visibility */
+      border-radius: 5px;
+      background-color: #1E2337;
+      /* Match navbar */
+      color: white;
+    }
+
+    .audio-control::-webkit-media-controls-panel {
+      background-color: #1E2337;
+      color: white;
+    }
+
+    .audio-control::-webkit-media-controls-play-button,
+    .audio-control::-webkit-media-controls-timeline {
+      filter: invert(100%);
+    }
+
+    .album-art {
+      width: 40px;
+      height: 40px;
+      border-radius: 5px;
+      /* Slight rounding for aesthetics */
+      object-fit: cover;
+      /* Ensure image is cropped neatly */
+      background-color: #ddd;
+      /* Placeholder color */
+    }
+  </style>
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#">EDMC | Quality Metric Analysis</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
+        <!-- Audio Player -->
+       </div>
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a class="nav-link active text-white" href="#">Home</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#">Settings</a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#">FAQ</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+
+  <div class="main-content">
+    <!-- Left Section: File Display -->
+    <div class="file-display">
+        <!-- Spectral Analysis Visualization -->
+        <div class="visualization-container">
+            <h2>Spectral Analysis Visualization</h2>
+            <h3>Spectrogram</h3>
+            <center>
+                <canvas id="spectrogramCanvas" width="1800" height="200"></canvas>
+                <p class="text-muted">Spectrogram: Frequency over time with energy intensity.</p>
+            </center>
+
+            <!-- Audio Player -->
+            <audio controls class="audio-control" id="audioElement">
+                <source id="audioSource" src="example.mp3" type="audio/mpeg">
+                Your browser does not support the audio element.
+            </audio>
+
+            <!-- File Upload Section -->
+            <!-- <h2>Uploaded Files</h2>
+            <input type="file" id="audioFileInput" accept="audio/*" /> -->
+            <table class="fl-table" id="fileTable">
+                <thead>
+                    <tr>
+                        <th>File Name</th>
+                        <th>File Size</th>
+                        <th>Last Modified</th>
+                        <th>MIME Type</th>
+                        <th>Extension</th>
+                        <th>Encoding</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>example.mp3</td>
+                        <td>5.4 MB</td>
+                        <td>12/08/2024, 14:23</td>
+                        <td>audio/mpeg</td>
+                        <td>.mp3</td>
+                        <td>UTF-8</td>
+                    </tr>
+                </tbody>
+            </table>
+       
+
+
+<script>
+    // Check for Web Audio API support
+    if (!window.AudioContext && !window.webkitAudioContext) {
+        alert("Your browser does not support the Web Audio API.");
+    }
+
+    // Get references to HTML elements
+    const audioElement = document.getElementById('audioElement');
+    const audioSource = document.getElementById('audioSource');
+    const canvas = document.getElementById('spectrogramCanvas');
+    const canvasContext = canvas.getContext('2d');
+
+    // Web Audio API setup
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const analyser = audioContext.createAnalyser();
+    const source = audioContext.createMediaElementSource(audioElement);
+
+    // Connect the audio element to the analyser
+    source.connect(analyser);
+    analyser.connect(audioContext.destination);
+
+    analyser.fftSize = 512;
+    const bufferLength = analyser.frequencyBinCount;
+    const dataArray = new Uint8Array(bufferLength);
+
+    // Function to draw the spectrogram
+    function drawSpectrogram() {
+        analyser.getByteFrequencyData(dataArray);
+
+        // Clear the previous frame
+        canvasContext.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw the new data
+        const barWidth = canvas.width / bufferLength;
+        let barHeight;
+        let x = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            barHeight = dataArray[i];
+
+            // Fill the canvas with the frequency data
+            const r = barHeight + 200; // Red component for color
+            const g = 50; // Green component for color
+            const b = 50; // Blue component for color
+            canvasContext.fillStyle = `rgb(${r},${g},${b})`;
+            canvasContext.fillRect(x, canvas.height - barHeight, barWidth - 1, barHeight);
+
+            x += barWidth;
+        }
+
+        // Call drawSpectrogram again to update the canvas
+        requestAnimationFrame(drawSpectrogram);
+    }
+
+    // Start drawing when the audio starts playing
+    audioElement.onplay = () => {
+        audioContext.resume().then(() => {
+            drawSpectrogram();
+        });
+    };
+
+    // Handle file selection and audio playback
+    document.getElementById('audioFileInput').addEventListener('change', function(e) {
+        const file = e.target.files[0];
+        if (file) {
+            const objectURL = URL.createObjectURL(file);
+            audioSource.src = objectURL;
+            audioElement.load(); // Reload the audio element with the new source
+            audioElement.play(); // Play the selected audio file
+        }
+    });
+</script>
+
+      
+      <!-- Spectral Analysis Visualization -->
+      <div class="visualization-container">
+        <h2>Spectral Analysis Visualization</h2>
+        <h3> Waveform </h3>
+        <!-- Waveform -->
+        <center> <canvas id="waveformCanvas" width="800" height="200"></canvas><br>
+          <p class="text-muted">Waveform: Amplitude over time.</p>
+        </center>
+
+      </div>
+      <h2 class="section-title">Audio File Properties</h2>
+      <table class="fl-table" id="audioPropertiesTable">
+        <thead>
+          <tr>
+            <th>Property</th>
+            <th>Value</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Sample Rate</td>
+            <td>44,100 Hz</td>
+          </tr>
+          <tr>
+            <td>Channels</td>
+            <td>2</td>
+          </tr>
+          <tr>
+            <td>Duration</td>
+            <td>3 min 45 sec</td>
+          </tr>
+          <tr>
+            <td>Bit Depth</td>
+            <td>16-bit</td>
+          </tr>
+          <tr>
+            <td>Length (Samples)</td>
+            <td>165,000</td>
+          </tr>
+        </tbody>
+      </table>
+      <!-- Spectral Analysis Visualization -->
+      <div class="visualization-container">
+        <h2>Spectral Analysis Visualization</h2>
+        <h3> Waveform </h3>
+        <canvas id="frequencyCanvas" width="800" height="200"></canvas>
+        <p class="text-muted">Frequency Spectrum: Energy at
+          different frequencies.</p>
+      </div>
+      <div class="scrollable-metrics">
+        <h2 class="section-title">Additional Metrics</h2>
+
+        <div class="metrics-group">
+          <h3>Group 1: General File Metrics</h3>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>File Name</td>
+                <td>example.mp3</td>
+              </tr>
+              <tr>
+                <td>File Size</td>
+                <td>5.4 MB</td>
+              </tr>
+              <tr>
+                <td>Last Modified Date</td>
+                <td>12/08/2024, 14:23</td>
+              </tr>
+              <tr>
+                <td>MIME Type</td>
+                <td>audio/mpeg</td>
+              </tr>
+              <tr>
+                <td>File Extension</td>
+                <td>.mp3</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="metrics-group">
+          <h3>Group 2: Spectral Features</h3>
+          <table class="fl-table" id="spectralFeaturesTable">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Spectral Centroid</td>
+                <td>3450 Hz</td>
+              </tr>
+              <tr>
+                <td>Spectral Flatness</td>
+                <td>0.8</td>
+              </tr>
+              <tr>
+                <td>Spectral Bandwidth</td>
+                <td>200 Hz</td>
+              </tr>
+              <tr>
+                <td>Spectral Roll-off</td>
+                <td>4500 Hz</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="metrics-group">
+          <h3>Group 3: Temporal Features</h3>
+          <table class="fl-table" id="temporalFeaturesTable">
+            <thead>
+              <tr>
+                <th>Feature</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>RMS</td>
+                <td>0.25</td>
+              </tr>
+              <tr>
+                <td>Peak Amplitude</td>
+                <td>1.0</td>
+              </tr>
+              <tr>
+                <td>Zero Crossing Rate</td>
+                <td>12.5%</td>
+              </tr>
+              <tr>
+                <td>Low Energy Ratio</td>
+                <td>15%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="metrics-group">
+          <h3>Group 4: Energy Metrics</h3>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Total Energy</td>
+                <td>125 J</td>
+              </tr>
+              <tr>
+                <td>Mean Energy</td>
+                <td>2.5 J</td>
+              </tr>
+              <tr>
+                <td>Energy Distribution (Bass)</td>
+                <td>35%</td>
+              </tr>
+              <tr>
+                <td>Energy Distribution (Treble)</td>
+                <td>40%</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="metrics-group">
+          <h3>Group 5: Frequency Analysis</h3>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Frequency Peaks</td>
+                <td>1000 Hz, 2000 Hz</td>
+              </tr>
+              <tr>
+                <td>Octave Bands</td>
+                <td>90 dB, 80 dB</td>
+              </tr>
+              <tr>
+                <td>Harmonic Ratio</td>
+                <td>85%</td>
+              </tr>
+              <tr>
+                <td>Dominant Frequency</td>
+                <td>1200 Hz</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="metrics-group">
+          <h3>Group 6: Custom Metrics</h3>
+          <table class="fl-table">
+            <thead>
+              <tr>
+                <th>Metric</th>
+                <th>Value</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>Custom Metric A</td>
+                <td>Value A</td>
+              </tr>
+              <tr>
+                <td>Custom Metric B</td>
+                <td>Value B</td>
+              </tr>
+              <tr>
+                <td>Custom Metric C</td>
+                <td>Value C</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+   
+      <div class="drag-drop-container" id="dragDropContainer">
+        <h2 class="text-center">Drag & Drop Your Files Here</h2>
+        <p class="text-center">Or click the button below to select files.</p>
+        
+        <!-- Hidden file input for audio files -->
+        <input type="file" id="fileInput" multiple style="display: none;" accept="audio/*">
+        
+        <!-- Button to trigger file input -->
+        <div class="d-flex justify-content-center">
+          
+        </div>
+        
+        <!-- Supported file formats info -->
+        <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
+      </div>
+    </div>
+      <!-- Section for displaying uploaded files -->
+      <h2>Uploaded Files</h2>
+      <div id="uploadedFiles" class="mt-3">
+        <!-- Uploaded files will appear here -->
+      </div>
+      
+      <!-- File input for adding additional files -->
+      <input type="file" id="audioFileInput" accept="audio/*" multiple onchange="handleFileSelect(event)" />
+      <script>
+        function handleFileSelect(event) {
+          const files = event.target.files;
+          const uploadedFilesContainer = document.getElementById('uploadedFiles');
+          
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            
+            const fileItem = document.createElement('div');
+            fileItem.classList.add('file-item');
+            fileItem.innerHTML = `
+              <span>${file.name}</span> 
+              <span>(${(file.size / 1024).toFixed(2)} KB)</span>
+            `;
+            
+            uploadedFilesContainer.appendChild(fileItem);
+          }
+        }
+      </script>
+</body>
+</html>
