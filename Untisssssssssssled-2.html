@@ -1,0 +1,70 @@
+document.getElementById("fileInput").addEventListener("change", function(event) {
+    const file = event.target.files[0];
+    if (file) {
+        // Populate basic file properties
+        document.getElementById("fileName").textContent = file.name;
+        document.getElementById("fileSize").textContent = formatBytes(file.size);
+        document.getElementById("lastModified").textContent = new Date(file.lastModified).toLocaleString();
+        document.getElementById("extension").textContent = file.name.split('.').pop();
+        document.getElementById("mimeType").textContent = file.type;
+
+        // Get audio metadata (using FileReader and a library like 'music-metadata')
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const audioData = e.target.result;
+            getAudioMetadata(audioData);
+        };
+        
+        reader.readAsArrayBuffer(file);
+    }
+});
+
+function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+}
+
+function getAudioMetadata(arrayBuffer) {
+    // Use a library like 'music-metadata-browser' to extract metadata
+    const musicMetadata = window.musicMetadata || null;
+
+    if (musicMetadata) {
+        musicMetadata.parse(arrayBuffer).then(metadata => {
+            // Populate metadata into table
+            document.getElementById("encoding").textContent = metadata.format.codec;
+            document.getElementById("title").textContent = metadata.common.title || '-';
+            document.getElementById("artist").textContent = metadata.common.artist || '-';
+            document.getElementById("album").textContent = metadata.common.album || '-';
+            document.getElementById("genre").textContent = metadata.common.genre?.join(", ") || '-';
+            document.getElementById("year").textContent = metadata.common.year || '-';
+            document.getElementById("track").textContent = metadata.common.track?.no || '-';
+            document.getElementById("composer").textContent = metadata.common.composer || '-';
+            document.getElementById("lyrics").textContent = metadata.common.lyrics?.text || '-';
+            document.getElementById("publisher").textContent = metadata.common.publisher || '-';
+            document.getElementById("discNumber").textContent = metadata.common.disc || '-';
+            document.getElementById("encoder").textContent = metadata.format.encoder || '-';
+            document.getElementById("language").textContent = metadata.common.language || '-';
+            document.getElementById("copyright").textContent = metadata.common.copyright || '-';
+            document.getElementById("isrc").textContent = metadata.common.isrc || '-';
+            document.getElementById("bpm").textContent = metadata.common.bpm || '-';
+            document.getElementById("albumArtist").textContent = metadata.common.albumartist || '-';
+            document.getElementById("key").textContent = metadata.common.key || '-';
+            document.getElementById("initialKey").textContent = metadata.common.initialKey || '-';
+            document.getElementById("length").textContent = formatTime(metadata.format.duration) || '-';
+            document.getElementById("comments").textContent = metadata.common.comment?.text || '-';
+        }).catch(err => {
+            console.error("Error reading audio metadata: ", err);
+        });
+    }
+}
+
+function formatTime(seconds) {
+    if (isNaN(seconds)) return '-';
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = Math.floor(seconds % 60);
+    return `${minutes}:${remainingSeconds.toString().padStart(2, '0')}`;
+}
