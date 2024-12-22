@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Metadata Extraction Sandbox</title>
+    <style>
+        /* Basic styles for the sandbox */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f4f4f4;
+        }
+
+        .container {
+            text-align: center;
+            width: 80%;
+        }
+
+        .drag-drop-container {
+            padding: 20px;
+            border: 2px dashed #007bff;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            cursor: pointer;
+        }
+
+        .drag-drop-container.dragging {
+            border-color: #28a745;
+        }
+
+        .table-container {
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+
+        th, td {
+            padding: 10px;
+            text-align: left;
+        }
+
+        td {
+            color: #555;
+        }
+
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Audio File Properties (metadata tags)</h2>
+
+        <!-- Drag and drop zone -->
+        <div id="dragDropContainer" class="drag-drop-container">
+            <h3>Drag & Drop Your Audio Files Here</h3>
+            <p>Or click the button below to select files.</p>
+            <input type="file" id="fileInput" accept="audio/*" style="display: none;" />
+            <button onclick="document.getElementById('fileInput').click()">Upload Audio File</button>
+        </div>
+
+        <!-- Table to display metadata -->
+        <div class="table-container">
+            <table id="fileTable">
+                <thead>
+                    <tr>
+                        <th>Property</th>
+                        <th>Value</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>File Name</td><td id="fileName">-</td><td id="fileNameSource">-</td></tr>
+                    <tr><td>File Size</td><td id="fileSize">-</td><td id="fileSizeSource">-</td></tr>
+                    <tr><td>Last Modified</td><td id="lastModified">-</td><td id="lastModifiedSource">-</td></tr>
+                    <tr><td>MIME Type</td><td id="mimeType">-</td><td id="mimeTypeSource">-</td></tr>
+                    <tr><td>Extension</td><td id="extension">-</td><td id="extensionSource">-</td></tr>
+                    <tr><td>Title</td><td id="title">-</td><td id="titleSource">-</td></tr>
+                    <tr><td>Artist</td><td id="artist">-</td><td id="artistSource">-</td></tr>
+                    <tr><td>Album</td><td id="album">-</td><td id="albumSource">-</td></tr>
+                    <tr><td>Genre</td><td id="genre">-</td><td id="genreSource">-</td></tr>
+                    <tr><td>Year</td><td id="year">-</td><td id="yearSource">-</td></tr>
+                    <tr><td>Track Number</td><td id="track">-</td><td id="trackSource">-</td></tr>
+                    <tr><td>Composer</td><td id="composer">-</td><td id="composerSource">-</td></tr>
+                    <tr><td>Lyrics</td><td id="lyrics">-</td><td id="lyricsSource">-</td></tr>
+                    <tr><td>Publisher</td><td id="publisher">-</td><td id="publisherSource">-</td></tr>
+                    <tr><td>Disc Number</td><td id="discNumber">-</td><td id="discNumberSource">-</td></tr>
+                    <tr><td>Encoder</td><td id="encoder">-</td><td id="encoderSource">-</td></tr>
+                    <tr><td>Language</td><td id="language">-</td><td id="languageSource">-</td></tr>
+                    <tr><td>Copyright</td><td id="copyright">-</td><td id="copyrightSource">-</td></tr>
+                    <tr><td>ISRC</td><td id="isrc">-</td><td id="isrcSource">-</td></tr>
+                    <tr><td>BPM</td><td id="bpm">-</td><td id="bpmSource">-</td></tr>
+                    <tr><td>Album Artist</td><td id="albumArtist">-</td><td id="albumArtistSource">-</td></tr>
+                    <tr><td>Key</td><td id="key">-</td><td id="keySource">-</td></tr>
+                    <tr><td>Initial Key</td><td id="initialKey">-</td><td id="initialKeySource">-</td></tr>
+                    <tr><td>Length</td><td id="length">-</td><td id="lengthSource">-</td></tr>
+                    <tr><td>Comments</td><td id="comments">-</td><td id="commentsSource">-</td></tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/jsmediatags"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/jsmediatags"></script>
+<script src="https://cdn.jsdelivr.net/npm/id3js/dist/id3.min.js"></script>
+
+<script>    
+document.addEventListener('DOMContentLoaded', function () {
+    const dropZone = document.getElementById('dragDropContainer');
+    const fileInput = document.getElementById('fileInput');
+
+    dropZone.addEventListener('dragover', function (e) { e.preventDefault(); dropZone.classList.add('dragging'); });
+    dropZone.addEventListener('dragleave', function (e) { e.preventDefault(); dropZone.classList.remove('dragging'); });
+    dropZone.addEventListener('drop', handleFileDrop);
+    fileInput.addEventListener('change', handleFileSelect);
+
+    function handleFileDrop(e) {
+        e.preventDefault();
+        dropZone.classList.remove('dragging');
+        const file = e.dataTransfer.files[0];
+        if (file && file.type.startsWith('audio/')) {
+            try {
+                extractAndPopulateMetadata(file);
+            } catch (error) {
+                console.error("Error processing file during drop:", error);
+                alert("Error during file processing.");
+            }
+        }
+    }
+
+    function handleFileSelect(e) {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('audio/')) {
+            try {
+                extractAndPopulateMetadata(file);
+            } catch (error) {
+                console.error("Error processing file during selection:", error);
+                alert("Error during file processing.");
+            }
+        }
+    }
+
+    function extractAndPopulateMetadata(file) {
+        const audio = new Audio();
+        audio.src = URL.createObjectURL(file);
+
+        audio.onloadedmetadata = function () {
+            try {
+                const metadata = extractPrimaryMetadata(audio);
+                updateFields(metadata);
+            } catch (error) {
+                console.error("Error extracting primary metadata:", error);
+                alert("Error extracting primary metadata.");
+            }
+        };
+
+        // Extract secondary metadata using jsmediatags and ID3.js
+        try {
+            extractSecondaryMetadata(file).then(metadata => {
+                updateFields(metadata);
+            }).catch(error => {
+                console.error("Error extracting secondary metadata:", error);
+                const fallbackMetadata = extractFallbackMetadata();
+                updateFields(fallbackMetadata);
+            });
+        } catch (error) {
+            console.error("Error processing secondary metadata:", error);
+            const fallbackMetadata = extractFallbackMetadata();
+            updateFields(fallbackMetadata);
+        }
+    }
+
+    function extractPrimaryMetadata(audio) {
+        return {
+            title: { value: audio.title || "Unavailable", source: "Primary Service" },
+            artist: { value: audio.artist || "Unavailable", source: "Primary Service" },
+            album: { value: audio.album || "Unavailable", source: "Primary Service" },
+            genre: { value: audio.genre || "Unavailable", source: "Primary Service" },
+            year: { value: audio.year || "Unavailable", source: "Primary Service" },
+            track: { value: audio.track || "Unavailable", source: "Primary Service" },
+            composer: { value: audio.composer || "Unavailable", source: "Primary Service" },
+            lyrics: { value: audio.lyrics || "Unavailable", source: "Primary Service" },
+            publisher: { value: audio.publisher || "Unavailable", source: "Primary Service" },
+            discNumber: { value: audio.discNumber || "Unavailable", source: "Primary Service" },
+            encoder: { value: audio.encoder || "Unavailable", source: "Primary Service" },
+            language: { value: audio.language || "Unavailable", source: "Primary Service" },
+            copyright: { value: audio.copyright || "Unavailable", source: "Primary Service" },
+            isrc: { value: audio.isrc || "Unavailable", source: "Primary Service" },
+            bpm: { value: audio.bpm || "Unavailable", source: "Primary Service" },
+            albumArtist: { value: audio.albumArtist || "Unavailable", source: "Primary Service" },
+            key: { value: audio.key || "Unavailable", source: "Primary Service" },
+            initialKey: { value: audio.initialKey || "Unavailable", source: "Primary Service" },
+            length: { value: audio.duration ? (audio.duration / 60).toFixed(2) + ' mins' : "Unavailable", source: "Primary Service" },
+            comments: { value: audio.comments || "Unavailable", source: "Primary Service" }
+        };
+    }
+
+    function extractSecondaryMetadata(file) {
+        return new Promise((resolve, reject) => {
+            // First attempt: jsmediatags
+            jsmediatags.read(file, {
+                onSuccess: function (tag) {
+                    resolve(coalesceMetadata(tag.tags, 'jsmediatags'));
+                },
+                onError: function (error) {
+                    console.error("jsmediatags error:", error);
+                    // If jsmediatags fails, attempt to extract using ID3.js
+                    try {
+                        extractID3Metadata(file, resolve, reject);
+                    } catch (id3Error) {
+                        reject(new Error("Failed to extract metadata from both services."));
+                    }
+                }
+            });
+        });
+    }
+
+    function extractID3Metadata(file, resolve, reject) {
+        ID3.loadTags(file.name, function () {
+            const tags = ID3.getAllTags(file.name);
+            resolve(coalesceMetadata(tags, 'ID3.js'));
+        }, { useLocalCache: false });
+    }
+
+    function coalesceMetadata(tags, source) {
+        return {
+            title: { value: tags.title || "Unavailable", source: source },
+            artist: { value: tags.artist || "Unavailable", source: source },
+            album: { value: tags.album || "Unavailable", source: source },
+            genre: { value: tags.genre || "Unavailable", source: source },
+            year: { value: tags.year || "Unavailable", source: source },
+            track: { value: tags.track || "Unavailable", source: source },
+            composer: { value: tags.composer || "Unavailable", source: source },
+            lyrics: { value: tags.lyrics || "Unavailable", source: source },
+            publisher: { value: tags.publisher || "Unavailable", source: source },
+            discNumber: { value: tags.discNumber || "Unavailable", source: source },
+            encoder: { value: tags.encoder || "Unavailable", source: source },
+            language: { value: tags.language || "Unavailable", source: source },
+            copyright: { value: tags.copyright || "Unavailable", source: source },
+            isrc: { value: tags.isrc || "Unavailable", source: source },
+            bpm: { value: tags.bpm || "Unavailable", source: source },
+            albumArtist: { value: tags.albumArtist || "Unavailable", source: source },
+            key: { value: tags.key || "Unavailable", source: source },
+            initialKey: { value: tags.initialKey || "Unavailable", source: source },
+            length: { value: tags.length || "Unavailable", source: source },
+            comments: { value: tags.comment || "Unavailable", source: source }
+        };
+    }
+
+    function extractFallbackMetadata() {
+        return {
+            title: { value: "Unavailable", source: "Fallback Service" },
+            artist: { value: "Unavailable", source: "Fallback Service" },
+            album: { value: "Unavailable", source: "Fallback Service" },
+            genre: { value: "Unavailable", source: "Fallback Service" },
+            year: { value: "Unavailable", source: "Fallback Service" },
+            track: { value: "Unavailable", source: "Fallback Service" },
+            composer: { value: "Unavailable", source: "Fallback Service" },
+            lyrics: { value: "Unavailable", source: "Fallback Service" },
+            publisher: { value: "Unavailable", source: "Fallback Service" },
+            discNumber: { value: "Unavailable", source: "Fallback Service" },
+            encoder: { value: "Unavailable", source: "Fallback Service" },
+            language: { value: "Unavailable", source: "Fallback Service" },
+            copyright: { value: "Unavailable", source: "Fallback Service" },
+            isrc: { value: "Unavailable", source: "Fallback Service" },
+            bpm: { value: "Unavailable", source: "Fallback Service" },
+            albumArtist: { value: "Unavailable", source: "Fallback Service" },
+            key: { value: "Unavailable", source: "Fallback Service" },
+            initialKey: { value: "Unavailable", source: "Fallback Service" },
+            length: { value: "Unavailable", source: "Fallback Service" },
+            comments: { value: "Unavailable", source: "Fallback Service" }
+        };
+    }
+
+    function updateFields(metadata) {
+        const fields = ['fileName', 'fileSize', 'lastModified', 'mimeType', 'extension', 'title', 'artist', 'album', 'genre', 'year', 'track', 'composer', 'lyrics', 'publisher', 'discNumber', 'encoder', 'language', 'copyright', 'isrc', 'bpm', 'albumArtist', 'key', 'initialKey', 'length', 'comments'];
+        fields.forEach(field => {
+            const valueElement = document.getElementById(field);
+            const sourceElement = document.getElementById(field + 'Source');
+            if (metadata[field]) {
+                valueElement.textContent = metadata[field].value;
+                sourceElement.textContent = metadata[field].source;
+            } else {
+                valueElement.textContent = 'Unavailable';
+                sourceElement.textContent = 'Unavailable';
+            }
+        });
+    }
+});
+</script>
+
+</body></html>

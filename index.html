@@ -3,13 +3,13 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Audio Spectrogram</title>
+  <title>Tonexs</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   
   <script type="text/javascript" id="MathJax-script" async
   src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
  
-  <link rel="stylesheet" href="./css/latex-tooltip.css">
+  <!-- <link rel="stylesheet" href="./css/latex-tooltip.css"> -->
  
   <link rel="stylesheet" href="./css/tooltip.css">
   <style>
@@ -175,7 +175,7 @@
 
 <body>
   <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid"><a class="navbar-brand text-white" href="#">EDMC | Quality Metric's
+    <div class="container-fluid"><a class="navbar-brand text-white" href="#">EDMC | Tonexs
   </a><button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button></div>
   </nav>
   <div class="main-content">
@@ -228,119 +228,144 @@
             <tr>
               <th>Property</th>
               <th>Value</th>
+              <th>Source</th> <!-- Added Source Column -->
             </tr>
           </thead>
           <tbody>
             <tr>
-              <td>File
-                Name</td>
-              <td id="fileName">-</td>
+              <td>File Name</td>
+              <td id="metaFileName_primary">-</td> <!-- Primary Service -->
+              <td id="metaFileNameSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
-              <td>File
-                Size</td>
-              <td id="fileSize">-</td>
+              <td>File Size</td>
+              <td id="metaFileSize_primary">-</td> <!-- Primary Service -->
+              <td id="metaFileSizeSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
-              <td>Last
-                Modified</td>
-              <td id="lastModified">-</td>
+              <td>Last Modified</td>
+              <td id="metaLastModified_primary">-</td> <!-- Primary Service -->
+              <td id="metaLastModifiedSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
-              <td>MIME
-                Type</td>
-              <td id="mimeType">-</td>
+              <td>MIME Type</td>
+              <td id="metaMimeType_primary">-</td> <!-- Primary Service -->
+              <td id="metaMimeTypeSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Extension</td>
-              <td id="extension">-</td>
+              <td id="metaExtension_primary">-</td> <!-- Primary Service -->
+              <td id="metaExtensionSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Encoding</td>
-              <td id="encoding">-</td>
+              <td id="metaEncoding_primary">-</td> <!-- Primary Service -->
+              <td id="metaEncodingSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Title</td>
-              <td id="title">-</td>
+              <td id="metaTitle_primary">-</td> <!-- Primary Service -->
+              <td id="metaTitleSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Artist</td>
-              <td id="artist">-</td>
+              <td id="metaArtist_primary">-</td> <!-- Primary Service -->
+              <td id="metaArtistSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Album</td>
-              <td id="album">-</td>
+              <td id="metaAlbum_primary">-</td> <!-- Primary Service -->
+              <td id="metaAlbumSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Genre</td>
-              <td id="genre">-</td>
+              <td id="metaGenre_primary">-</td> <!-- Primary Service -->
+              <td id="metaGenreSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Year</td>
-              <td id="year">-</td>
+              <td id="metaYear_primary">-</td> <!-- Primary Service -->
+              <td id="metaYearSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Track Number</td>
-              <td id="track">-</td>
+              <td id="metaTrack_primary">-</td> <!-- Primary Service -->
+              <td id="metaTrackSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Composer</td>
-              <td id="composer">-</td>
+              <td id="metaComposer_primary">-</td> <!-- Primary Service -->
+              <td id="metaComposerSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Lyrics</td>
-              <td id="lyrics">-</td>
+              <td id="metaLyrics_primary">-</td> <!-- Primary Service -->
+              <td id="metaLyricsSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Publisher</td>
-              <td id="publisher">-</td>
+              <td id="metaPublisher_primary">-</td> <!-- Primary Service -->
+              <td id="metaPublisherSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Disc Number</td>
-              <td id="discNumber">-</td>
+              <td id="metaDiscNumber_primary">-</td> <!-- Primary Service -->
+              <td id="metaDiscNumberSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Encoder</td>
-              <td id="encoder">-</td>
+              <td id="metaEncoder_primary">-</td> <!-- Primary Service -->
+              <td id="metaEncoderSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Language</td>
-              <td id="language">-</td>
+              <td id="metaLanguage_primary">-</td> <!-- Primary Service -->
+              <td id="metaLanguageSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Copyright</td>
-              <td id="copyright">-</td>
+              <td id="metaCopyright_primary">-</td> <!-- Primary Service -->
+              <td id="metaCopyrightSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>ISRC</td>
-              <td id="isrc">-</td>
+              <td id="metaIsrc_primary">-</td> <!-- Primary Service -->
+              <td id="metaIsrcSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>BPM</td>
-              <td id="bpm">-</td>
+              <td id="metaBpm_primary">-</td> <!-- Primary Service -->
+              <td id="metaBpmSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Album Artist</td>
-              <td id="albumArtist">-</td>
+              <td id="metaAlbumArtist_primary">-</td> <!-- Primary Service -->
+              <td id="metaAlbumArtistSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Key</td>
-              <td id="key">-</td>
+              <td id="metaKey_primary">-</td> <!-- Primary Service -->
+              <td id="metaKeySource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Initial Key</td>
-              <td id="initialKey">-</td>
+              <td id="metaInitialKey_primary">-</td> <!-- Primary Service -->
+              <td id="metaInitialKeySource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Length</td>
-              <td id="length">-</td>
+              <td id="metaLength_primary">-</td> <!-- Primary Service -->
+              <td id="metaLengthSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
             <tr>
               <td>Comments</td>
-              <td id="comments">-</td>
+              <td id="metaComments_primary">-</td> <!-- Primary Service -->
+              <td id="metaCommentsSource_primary">-</td> <!-- Source for Primary Service -->
             </tr>
           </tbody>
         </table>
+        
+        
         <h3>Group 2: Spectral Features</h3>
         <table class="fl-table" id="spectralFeaturesTable">
           <thead>
@@ -758,12 +783,7 @@
       <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
     </div>
   </div>
-    <script src="./js/metrics.js"></script>
-    <script src="./js/metadata.js"></script>
-    <script src="./js/spectogram.js"></script>
-    <script src="./js/Analytics.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/wavesurfer.min.js" integrity="sha512-HaIBPxUx5bshhdacWu+L4Ty4sjtp6Y0YhZeIXcVjKVxC/Iaod1Ory3Ap6gqT8E/SkrbKalXKALP8CNEIGsVd0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
- 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/wavesurfer.min.js" integrity="sha512-HaIBPxUx5bshhdacWu+L4Ty4sjtp6Y0YhZeIXcVjKVxC/Iaod1Ory3Ap6gqT8E/SkrbKalXKALP8CNEIGsVd0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>  
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/base-plugin.min.js" integrity="sha512-xmYR7YgQxp/dxVxA80Wr7V09ISHuoAOebO1L75A4y1g+VUUxTfTEX596RRXybx+5IncdS/J9QJ9w2t75vz21uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/decoder.min.js" integrity="sha512-UWuhKWfKVBzon4SoA3odRdxqUS8tFyfuEOfSXegT7IJsIO3dbCyQLZP4RiaiRw49ljHhip/gkartU8BoeRQ8Mg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/dom.min.js" integrity="sha512-5SgJXMHgYw/j8MbeFAi7b78vs8xm3n2ClZMMFyOrd+3NApj9+gJBk/WMSBnL1tdRwMQU8vw500WGKrt81hVJGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
@@ -787,7 +807,23 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/spectrogram.min.js" integrity="sha512-bSA7lT30DvZuVmnrkTHhuu3ugs2FZYWp2OqbvrB05OV61n5Az2gSLl4Z7sVykrYtJYOtoN86Y6Sh/2+a4JOQlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/spectrogram.esm.min.js" integrity="sha512-xc/DigQXwq81ZFsbupDh05HrsIWiF4vd2mcjSqH9/SzwFuHXgdhYhFoBrOwvkhAG0WHENFAVW15BcU78TE55Sg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/regions.min.js" integrity="sha512-03bOyBXWMGMHmjlUCLmpypgiSiuqg/1rkhsQa78hpwKCp7dex6XWCUectkNyvoKviuSLU8yGCc98JMSCfDjd8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('audio/')) {
+        populateMetadata(file);
+      }
+    });
+  </script>
+  
+  <script src="./js/metrics.js"></script>
+    <script src="./js/metadata.js"></script>
+    <script src="./js/spectogram.js"></script>
+    <script src="./js/Analytics.js"></script>
+    <script src="./js/medadata.js"></script>
 
+ 
+  
 </body>
 
 

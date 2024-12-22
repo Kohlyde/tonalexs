@@ -9,17 +9,17 @@ body {
 /* Button Styling */
 
 .latex-hover-spectrogram-button {
-    position: absolute;
-    padding: 5px 10px;
-    font-size: 16px;
+    position: relative;
+    padding: 1px 1px;
+    font-size: 12px;
     border-radius: 4px;
     color: #000;
     /* float: auto; */
-    display: flex;
-    top:125px;
+    display: inline-flex;
+    top:75px;
     font-variant-caps: titling-caps;
     background-color: #fff;
-   right:1300px;
+   /* right:1300px; */
     border: #1e2337 1px solid;
     cursor: pointer;
     outline: none;
