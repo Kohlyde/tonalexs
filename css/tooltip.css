@@ -13,19 +13,21 @@ body {
     padding: 1px 1px;
     font-size: 12px;
     border-radius: 4px;
-    color: #000;
-    /* float: auto; */
-    display: inline-flex;
-    top:75px;
+    color: #1e2337;
+    float: right;
+    display:  block;
+    top: -20px;
     font-variant-caps: titling-caps;
     background-color: #fff;
-   /* right:1300px; */
+    right:100px;
+    margin-right: -100px;
     border: #1e2337 1px solid;
     cursor: pointer;
     outline: none;
-    transition: background-color 0.53s ease;
+    /* transition: background-color 0.53s ease; */
     z-index: 9999999;
-    box-shadow: 0 0 0 rgba(255, 255, 255, 0.7);;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.589);
+    ;
 
 }
 
@@ -33,41 +35,51 @@ body {
     background-color: #fff;
     color: #ffffff;
     border: #1e2337 1px solid;
-    background-color: #8f8f8f;
-    padding: 5px 10px;
-    font-size: 16px;
-    box-shadow: 355px 331px 1300px 1300px rgba(255, 255, 255, 0.7);
-    animation: tooltipcanvas 0.5s forwards linear;
+    background-color: #ffffff;
+    padding: 1px 1px;
+    /* margin-right: 400px; */
+    opacity: 1;
+    font-size: 12px;
+    box-shadow: 0 0 1300px 1300px rgb(255, 255, 255);
+    animation: tooltipcanvas .7s forwards linear;
 }
 
 @keyframes tooltipcanvas {
     0% {
-        box-shadow: 0 0 0 0 #000;
+        color:#1e2337;
+        box-shadow: 43 43 432 700 #ffffff;
         transition: background-color 0.83s ease;
     }
 
-    100% {
-        box-shadow: 330px 300px 1300px 1300px rgba(255, 255, 255, 0.7);
+    59% {background-color:#1e2337; color: #fff;
+        box-shadow: 1330px 3100px 1300px 1300px rgba(255, 255, 255, 0.856);
         transition: background-color 0.53s ease;
+
+    }
+
+    100% {color:rgb(30, 35, 55,.4);
+        box-shadow: 1330px 100px 1300px 1300px rgba(255, 255, 255, 0.849), 20 15 10 25  rgba(0,0,0,.6);
+        transition: background-color 0.13s ease;
+
     }
 }
 
 /* Tooltip Container */
 .latex-hover-spectrogram-tooltip {
     position: absolute;
-    top: 40px;
-    left: 100px;
+    top: 36px;
+    left: -150px ;
     transform: translateX(-50%);
     visibility: hidden;
     opacity: 0;
     background: #fff;
-    color: #000;
+    color: #1e2337;
     padding: 15px;
     border-radius: 5px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    box-shadow: 0px 4px 8px rgba(39, 39, 39, 0.481);
     max-width: 400px;
-    font-size: 14px;
-    z-index: 10;
+    font-size: 16px;
+    z-index: 99999;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
 }
 
@@ -80,7 +92,7 @@ body {
 
 /* Tooltip Content Styling */
 .latex-hover-spectrogram-content {
-    text-align: right;
+    text-align: center;
 }
 
 .latex-hover-spectrogram-content p {
@@ -94,19 +106,20 @@ body {
 .latex-hover-spectrogram-content ul li {
     margin: 5px 0;
 }
+
 .latex-render {
     display: auto !important;
     float: right !important;
     position: relative !important;
-    align-items: center !important;
-    top:-20px;
-    gap: 10px !important;
-    right: 60px !important;
-    font-size: 20px !important;
+    align-items: right !important;
+    top: -0px;
+    gap: 0px !important;
+    right: 54px !important;
+    letter-spacing: 0;
+    font-size: 16px !important;
     transition-duration: 0s;
     /* animation-duration: 1s !important; */
-<<<<<<< HEAD
+
 }
-=======
-}
->>>>>>> cb2a69724c983b7b60136e607c5d28af9ec019d0
+
+.formula-column{font-family:"EB Garamond",serif;font-size:24px;text-align:center;color:#1e2337;padding:5px;letter-spacing:0.02em;}/*Increased font size for Formula column*/

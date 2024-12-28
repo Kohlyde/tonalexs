@@ -34,13 +34,245 @@
     <div class="container" id="typewriter"></div>
     <script>
         const formula = [
-            "X_k",
-            "=",
-            "\\sum_{n=0}^{N-1}",
-            "x_n",
-            "\\cdot",
-            "e^{-i \\frac{2\\pi}{N} k n}"
-        ];
+  { id: "formula1", formula: "f = f_0 \\cdot 2^{\\frac{n}{12}}" }, // Frequency formula for equal temperament
+  { id: "formula2", formula: "X_k  = \\sum_{n=0}^{N-1} x_n\\cdot e^{-i \\frac{2\\pi}{N} k n}" }, // DFT
+  { id: "formula3", formula: "C = A + B" }, // Chord notation: C is the sum of A and B
+  { id: "formula4", formula: "A_4 = 440 \\text{ Hz}" }, // Standard tuning for A4
+  { id: "formula5", formula: "f_n = f_0 \\cdot 2^{n/12}" }, // Frequency formula for the nth note in equal temperament
+  { id: "formula6", formula: "P5 = 7 \\text{ semitones}" }, // Perfect Fifth interval
+  { id: "formula7", formula: "M3 = 4 \\text{ semitones}" }, // Major Third interval
+  { id: "formula8", formula: "m3 = 3 \\text{ semitones}" }, // Minor Third interval
+  { id: "formula9", formula: "d3 = 2 \\text{ semitones}" }, // Diminished Third interval
+  { id: "formula10", formula: "M7 = 11 \\text{ semitones}" }, // Major Seventh interval
+  { id: "formula11", formula: "m7 = 10 \\text{ semitones}" }, // Minor Seventh interval
+  { id: "formula12", formula: "I = \\{ 1, 3, 5 \\}" }, // Major chord (root, major third, perfect fifth)
+  { id: "formula13", formula: "ii = \\{ 2, 4, 6 \\}" }, // Minor chord in second inversion
+  { id: "formula14", formula: "IV = \\{ 4, 6, 8 \\}" }, // Major chord in fourth inversion
+  { id: "formula15", formula: "V = \\{ 5, 7, 9 \\}" }, // Dominant chord (perfect fifth, major third, minor seventh)
+  { id: "formula16", formula: "T = \\sum_{n=0}^{N-1} \\left| x_n \\right|^2" }, // Signal power formula
+  { id: "formula17", formula: "R = \\int_{0}^{T} x(t) \\cdot y(t) \, dt" }, // Cross-correlation formula
+  { id: "formula18", formula: "A = \\frac{1}{2} m v^2" }, // Kinetic energy formula
+  { id: "formula19", formula: "Q = m c \\Delta T" }, // Heat energy formula
+  { id: "formula20", formula: "f(t) = A \\sin(2 \\pi f t + \\phi)" }, // Sine wave function
+  { id: "formula21", formula: "F(s) = \\mathcal{L} \\{ f(t) \\}" }, // Laplace transform
+  { id: "formula22", formula: "L^{-1}\\{ F(s) \\} = f(t)" }, // Inverse Laplace transform
+  { id: "formula23", formula: "X(w) = \\int_{-\\infty}^{\\infty} x(t) e^{-i w t} dt" }, // Fourier Transform
+  { id: "formula24", formula: "X(w) = \\sum_{n=-\\infty}^{\\infty} x[n] e^{-i w n}" }, // Discrete Fourier Transform for discrete signals
+  { id: "formula25", formula: "x(t) = \\sum_{n=-\\infty}^{\\infty} X[k] e^{i \\frac{2\\pi}{N} k n}" }, // Inverse DFT
+  { id: "formula26", formula: "Y(f) = \\mathcal{F} \\{ x(t) \\}" }, // Fourier transform notation
+  { id: "formula27", formula: "S = \\int_{-\\infty}^{\\infty} |X(f)|^2 df" }, // Spectral energy formula
+  { id: "formula28", formula: "BPM = 60 \\cdot \\frac{1}{T}" }, // Beats per minute (BPM) formula
+  { id: "formula29", formula: "f_{cutoff} = \\frac{1}{2 \\pi R C}" }, // Cutoff frequency for an RC circuit
+  { id: "formula30", formula: "f_{harmonic} = n \\cdot f_0" }, // Harmonics in a sound wave
+  { id: "formula31", formula: "f_{fundamental} = f_0" }, // Fundamental frequency
+  { id: "formula32", formula: "N = \\frac{c}{f_{sound}}" }, // Number of harmonics
+  { id: "formula33", formula: "d = v \\cdot t" }, // Distance formula for sound waves
+  { id: "formula34", formula: "v = \\sqrt{\\frac{E}{\\rho}}" }, // Velocity formula for sound in a medium
+  { id: "formula35", formula: "p(t) = A \\sin(\\omega t + \\phi)" }, // Pressure wave function for sound
+  { id: "formula36", formula: "T = \\frac{1}{f}" }, // Period of a waveform
+  { id: "formula37", formula: "f = \\frac{1}{T}" },
+  { id: "formula1", formula: "f = f_0 \\cdot 2^{\\frac{n}{12}}" }, // Frequency formula for equal temperament
+  { id: "formula2", formula: "X_k =\\sum_{n=0}^{N-1} x_n\\cdot e^{-i\\frac{2\\pi}{N} k n}" } // DFT
+  { id: "formula3", formula: "C = A + B" }, // Chord notation: C is the sum of A and B
+  { id: "formula4", formula: "A_4 = 440 \\text{ Hz}" }, // Standard tuning for A4
+  { id: "formula5", formula: "f_n = f_0 \\cdot 2^{n/12}" }, // Frequency formula for the nth note in equal temperament
+  { id: "formula6", formula: "P5 = 7 \\text{ semitones}" }, // Perfect Fifth interval
+  { id: "formula7", formula: "M3 = 4 \\text{ semitones}" }, // Major Third interval
+  { id: "formula8", formula: "m3 = 3 \\text{ semitones}" }, // Minor Third interval
+  { id: "formula9", formula: "d3 = 2 \\text{ semitones}" }, // Diminished Third interval
+  { id: "formula10", formula: "M7 = 11 \\text{ semitones}" }, // Major Seventh interval
+  { id: "formula11", formula: "m7 = 10 \\text{ semitones}" }, // Minor Seventh interval
+  { id: "formula12", formula: "I = \\{ 1, 3, 5 \\}" }, // Major chord (root, major third, perfect fifth)
+  { id: "formula13", formula: "ii = \\{ 2, 4, 6 \\}" }, // Minor chord in second inversion
+  { id: "formula14", formula: "IV = \\{ 4, 6, 8 \\}" }, // Major chord in fourth inversion
+  { id: "formula15", formula: "V = \\{ 5, 7, 9 \\}" }, // Dominant chord (perfect fifth, major third, minor seventh)
+  { id: "formula16", formula: "T = \\sum_{n=0}^{N-1} \\left| x_n \\right|^2" }, // Signal power formula
+  { id: "formula17", formula: "R = \\int_{0}^{T} x(t) \\cdot y(t) \, dt" }, // Cross-correlation formula
+  { id: "formula18", formula: "A = \\frac{1}{2} m v^2" }, // Kinetic energy formula
+  { id: "formula19", formula: "Q = m c \\Delta T" }, // Heat energy formula
+  { id: "formula20", formula: "f(t) = A \\sin(2 \\pi f t + \\phi)" }, // Sine wave function
+  { id: "formula21", formula: "F(s) = \\mathcal{L} \\{ f(t) \\}" }, // Laplace transform
+  { id: "formula22", formula: "L^{-1}\\{ F(s) \\} = f(t)" }, // Inverse Laplace transform
+  { id: "formula23", formula: "X(w) = \\int_{-\\infty}^{\\infty} x(t) e^{-i w t} dt" }, // Fourier Transform
+  { id: "formula24", formula: "X(w) = \\sum_{n=-\\infty}^{\\infty} x[n] e^{-i w n}" }, // Discrete Fourier Transform for discrete signals
+  { id: "formula25", formula: "x(t) = \\sum_{n=-\\infty}^{\\infty} X[k] e^{i \\frac{2\\pi}{N} k n}" }, // Inverse DFT
+  { id: "formula26", formula: "Y(f) = \\mathcal{F} \\{ x(t) \\}" }, // Fourier transform notation
+  { id: "formula27", formula: "S = \\int_{-\\infty}^{\\infty} |X(f)|^2 df" }, // Spectral energy formula
+  { id: "formula28", formula: "BPM = 60 \\cdot \\frac{1}{T}" }, // Beats per minute (BPM) formula
+  { id: "formula29", formula: "f_{cutoff} = \\frac{1}{2 \\pi R C}" }, // Cutoff frequency for an RC circuit
+  { id: "formula30", formula: "f_{harmonic} = n \\cdot f_0" }, // Harmonics in a sound wave
+  { id: "formula31", formula: "f_{fundamental} = f_0" }, // Fundamental frequency
+  { id: "formula32", formula: "N = \\frac{c}{f_{sound}}" }, // Number of harmonics
+  { id: "formula33", formula: "d = v \\cdot t" }, // Distance formula for sound waves
+  { id: "formula34", formula: "v = \\sqrt{\\frac{E}{\\rho}}" }, // Velocity formula for sound in a medium
+  { id: "formula35", formula: "p(t) = A \\sin(\\omega t + \\phi)" }, // Pressure wave function for sound
+  { id: "formula36", formula: "T = \\frac{1}{f}" }, // Period of a waveform
+  { id: "formula37", formula: "f = \\frac{1}{T}" }, // Frequency formula // Frequency formula
+  { id: "formula38", formula: "f = f_0 \\cdot 2^{n/12}" }, // Frequency of nth harmonic in equal temperament
+  { id: "formula39", formula: "x(t) = A \\cos(2 \\pi f t + \\phi)" }, // Cosine wave function
+  { id: "formula40", formula: "dB = 10 \\log_{10} \\left( \\frac{P}{P_0} \\right)" }, // Decibel formula
+  { id: "formula41", formula: "A = \\frac{1}{2} L m v^2" }, // Energy in a vibrating string
+  { id: "formula42", formula: "f_{beat} = |f_1 - f_2|" }, // Beat frequency formula
+  { id: "formula43", formula: "C = \\sum_{n=0}^{N-1} x_n" }, // Sum of discrete signal values
+  { id: "formula44", formula: "T = \\frac{2 L}{v}" }, // Period of a standing wave on a string
+  { id: "formula45", formula: "f = \\frac{c}{\\lambda}" }, // Frequency-wavelength relationship
+  { id: "formula46", formula: "P = A \\cdot \\omega" }, // Power in a harmonic oscillator
+  { id: "formula47", formula: "E = \\frac{1}{2} m v^2" }, // Kinetic energy of a vibrating particle
+  { id: "formula48", formula: "F = -kx" }, // Hooke's Law for spring systems
+  { id: "formula49", formula: "f = f_0 \\cdot 2^{n/12}" }, // Harmonic series frequency formula
+  { id: "formula50", formula: "\\Delta f = \\frac{1}{T}" }, // Frequency resolution in Fourier Transform
+  { id: "formula51", formula: "I = \\int_{0}^{T} |x(t)|^2 dt" }, // Energy of a signal over time
+  { id: "formula52", formula: "T = \\frac{1}{f_0}" }, // Period of a simple sine wave
+  { id: "formula53", formula: "f_{max} = 2 f_{fundamental}" }, // Maximum frequency in harmonic series
+  { id: "formula54", formula: "p = \\frac{F}{A}" }, // Pressure formula (Force per unit area)
+  { id: "formula55", formula: "\\lambda = \\frac{c}{f}" }, // Wavelength formula for waves
+  { id: "formula56", formula: "f_{resonance} = \\frac{1}{2 \\pi \\sqrt{LC}}" }, // Resonant frequency of LC circuit
+  { id: "formula57", formula: "T = \\frac{2L}{g}" }, // Time period of a simple pendulum
+  { id: "formula58", formula: "P = \\frac{V^2}{R}" }, // Power dissipated in a resistor
+  { id: "formula59", formula: "v = \\lambda f" }, // Wave velocity formula
+  { id: "formula60", formula: "Q = \\frac{v}{\\rho}" }, // Volume flow rate formula
+  { id: "formula61", formula: "f_{max} = \\frac{v}{2L}" }, // Maximum frequency of a vibrating string
+  { id: "formula62", formula: "v = \\sqrt{\\frac{T}{\\mu}}" }, // Wave velocity on a string
+  { id: "formula63", formula: "f_{cutoff} = \\frac{1}{2 \\pi R C}" }, // RC circuit cutoff frequency
+  { id: "formula64", formula: "T = \\frac{1}{f}" }, // Time period as inverse of frequency
+  { id: "formula65", formula: "f = \\frac{1}{T}" }, // Frequency as inverse of time period
+  { id: "formula66", formula: "x(t) = A \\sin(\\omega t + \\phi)" }, // Sinusoidal signal function
+  { id: "formula67", formula: "E = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula68", formula: "X = \\frac{V}{I}" }, // Impedance formula
+  { id: "formula69", formula: "R = \\frac{\\rho L}{A}" }, // Resistance formula (Ohm's law)
+  { id: "formula70", formula: "f_{max} = \\frac{v}{2L}" }, // Maximum frequency of a vibrating string
+  { id: "formula71", formula: "v = \\sqrt{\\frac{E}{\\rho}}" }, // Speed of sound in a medium
+  { id: "formula72", formula: "F = \\frac{1}{2} k x^2" }, // Potential energy stored in a spring
+  { id: "formula73", formula: "f(t) = \\int_{0}^{\\infty} X(w) e^{i w t} dw" }, // Inverse Fourier transform
+  { id: "formula74", formula: "x(t) = \\sum_{n=-\\infty}^{\\infty} X[k] e^{i \\frac{2\\pi}{N} k n}" }, // Inverse DFT formula
+  { id: "formula75", formula: "X(w) = \\int_{-\\infty}^{\\infty} x(t) e^{-i w t} dt" }, // Fourier transform of x(t)
+  { id: "formula76", formula: "f = \\frac{v}{\\lambda}" }, // Relationship between frequency and wavelength
+  { id: "formula77", formula: "v = v_0 + at" }, // Velocity formula for uniformly accelerated motion
+  { id: "formula78", formula: "v = \\sqrt{g L}" }, // Velocity of a wave on a string under tension
+  { id: "formula79", formula: "f = \\frac{1}{2 \\pi} \\sqrt{\\frac{k}{m}}" }, // Natural frequency of a mass-spring system
+  { id: "formula80", formula: "I = m r^2" }, // Moment of inertia for a point mass
+  { id: "formula81", formula: "F = \\mu N" }, // Frictional force formula
+  { id: "formula82", formula: "T = 2 \\pi \\sqrt{\\frac{L}{g}}" }, // Period of a simple pendulum
+  { id: "formula83", formula: "P = \\frac{F}{A}" }, // Pressure formula (Force per unit area)
+  { id: "formula84", formula: "f_n = n f_1" }, // Harmonics formula for string vibrations
+  { id: "formula85", formula: "f(t) = A e^{i \\omega t}" }, // Exponential function representation of a wave
+  { id: "formula86", formula: "F_{spring} = -k x" }, // Hooke's Law for spring force
+  { id: "formula87", formula: "v = \\frac{2 d}{t}" }, // Average velocity formula
+  { id: "formula88", formula: "A = \\pi r^2" }, // Area of a circle
+  { id: "formula89", formula: "E = \\frac{1}{2} m v^2" }, // Kinetic energy formula
+  { id: "formula90", formula: "I = \\int_0^T x(t) dt" }, // Total energy of a signal over time
+  { id: "formula91", formula: "f_{beat} = |f_1 - f_2|" }, // Beat frequency formula
+  { id: "formula92", formula: "v = \\frac{c}{\\sqrt{\\epsilon_r \\mu_r}}" }, // Speed of wave in a medium
+  { id: "formula93", formula: "P = V^2 / R" }, // Power dissipated by a resistor in an electrical circuit
+  { id: "formula94", formula: "E_{cap} = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula95", formula: "P = \\frac{1}{2} m v^2" }, // Power of a harmonic oscillator
+  { id: "formula96", formula: "f_{res} = \\frac{1}{2 \\pi \\sqrt{LC}}" }, // Resonance frequency of an LC circuit
+  { id: "formula97", formula: "F = \\mu m g" }, // Force due to friction on a mass
+  { id: "formula98", formula: "f(t) = A \\sin(\\omega t + \\phi)" }, // Sinusoidal function for displacement in a wave
+  { id: "formula99", formula: "v = \\lambda f" }, // Wave velocity formula
+  { id: "formula100", formula: "R = \\frac{\\rho L}{A}" }, // Resistance formula
+  { id: "formula101", formula: "V = I R" }, // Ohm's Law for voltage
+  { id: "formula102", formula: "P = I V" }, // Electrical power formula
+  { id: "formula103", formula: "A_{circ} = \\pi r^2" }, // Area of a circle
+  { id: "formula104", formula: "C = 2 \\pi r" }, // Circumference of a circle
+  { id: "formula105", formula: "v_{max} = A \\omega" }, // Maximum velocity in simple harmonic motion
+  { id: "formula106", formula: "a_{max} = A \\omega^2" }, // Maximum acceleration in SHM
+  { id: "formula107", formula: "T = \\frac{2\\pi}{\\omega}" }, // Time period from angular frequency
+  { id: "formula108", formula: "I = \\frac{1}{2} m r^2" }, // Moment of inertia for a solid disc
+  { id: "formula109", formula: "P_{max} = \\frac{1}{2} \\rho A v^3" }, // Maximum power of a wave in a medium
+  { id: "formula110", formula: "f = \\frac{1}{2 L} \\sqrt{T / \\mu}" }, // Frequency of a vibrating string
+  { id: "formula111", formula: "I = I_0 e^{-\\alpha x}" }, // Intensity attenuation in a medium
+  { id: "formula112", formula: "f_n = \\frac{n}{2L} \\sqrt{T / \\mu}" }, // Frequency of the nth harmonic
+  { id: "formula113", formula: "v = \\frac{dx}{dt}" }, // Velocity as the rate of change of displacement
+  { id: "formula114", formula: "T = \\frac{1}{f}" }, // Period of oscillation in SHM
+  { id: "formula115", formula: "E = \\frac{1}{2} \\mu v^2" }, // Kinetic energy of a particle in a wave
+  { id: "formula116", formula: "v_{max} = A \\omega" }, // Maximum velocity in a wave
+  { id: "formula117", formula: "a = -\\omega^2 x" }, // Acceleration in simple harmonic motion
+  { id: "formula118", formula: "v = A \\omega \\cos(\\omega t + \\phi)" }, // Velocity in SHM
+  { id: "formula119", formula: "a = - A \\omega^2 \\sin(\\omega t + \\phi)" }, // Acceleration in SHM
+  { id: "formula120", formula: "P = \\frac{I^2 R}{L}" }, // Power in an electrical circuit with inductance
+  { id: "formula121", formula: "E = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula122", formula: "f_0 = \\frac{1}{2 \\pi} \\sqrt{\\frac{k}{m}}" }, // Natural frequency of a mass-spring system
+  { id: "formula123", formula: "P = \\frac{V^2}{R}" }, // Power formula in an electrical circuit
+  { id: "formula124", formula: "X(w) = \\int_{-\\infty}^{\\infty} x(t) e^{-i w t} dt" }, // Fourier Transform
+  { id: "formula125", formula: "f = \\frac{c}{\\lambda}" }, // Relationship between frequency and wavelength in vacuum
+  { id: "formula126", formula: "v = \\sqrt{g L}" }, // Speed of wave on a string under tension
+  { id: "formula127", formula: "f = \\frac{1}{2\\pi} \\sqrt{\\frac{k}{m}}" }, // Frequency of a mass-spring system
+  { id: "formula128", formula: "T = \\frac{1}{f}" }, // Time period of oscillation
+  { id: "formula129", formula: "f = \\frac{v}{2L}" }, // Fundamental frequency of a vibrating string
+  { id: "formula130", formula: "P = \\frac{1}{2} m v^2" }, // Kinetic energy of a moving object
+  { id: "formula131", formula: "A = \\pi r^2" }, // Area of a circle
+  { id: "formula132", formula: "f = \\frac{1}{T}" }, // Frequency from period
+  { id: "formula133", formula: "v = \\lambda f" }, // Wave velocity equation
+  { id: "formula134", formula: "I = m r^2" }, // Moment of inertia of a point mass
+  { id: "formula135", formula: "F = -kx" }, // Hooke’s law for spring force
+  { id: "formula136", formula: "v = A \\cos(\\omega t + \\phi)" }, // Cosine wave displacement equation
+  { id: "formula137", formula: "a = \\frac{F}{m}" }, // Newton’s second law of motion
+  { id: "formula138", formula: "P = Fv" }, // Power as force times velocity
+  { id: "formula139", formula: "f = \\frac{c}{\\lambda}" }, // Wave frequency formula
+  { id: "formula140", formula: "x(t) = A e^{i \\omega t}" }, // Complex exponential form of a wave
+  { id: "formula141", formula: "f(t) = A \\sin(\\omega t + \\phi)" }, // Sinusoidal displacement equation
+  { id: "formula142", formula: "v_{max} = A \\omega" }, // Maximum velocity in harmonic motion
+  { id: "formula143", formula: "a_{max} = A \\omega^2" }, // Maximum acceleration in SHM
+  { id: "formula144", formula: "f_n = n f_1" }, // Harmonics in a vibrating string
+  { id: "formula145", formula: "v = \\frac{dx}{dt}" }, // Velocity as the rate of change of position
+  { id: "formula146", formula: "F_{spring} = -kx" }, // Spring force from Hooke’s law
+  { id: "formula147", formula: "P = \\frac{V^2}{R}" }, // Power dissipated in a resistor (Ohm’s law)
+  { id: "formula148", formula: "E = \\frac{1}{2} m v^2" }, // Kinetic energy equation
+  { id: "formula149", formula: "v = \\sqrt{gL}" }, // Speed of a wave on a string
+  { id: "formula150", formula: "P = V I" }, // Power in an electrical circuit
+  { id: "formula151", formula: "I = \\frac{V}{R}" }, // Ohm’s law for current
+  { id: "formula152", formula: "f_0 = \\frac{1}{2L} \\sqrt{T / \\mu}" }, // Frequency of a string vibrating in its fundamental mode
+  { id: "formula153", formula: "P = \\frac{V^2}{R}" }, // Power dissipated across a resistor
+  { id: "formula154", formula: "f = \\frac{v}{\\lambda}" }, // Wave frequency in terms of velocity and wavelength
+  { id: "formula155", formula: "E = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula156", formula: "I = \\int_0^T x(t) dt" }, // Total energy of a signal over time
+  { id: "formula157", formula: "F = \\mu m g" }, // Force due to friction on a mass
+  { id: "formula158", formula: "f = \\frac{1}{2 L} \\sqrt{T / \\mu}" }, // Frequency of a vibrating string
+  { id: "formula159", formula: "P = \\frac{I^2 R}{L}" }, // Power in an RLC circuit
+  { id: "formula160", formula: "v = \\frac{c}{\\sqrt{\\epsilon_r \\mu_r}}" }, // Speed of light in a medium
+  { id: "formula161", formula: "E = \\frac{1}{2} \\mu v^2" }, // Energy in a wave in a medium
+  { id: "formula162", formula: "v = A \\omega \\cos(\\omega t + \\phi)" }, // Velocity in SHM
+  { id: "formula163", formula: "a = - A \\omega^2 \\sin(\\omega t + \\phi)" }, // Acceleration in SHM
+  { id: "formula164", formula: "T = \\frac{1}{f}" }, // Time period of a periodic signal
+  { id: "formula165", formula: "f = \\frac{1}{T}" }, // Frequency of a periodic signal
+  { id: "formula166", formula: "E = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula167", formula: "v = v_0 + at" }, // Velocity with uniform acceleration
+  { id: "formula168", formula: "A = \\pi r^2" }, // Area of a circle
+  { id: "formula169", formula: "f_n = n f_1" }, // Harmonics in a vibrating string
+  { id: "formula170", formula: "v = A \\cos(\\omega t + \\phi)" }, // Velocity in SHM
+  { id: "formula171", formula: "T = \\frac{1}{f}" }, // Time period as inverse of frequency
+  { id: "formula172", formula: "I = m r^2" }, // Moment of inertia for point mass
+  { id: "formula173", formula: "f_{beat} = |f_1 - f_2|" }, // Beat frequency formula
+  { id: "formula174", formula: "I = \\sum_{n=0}^{N-1} x_n" }, // Sum of discrete signal values
+  { id: "formula175", formula: "f_{fundamental} = \\frac{c}{2L}" }, // Fundamental frequency of a vibrating string
+  { id: "formula176", formula: "X = \\frac{V}{I}" }, // Impedance formula
+  { id: "formula177", formula: "P = F v" }, // Power as force times velocity
+  { id: "formula178", formula: "E = \\frac{1}{2} \\mu v^2" }, // Energy of a wave in a medium
+  { id: "formula179", formula: "P = \\frac{V^2}{R}" }, // Power dissipated in a resistor
+  { id: "formula180", formula: "f = \\frac{1}{2L} \\sqrt{T / \\mu}" }, // Frequency of a vibrating string
+  { id: "formula181", formula: "T = \\frac{1}{f}" }, // Period from frequency
+  { id: "formula182", formula: "P = \\frac{V^2}{R}" }, // Power dissipated in a resistor
+  { id: "formula183", formula: "E = \\frac{1}{2} C V^2" }, // Energy stored in a capacitor
+  { id: "formula184", formula: "f = \\frac{v}{\\lambda}" }, // Frequency-wavelength relationship
+  { id: "formula185", formula: "v = \\frac{dx}{dt}" }, // Rate of change of position
+  { id: "formula186", formula: "f_{beat} = |f_1 - f_2|" }, // Beat frequency formula
+  { id: "formula187", formula: "T = \\frac{2L}{v}" }, // Time period of a standing wave
+  { id: "formula188", formula: "a = - A \\omega^2 \\sin(\\omega t + \\phi)" }, // Acceleration in SHM
+  { id: "formula189", formula: "P = \\frac{I^2 R}{L}" }, // Power dissipation formula for RLC circuits
+  { id: "formula190", formula: "v_{max} = A \\omega" }, // Maximum velocity of a wave
+  { id: "formula191", formula: "I = \\frac{V}{R}" }, // Ohm's Law for current
+  { id: "formula192", formula: "f = \\frac{c}{\\lambda}" }, // Frequency equation for waves
+  { id: "formula193", formula: "P = \\frac{V^2}{R}" }, // Power formula for electrical circuits
+  { id: "formula194", formula: "f_n = n f_1" }, // Harmonics for a vibrating string
+  { id: "formula195", formula: "f = \\frac{1}{T}" }, // Frequency from time period
+  { id: "formula196", formula: "I = \\sum_{n=0}^{N-1} x_n" }, // Sum of signal values
+  { id: "formula197", formula: "T = 2 \\pi \\sqrt{\\frac{L}{g}}" }, // Period of a simple pendulum
+  { id: "formula198", formula: "P = \\frac{V^2}{R}" }, // Power formula for resistive circuits
+  { id: "formula199", formula: "E = \\frac{1}{2} C V^2" } // Energy stored in a capacitor
+
+];
+
 
         const animations = [
             "animate__fadeIn",

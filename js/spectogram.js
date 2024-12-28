@@ -85,12 +85,11 @@ document.getElementById("fileInput").addEventListener("change", (event) => {
     alert("Please select a valid audio file.");
   }
 });
-
 // Resize canvas dynamically for responsiveness
 window.addEventListener("resize", () => {
-  canvas.width = canvas.parentElement.offsetWidth;
-  canvas.height = 300; // Set a default height
-  canvasCtx.clearRect(0, 0, canvas.width, canvas.height); // Clear on resize
+canvas.width = canvas.parentElement.offsetWidth;
+canvas.height = 300; // Set a default height
+canvasCtx.clearRect(0, 0, canvas.width, canvas.height); // Clear on resize
 });
 
 // Calculate Spectral Centroid
@@ -230,6 +229,7 @@ function startMetricUpdates(analyser, dataArray, audioContext, audioPlayer) {
   }, 1000); // Update every second
 }
 
+/* DOM Ready Event   */ document.addEventListener('DOMContentLoaded',()=>{const container=document.querySelector('#waveform');if(!container){console.error('WaveSurfer container not found in the DOM!');return;}const waveSurfer=WaveSurfer.create({container:'#waveform',waveColor:'violet',progressColor:'purple'});});
 
 
 // const audioPlayer = document.getElementById("audioPlayer");
