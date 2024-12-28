@@ -1,0 +1,343 @@
+<!DOCTYPE html>
+<html lang="en-US">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>tonalexs</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
+  <link rel="stylesheet" href="./css/tooltip.css">
+  <script type="text/javascript" id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <style>
+     html, body { height: 100%; margin: 0; } /* Sets the height of the HTML and body to 100% and removes default margin. */
+    .navbar { z-index: 1; background-color: #1E2337; color: ivory !important; box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6); } /* Styles the navigation bar with a background color, text color, and shadow. */
+    .main-content { display: flex; height: calc(100vh - 56px); } /* Makes the main content a flex container and adjusts its height. */
+    .file-display, .analysis-display { flex: 1; padding: 10px; overflow-y: auto; max-height: calc(100vh - 26px); } /* Divides space equally, adds padding, scrolls vertically if needed, and sets a maximum height. */
+    .drag-drop-container { flex: 1; padding: 20px; margin: 10px; margin-top: 20px; border: 2px dashed #1E2337; color: white; border-radius: 10px; } /* Creates a drag-and-drop area with dashed border and styling. */
+    .audio-player { width: 500px; display: flex; align-items: center; justify-content: flex-start; } /* Styles the audio player as a flex container with a fixed width. */
+    .audio-control { width: 100%; height: 30px; border-radius: 5px; background-color: #1E2337; color: white; } /* Styles the audio control with a background and text color, and rounded corners. */
+    .audio-control::-webkit-media-controls-panel { background-color: #1E2337; color: white; } /* Customizes the media control panel's colors. */
+    .audio-control::-webkit-media-controls-play-button, .audio-control::-webkit-media-controls-timeline { filter: invert(100%); } /* Inverts colors for play button and timeline. */
+    .album-art { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; background-color: #ddd; } /* Styles the album art with fixed dimensions and rounded corners. */
+    .fl-table { width: 100%; border-collapse: collapse; margin-top: 10px; } /* Creates a full-width table with collapsed borders. */
+    .fl-table th, .fl-table td { text-align: left; padding: 5px; font-size: 10px; border: 1px solid #ddd; } /* Adds padding, font size, and borders to table cells. */
+    .fl-table th { background-color: #1E2337; font-variant-caps: titling-caps; font-size: 12px; color: white; } /* Styles the table header with a background and text color. */
+    .section-title { margin-top: 10px; color: #1E2337; } /* Adds spacing above and sets the text color for section titles. */
+    .fileInput { display: none; } /* Hides the file input element. */
+    .btn { background-color: #F2A900; color: black; border: 2px solid #000; } /* Styles buttons with background, text color, and border. */
+    .btn:hover { background-color: #1E2337; color: white; border: 2px solid #000; } /* Changes button styling on hover. */
+     h3 { font-variant-caps: small-caps; font-style: italic; color: #F2A900; text-decoration: dashed; float: center; } /* Styles h3 headings with small caps, italics, and dashed text decoration. */
+    tr, td { font-weight: 700 !important; } /* Sets table rows and cells to bold text. */
+    .high { background-color: lightblue; animation: colorChange 1s ease-in-out; } /* Highlights with blue background and adds animation. */
+    .medium { background-color: orange; animation: colorChange 1s ease-in-out; } /* Highlights with orange background and adds animation. */
+    .low { background-color: lightcoral; animation: colorChange 1s ease-in-out; } /* Highlights with coral background and adds animation. */
+     @keyframes colorChange { 0% { background-color: white; } 100% { background-color: inherit; } } /* Animates background color transition. */
+    .fl-table td { transition: background-color 0.5s ease; } /* Smoothly transitions table cell background colors. */
+    .fl-table td:hover { background-color: rgba(0, 0, 0, 0.1); } /* Changes table cell background on hover. */
+     body { background-color: #f8f8f8; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; } /* Centers content on the page and sets background color. */
+    .container { display: flex; font-size: 48px; position: relative; gap: 20px; } /* Creates a flexible container with spacing between elements. */
+    .latex-piece { display: inline-block; opacity: 0; transform: translateY(-50px); animation: bigdrop 0.4s ease forwards; } /* Styles LaTeX elements with animation and initial hidden state. */
+     @keyframes bigdrop { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } } /* Animates opacity and position for big drop effect. */
+     body { background-color: #f8f8f8; display: inline; justify-content: center; align-items: center; height: 100vh; margin: 0; } /* Centers content with an inline display. */
+    .container { display: inline-flex; font-size: 23px; position: inherit; right: 50px; gap: 15px; } /* Creates an inline-flex container with smaller font size and alignment. */
+    .latex-piece { display: inline-block; opacity: 0; } /* Hides LaTeX elements initially. */
+
+</style>
+       <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/wavesurfer.min.js" integrity="sha512-HaIBPxUx5bshhdacWu+L4Ty4sjtp6Y0YhZeIXcVjKVxC/Iaod1Ory3Ap6gqT8E/SkrbKalXKALP8CNEIGsVd0g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- <script>const waveSurfer=WaveSurfer.create({ container: '#waveform', waveColor: 'violet', progressColor: 'purple'}); </script> -->
+
+</head>
+
+<body>
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid">
+      <a class="navbar-brand text-white" href="#">\( \text{tonalexs} \)</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </div>
+  </nav>
+  <div class="main-content">
+    <div class="file-display">
+
+      <div class="visualization-container">
+        <h2>Spectral Analysis Visualization</h2>
+        <button class="latex-hover-spectrogram-button">Hover for Info
+          <div class="latex-hover-spectrogram-tooltip">
+            <div class="latex-hover-spectrogram-content">
+              <p>The spectrum visualization is based on the <strong>Discrete Fourier Transform (DFT)</strong>, computed using the Fast Fourier Transform (FFT) algorithm:</p>
+              <p>
+                \[
+                X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n}
+                \]
+              </p>
+              <p>Where:</p>
+              <ul>
+                <li>\(x_n\): Signal in the time domain (e.g., audio samples)</li>
+                <li>\(N\): Number of samples in the signal</li>
+                <li>\(k\): Index of the frequency bin (0 to \(N-1\))</li>
+                <li>\(e^{-i \frac{2\pi}{N} k n}\): Complex sinusoid for each bin</li>
+              </ul>
+              <p>The magnitude of \(X_k\) determines the intensity of each frequency bin:</p>
+              <p>
+                \[
+                \text{Magnitude} = |X_k| = \sqrt{\text{Re}(X_k)^2 + \text{Im}(X_k)^2}
+                \]
+              </p>
+            </div>
+          </div>
+        </button>
+        <div class="latex-render">
+          <div class="container" id="typewriter"></div>
+          <!-- X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n} -->
+
+        </div>
+
+        <script>
+          // LaTeX formula split into meaningful pieces
+          const formula = [
+            "X_k",
+            "=",
+            "\\sum_{n=0}^{N-1}",
+            "x_n",
+            "\\cdot",
+            "e^{-i \\frac{2\\pi}{N} k n}"
+          ];
+
+          const container = document.getElementById('typewriter');
+
+          // Animate each part
+          formula.forEach((part, index) => {
+            const span = document.createElement('span');
+            span.className = 'latex-piece';
+            span.style.animationDelay = `${index * 0.4}s`; // Faster drop effect
+            span.innerHTML = `\\(${part}\\)`; // Render this as MathJax inline math
+            container.appendChild(span);
+          });
+
+          // Render MathJax dynamically
+          MathJax.typesetPromise([container]);
+        </script>
+        <h3>Spectrogram</h3>
+        <canvas id="spectrogramCanvas" width="900" height="200"></canvas>
+        <p class="text-muted">Spectrogram: Frequency over time with energy intensity.</p>
+        <audio id="audioPlayer" controls class="audio-control">
+          <img id="albumArt" src="https://via.placeholder.com/40" alt="Album Art" class="album-art me-2">
+          <source id="audioSource" src="" type="audio/mpeg">
+          Your browser does not support the audio element.
+        </audio>
+        <h3>Waveform</h3>
+        <div id="waveform"></div>
+        <h2 class="section-title">Audio File Properties (metadata tags)</h2>
+        <table class="fl-table" id="combinedTable">
+          <thead>
+            <tr><td colspan="5" style="background-color:#1e2337;color:#fff;font-size:20px;text-align:center;">Audio File Properties (metadata tags)</td></tr>
+            <tr><td>Property/Metric</td><td>Value</td><td>Threshold</td><td>Formula</td><td>Source</td></tr>
+          </thead>
+          <tbody>
+            <tr><td>File Name</td><td id="metaFileName_primary">-</td><td>-</td><td class="formula-column">\( \text{File\ Name} \)</td><td id="metaFileNameSource_primary">-</td></tr>
+            <tr><td>File Size</td><td id="metaFileSize_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)</td><td id="metaFileSizeSource_primary">-</td></tr>
+            <tr><td>Last Modified</td><td id="metaLastModified_primary">-</td><td>-</td><td class="formula-column">\( \text{Date:\ YYYY-MM-DD} \)</td><td id="metaLastModifiedSource_primary">-</td></tr>
+            <tr><td>MIME Type</td><td id="metaMimeType_primary">-</td><td>-</td><td class="formula-column">\( \text{MIME:\ Type} \)</td><td id="metaMimeTypeSource_primary">-</td></tr>
+            <tr><td>Extension</td><td id="metaExtension_primary">-</td><td>-</td><td class="formula-column">\( \text{.ext} \)</td><td id="metaExtensionSource_primary">-</td></tr>
+            <tr><td>Encoding</td><td id="metaEncoding_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ UTF-8,\ etc.} \)</td><td id="metaEncodingSource_primary">-</td></tr>
+            <tr><td>Title</td><td id="metaTitle_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Title} \)</td><td id="metaTitleSource_primary">-</td></tr>
+            <tr><td>Artist</td><td id="metaArtist_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Artist} \)</td><td id="metaArtistSource_primary">-</td></tr>
+            <tr><td>Album</td><td id="metaAlbum_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Album} \)</td><td id="metaAlbumSource_primary">-</td></tr>
+            <tr><td>Genre</td><td id="metaGenre_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Genre} \)</td><td id="metaGenreSource_primary">-</td></tr>
+            <tr><td>Year</td><td id="metaYear_primary">-</td><td>-</td><td class="formula-column">\( \text{Year:\ YYYY} \)</td><td id="metaYearSource_primary">-</td></tr>
+            <tr><td>Track Number</td><td id="metaTrack_primary">-</td><td>-</td><td class="formula-column">\( \text{Track\ \#:\ N} \)</td><td id="metaTrackSource_primary">-</td></tr>
+            <tr><td>Composer</td><td id="metaComposer_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Composer} \)</td><td id="metaComposerSource_primary">-</td></tr>
+            <tr><td>Lyrics</td><td id="metaLyrics_primary">-</td><td>-</td><td class="formula-column">\( \text{Lyrics:\ String} \)</td><td id="metaLyricsSource_primary">-</td></tr>
+            <tr><td>Publisher</td><td id="metaPublisher_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Publisher} \)</td><td id="metaPublisherSource_primary">-</td></tr>
+            <tr><td>Disc Number</td><td id="metaDiscNumber_primary">-</td><td>-</td><td class="formula-column">\( \text{Disc\ \#:\ N} \)</td><td id="metaDiscNumberSource_primary">-</td></tr>
+            <tr><td>Encoder</td><td id="metaEncoder_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Encoder} \)</td><td id="metaEncoderSource_primary">-</td></tr>
+            <tr><td>Language</td><td id="metaLanguage_primary">-</td><td>-</td><td class="formula-column">\( \text{Language:\ ISO\ 639-1} \)</td><td id="metaLanguageSource_primary">-</td></tr>
+            <tr><td>Copyright</td><td id="metaCopyright_primary">-</td><td>-</td><td class="formula-column">\( \text{Legal:\ \copyright} \)</td><td id="metaCopyrightSource_primary">-</td></tr>
+            <tr><td>ISRC</td><td id="metaIsrc_primary">-</td><td>-</td><td class="formula-column">\( \text{ISRC:\ Alphanumeric\ ID} \)</td><td id="metaIsrcSource_primary">-</td></tr>
+            <tr><td>BPM</td><td id="metaBpm_primary">-</td><td>-</td><td class="formula-column">\( \text{BPM:\ Integer} \)</td><td id="metaBpmSource_primary">-</td></tr>
+            <tr><td>Album Artist</td><td id="metaAlbumArtist_primary">-</td><td>-</td><td class="formula-column">\( \text{String:\ Album\ Artist} \)</td><td id="metaAlbumArtistSource_primary">-</td></tr>
+            <tr><td>Key</td><td id="metaKey_primary">-</td><td>-</td><td class="formula-column">\( \text{Key:\ A,\ B,\ etc.} \)</td><td id="metaKeySource_primary">-</td></tr>
+            <tr><td>Initial Key</td><td id="metaInitialKey_primary">-</td><td>-</td><td class="formula-column">\( \text{Key:\ A,\ B,\ etc.} \)</td><td id="metaInitialKeySource_primary">-</td></tr>
+            <tr><td>Length</td><td id="metaLength_primary">-</td><td>-</td><td class="formula-column">\( \text{Length:\ HH:MM:SS} \)</td><td id="metaLengthSource_primary">-</td></tr>
+            <tr><td>Comments</td><td id="metaComments_primary">-</td><td>-</td><td class="formula-column">\( \text{Comments:\ String} \)</td><td id="metaCommentsSource_primary">-</td></tr>
+          </tbody>
+          
+       
+        
+      
+          <thead>
+            <tr><th colspan="5">Spectral Features</th></tr>
+            <tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>Spectral Centroid</td><td id="spectralCentroid">-</td><td>High: &gt; 4000 Hz</td><td>\( C = \frac{\sum_{k} f_k A_k}{\sum_{k} A_k} \)</td><td>-</td></tr>
+            <tr><td>Spectral Flatness</td><td id="spectralFlatness">-</td><td>High: 0.8–1.0</td><td>\( SF = \frac{(\sum_{k} A_k)^2}{\sum_{k} A_k^2} \)</td><td>-</td></tr>
+            <tr><td>Spectral Bandwidth</td><td id="spectralBandwidth">-</td><td>Medium: 500–1500 Hz</td><td>\( BW = \sqrt{\frac{\sum_{k} (f_k - C)^2 A_k}{\sum_{k} A_k}} \)</td><td>-</td></tr>
+            <tr><td>Spectral Roll-off</td><td id="spectralRollOff">-</td><td>High: &gt; 4500 Hz</td><td>\( SR = \frac{\sum_{k} A_k \cdot \mathbb{1}(f_k \geq f_{\text{roll}})}{\sum_{k} A_k} \)</td><td>-</td></tr>
+            <tr><td>Spectral Contrast</td><td id="spectralContrast_quality">-</td><td>High: &gt; 30 dB</td><td>\( SC = \sum_{i} \left| E_{i} - E_{i+1} \right| \)</td><td>-</td></tr>
+            <tr><td>Spectral Energy</td><td id="spectralEnergy">-</td><td>High: &gt; 500</td><td>\( E = \sum_{k} A_k^2 \)</td><td>-</td></tr>
+            <tr><td>Spectral Flux</td><td id="spectralFlux">-</td><td>High: &gt; 0.5</td><td>\( SF = \sum_{k} (A_k^{(n)} - A_k^{(n-1)})^2 \)</td><td>-</td></tr>
+            <tr><td>Spectral Entropy</td><td id="spectralEntropy">-</td><td>Low: &lt; 0.5</td><td>\( H = - \sum_{k} P_k \log P_k \)</td><td>-</td></tr>
+          </tbody>
+      
+          <thead>
+            <tr><th colspan="5">Temporal Features</th></tr>
+            <tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th></tr>
+          </thead>
+          <tbody>
+            <tr><td>RMS</td><td id="RMS">-</td><td>Medium: 0.3–0.5</td><td>\( RMS = \sqrt{\frac{1}{N} \sum_{n=1}^N x_n^2} \)</td><td>-</td></tr>
+            <tr><td>Peak Amplitude</td><td id="PeakAmplitude">-</td><td>High: &gt; 1.0</td><td>\( A_{peak} = \max(|x_n|) \)</td><td>-</td></tr>
+            <tr><td>Zero Crossing Rate</td><td id="ZeroCrossingRate">-</td><td>Low: &lt; 10%</td><td>\( ZCR = \sum_{n=1}^{N-1} \mathbb{1}(x_n x_{n+1} < 0) \)</td><td>-</td></tr>
+            <tr><td>Low Energy Ratio</td><td id="LowEnergyRatio_quality">-</td><td>Medium: 10–30%</td><td>\( LER = \frac{\sum_{i \in \text{Low}} E_i}{\sum_{i} E_i} \)</td><td>-</td></tr>
+            <tr><td>Attack Time</td><td id="AttackTime_quality">-</td><td>Short: &lt; 50 ms</td><td>\( T_{attack} = \frac{t_{90} - t_{10}}{2} \)</td><td>-</td></tr>
+            <tr><td>Decay Time</td><td id="DecayTime_quality">-</td><td>Medium: 50–200 ms</td><td>\( T_{decay} = t_{90} - t_{10} \)</td><td>-</td></tr>
+            <tr><td>Sustain Level</td><td id="SustainLevel_quality">-</td><td>High: &gt; 70%</td><td>\( S_{level} = \frac{\sum_{t \in \text{sustain}} A_t}{\sum_{t \in \text{full}} A_t} \)</td><td>-</td></tr>
+            <tr><td>Release Time</td><td id="ReleaseTime_quality">-</td><td>Long: &gt; 200 ms</td><td>\( T_{release} = t_0 - t_f \)</td><td>-</td></tr>
+            <tr><td>Temporal Centroid</td><td id="TemporalCentroid_quality">-</td><td>Medium: ~50%</td><td>\( TC = \frac{\sum_{t} t \cdot A_t}{\sum_{t} A_t} \)</td><td>-</td></tr>
+            
+          </tbody>
+       <thead>
+              <tr>
+                <td colspan="5" style="background-color:#1e2337;color:#fff;font-size:20px;text-align:center;">Audio File Properties (Spectral Metrics)</td>
+              </tr>
+              <tr>
+                <td>Metric</td>
+                <td>Value</td>
+                <td>Threshold</td>
+                <td>Formula</td>
+                <td>Source</td>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Frequency Peaks</td><td>-</td><td>Medium: 1&amp;ndash;3 peaks</td><td>Peaks \( = \text{argmax}(X(f)) \)</td><td>-</td></tr>
+              <tr><td>Octave Bands</td><td>-</td><td>Medium: 70&amp;ndash;85 dB</td><td>\( \text{Octave Band Energy} = 10 \log_{10} \left(\sum_{f \in \text{band}} |X(f)|^2 \right) \)</td><td>-</td></tr>
+              <tr><td>Harmonic Ratio</td><td>-</td><td>High: &gt; 90%</td><td>\( \text{HR} = \frac{\text{Energy}_{\text{Harmonic}}}{\text{Total Energy}} \)</td><td>-</td></tr>
+              <tr><td>Dominant Frequency</td><td>-</td><td>High: Strong peak &gt; 1000 Hz</td><td>\( f_{\text{Dominant}} = \text{argmax}(|X(f)|) \)</td><td>-</td></tr>
+              <tr><td>Fundamental Frequency</td><td>-</td><td>High: &gt; 300 Hz</td><td>\( f_0 = \frac{1}{T} \)</td><td>-</td></tr>
+              <tr><td>Harmonic Distortion</td><td>-</td><td>Low: &lt; 10%</td><td>\( \text{THD} = \frac{\sum_{n=2}^N |H_n|^2}{|H_1|^2} \)</td><td>-</td></tr>
+              <tr><td>Spectral Slope</td><td>-</td><td>Medium: ~ -6 dB/octave</td><td>\( S = \frac{\Delta A}{\Delta f} \)</td><td>-</td></tr>
+              <tr><td>Inharmonicity</td><td>-</td><td>Low: &lt; 0.1</td><td>\( I = \frac{\sum_{n=1}^N (f_n - nf_0)^2}{\sum_{n=1}^N f_n^2} \)</td><td>-</td></tr>
+              <tr><td>Spectral Centroid</td><td>-</td><td>High: &gt; 4000 Hz</td><td>\( C = \frac{\sum f |X(f)|}{\sum |X(f)|} \)</td><td>-</td></tr>
+              <tr><td>Spectral Flatness</td><td>-</td><td>High: 0.8&amp;ndash;1.0</td><td>\( \text{Flatness} = \frac{\text{Geometric Mean}(|X(f)|)}{\text{Arithmetic Mean}(|X(f)|)} \)</td><td>-</td></tr>
+              <tr><td>Spectral Kurtosis</td><td>-</td><td>Low: &lt; 3</td><td>\( K = \frac{\mu_4}{\sigma^4} \)</td><td>-</td></tr>
+              <tr><td>Spectral Skewness</td><td>-</td><td>Low: &lt; 0.5</td><td>\( \text{Skewness} = \frac{\mu_3}{\sigma^3} \)</td><td>-</td></tr>
+              <tr><td>Noise-to-Harmonic Ratio</td><td>-</td><td>Low: &lt; 0.2</td><td>\( \text{NHR} = \frac{\text{Energy}_{\text{Noise}}}{\text{Energy}_{\text{Harmonic}}} \)</td><td>-</td></tr>
+              <tr><td>Energy per Octave</td><td>-</td><td>High: &gt; 50%</td><td>\( E_{\text{Octave}} = \frac{\text{Energy in Octave}}{\text{Total Energy}} \)</td><td>-</td></tr>
+            </tbody>
+
+          
+          
+            <thead>
+              <tr><th colspan="5">Energy Metrics</th></tr>
+              <tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Total Energy</td><td id="TotalEnergy">-</td><td>Medium: 100–200 J</td><td>\( E_{\text{total}} = \int P(t) \, dt \)</td><td>-</td></tr>
+              <tr><td>Mean Energy</td><td id="MeanEnergy">-</td><td>Medium: 2–4 J</td><td>\( E_{\text{mean}} = \frac{1}{T} \int_{0}^{T} P(t) \, dt \)</td><td>-</td></tr>
+              <tr><td>Energy Distribution (Bass)</td><td id="BassEnergy">-</td><td>Medium: 20–40%</td><td>\( \frac{E_{\text{bass}}}{E_{\text{total}}} \times 100 \)</td><td>-</td></tr>
+              <tr><td>Energy Distribution (Treble)</td><td id="TrebleEnergy">-</td><td>Medium: 30–50%</td><td>\( \frac{E_{\text{treble}}}{E_{\text{total}}} \times 100 \)</td><td>-</td></tr>
+              <tr><td>Dynamic Range</td><td id="DynamicRange">-</td><td>High: &gt; 20 dB</td><td>\( \text{DR} = 20 \log_{10} \frac{P_{\text{max}}}{P_{\text{min}}} \)</td><td>-</td></tr>
+              <tr><td>Crest Factor</td><td id="CrestFactor">-</td><td>High: &gt; 3</td><td>\( \text{CF} = \frac{P_{\text{peak}}}{P_{\text{rms}}} \)</td><td>-</td></tr>
+              <tr><td>Energy Envelope Variance</td><td id="EnergyEnvelopeVariance">-</td><td>Low: &lt; 0.1</td><td>\( \sigma^2 = \frac{1}{N} \sum_{i=1}^N (E_i - \mu)^2 \)</td><td>-</td></tr>
+              <tr><td>Normalized Energy</td><td id="NormalizedEnergy">-</td><td>High: &gt; 0.8</td><td>\( E_{\text{norm}} = \frac{E_{\text{current}}}{E_{\text{max}}} \)</td><td>-</td></tr>
+              <tr><td>Transient Energy</td><td id="TransientEnergy">-</td><td>Medium: 10–30%</td><td>\( \frac{E_{\text{transient}}}{E_{\text{total}}} \times 100 \)</td><td>-</td></tr>
+              <tr><td>Sustain Energy</td><td id="SustainEnergy">-</td><td>Medium: 30–60%</td><td>\( \frac{E_{\text{sustain}}}{E_{\text{total}}} \times 100 \)</td><td>-</td></tr>
+              <tr><td>Peak-to-Average Ratio (PAR)</td><td id="PeakToAverageRatio">-</td><td>High: &gt; 3 dB</td><td>\( \text{PAR} = \frac{P_{\text{peak}}}{P_{\text{average}}} \)</td><td>-</td></tr>
+            </tbody>
+            
+      
+            <thead>
+              <tr><th colspan="5">Custom Metrics</th></tr>
+              <tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Copyright</td><td id="Copyright">-</td><td>-</td><td>\( \text{Legal\ Protection\ \copyright} \)</td><td>-</td></tr>
+              <tr><td>Publisher</td><td id="Publisher">-</td><td>-</td><td>\( \text{Publishing\ Entity} \)</td><td>-</td></tr>
+              <tr><td>ISRC</td><td id="ISRC">-</td><td>-</td><td>\( \text{ISRC:\ A12345AB6789} \)</td><td>-</td></tr>
+              <tr><td>UPC</td><td id="UPC">-</td><td>-</td><td>\( \text{UPC:\ 012345678901} \)</td><td>-</td></tr>
+              <tr><td>Geolocation</td><td id="Geolocation">-</td><td>-</td><td>\( \text{Coordinates:\ (lat, long)} \)</td><td>-</td></tr>
+              <tr><td>Region of Recording</td><td id="RegionOfRecording">-</td><td>-</td><td>\( \text{Region:\ Country\ Name} \)</td><td>-</td></tr>
+              <tr><td>Creation Date</td><td id="CreationDate">-</td><td>-</td><td>\( \text{Date:\ YYYY-MM-DD} \)</td><td>-</td></tr>
+              <tr><td>Modification Date</td><td id="ModificationDate">-</td><td>-</td><td>\( \text{Date:\ YYYY-MM-DD} \)</td><td>-</td></tr>
+              <tr><td>License Type</td><td id="LicenseType">-</td><td>-</td><td>\( \text{License:\ CC-BY-SA} \)</td><td>-</td></tr>
+              <tr><td>Creative Commons Information</td><td id="CreativeCommons">-</td><td>-</td><td>\( \text{CC\ Info:\ CC0} \)</td><td>-</td></tr>
+              <tr><td>Album Art URL</td><td id="AlbumArtURL">-</td><td>-</td><td>\( \text{Image:\ URL} \)</td><td>-</td></tr>
+              <tr><td>Language</td><td id="Language">-</td><td>-</td><td>\( \text{Language:\ ISO\ Code} \)</td><td>-</td></tr>
+              <tr><td>Original Source URL</td><td id="OriginalSourceURL">-</td><td>-</td><td>\( \text{URL:\ https://example.com} \)</td><td>-</td></tr>
+              <tr><td>Genre Subcategory</td><td id="GenreSubcategory">-</td><td>-</td><td>\( \text{Subcategory:\ Pop-Rock} \)</td><td>-</td></tr>
+              <tr><td>Explicit Content</td><td id="ExplicitContent">-</td><td>-</td><td>\( \text{Explicit:\ Yes/No} \)</td><td>-</td></tr>
+              <tr><td>Keywords</td><td id="Keywords">-</td><td>-</td><td>\( \text{Keywords:\ Tag1,Tag2,...} \)</td><td>-</td></tr>
+              <tr><td>Geotag (Latitude, Longitude)</td><td id="Geotag">-</td><td>-</td><td>\( \text{Geo:\ (lat,long)} \)</td><td>-</td></tr>
+              <tr><td>Recording Environment</td><td id="RecordingEnvironment">-</td><td>-</td><td>\( \text{Environment:\ Indoor/Outdoor} \)</td><td>-</td></tr>
+              <tr><td>Audio Watermark</td><td id="AudioWatermark">-</td><td>-</td><td>\( \text{Watermark:\ Present/Absent} \)</td><td>-</td></tr>
+            </tbody>
+            
+        </table>
+      
+      </div>
+    </div>
+    <div class="drag-drop-container" id="dragDropContainer">
+      <h2 style="margin-top:250px;color:#000" class="text-center">Drag &amp; Drop Your Files Here</h2>
+      <p class="text-center">Or click the button below to select files.</p>
+      <input type="file" id="fileInput" multiple style="display: none;" accept="audio/*">
+      <div class="d-flex justify-content-center">
+        <button class="btn btn-success btn-lg px-4" onclick="document.getElementById('fileInput').click()">
+          <i class="bi bi-upload"></i> Upload Files
+        </button>
+      </div>
+      <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
+    </div>
+  </div>
+  <script>
+    document.getElementById('fileInput').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file && file.type.startsWith('audio/')) {
+        populateMetadata(file);
+      }
+    });
+  </script>
+
+  <script src="./js/metricas.js"></script>
+  <script src="./js/metrics.js"></script>
+
+  <script src="./js/spectogram.js"></script>
+  <script src="./js/Analytics.js"></script>
+  <script src="./js/medadata.js"></script>
+<script>
+  document.getElementById('startButton').addEventListener('click', () => {
+    const audioContext = new AudioContext();
+    audioContext.resume();
+});
+</script> 
+<!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/base-plugin.min.js" integrity="sha512-xmYR7YgQxp/dxVxA80Wr7V09ISHuoAOebO1L75A4y1g+VUUxTfTEX596RRXybx+5IncdS/J9QJ9w2t75vz21uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script> -->
+ 
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/decoder.min.js" integrity="sha512-UWuhKWfKVBzon4SoA3odRdxqUS8tFyfuEOfSXegT7IJsIO3dbCyQLZP4RiaiRw49ljHhip/gkartU8BoeRQ8Mg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/dom.min.js" integrity="sha512-5SgJXMHgYw/j8MbeFAi7b78vs8xm3n2ClZMMFyOrd+3NApj9+gJBk/WMSBnL1tdRwMQU8vw500WGKrt81hVJGg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/fetcher.min.js" integrity="sha512-OuySWodKMtYz+45VKNSRoBatVumNzkW6y9Fhz7hzAGTjN5JO3uY8JOjs5QyG7pzBqcLeZ/RM7HQqeh49WIwIBg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/base-plugin.min.js" integrity="sha512-xmYR7YgQxp/dxVxA80Wr7V09ISHuoAOebO1L75A4y1g+VUUxTfTEX596RRXybx+5IncdS/J9QJ9w2t75vz21uQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/zoom.min.js" integrity="sha512-LGWn1tOb3FAuVVwIkEJxwIaOh6uiaL8SoC9pQKuEqh8MCAnGQClQJ8Uc20qO37/9AUrmXcFzBwDUhH64cwfrpg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/zoom.esm.min.js" integrity="sha512-drObm+XutVWW6W4vGa4dJvTigv4dXH3KxoEVPQ0P0XfWNif7ovUOt/yQf54GqUaLdEGCm3wbyhgxg7Z7M+Czjg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/timeline.esm.min.js" integrity="sha512-Pf2lUaGLbFRgTs4MBacHl9S8fFQk3ruxK5HPpTO+FWpSjFnC2/y8hijRPLbZNAJ2bnSG+BSH6mc49UJRFWLYfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/draggable.min.js" integrity="sha512-b0uUDJAe1PVhHT0eauRmVbn3T+M06bkEwrMBc08QFAdSFZNt8t6+9AB2M7zln5gtqRYzqxsIMhlltEoB5Z96GQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/event-emitter.min.js" integrity="sha512-cWNuQtKqK07WGaGhyAbItLaaFon8s7BA2kMo86t/HIBpUp8kzR5/D6/3TJqNHEHq+KRBe690+v+3K7MTuZA0lQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/renderer.min.js" integrity="sha512-qQ+L++rfSjfi+Lp2G/iI5+EafRWKgWREmKNEy/rboEWhGWVl3Gtqdprcd4ebEWBUxvoy6AQm+HxfeUJi9uDb/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/timer.min.js" integrity="sha512-BO/2kQpBNoctPNgc4roUIw8gAYYzh5/fbayFvwirF5nWuPAydImE+FuhO3JVtCfuqLWbtMHhAkaSKk5hsIa0WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/timer.min.js" integrity="sha512-BO/2kQpBNoctPNgc4roUIw8gAYYzh5/fbayFvwirF5nWuPAydImE+FuhO3JVtCfuqLWbtMHhAkaSKk5hsIa0WA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/wavesurfer.esm.min.js" integrity="sha512-kaGHfKGSEuc1TBDM/uJT/D15PWALxrSy0Xl7n5T3UcgGosZ5gOgS34d24oPk/8lYZJ5DvQVF11zGzKr6OFayxg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/webaudio.min.js" integrity="sha512-ju3tmtMM4qbxcwgHks/dcCf5V1Opp5x3x5Azt00cDgB1Tkmm+rm+zur1+2uFdyq1HaAcPOEQmscr7bgbn7r+aw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/envelope.esm.min.js" integrity="sha512-vM1hKIkJZkKu4t5xToBI/lIj9in04WSs5re4aEj+MTYJDHm583tcLtkfB+BotaBlxX1Swpi8BZEfdkAjxkxjQQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/envelope.min.js" integrity="sha512-CmE0mhPX6YuBY4zsczNHKj4ypMoH14QSjhQYUMZpUO8SD2sGQfAxpbhnc0XlQvwmVvSNuRP1r1p4Kbi5qNfgqg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/webaudio.min.js" integrity="sha512-ju3tmtMM4qbxcwgHks/dcCf5V1Opp5x3x5Azt00cDgB1Tkmm+rm+zur1+2uFdyq1HaAcPOEQmscr7bgbn7r+aw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/timeline.min.js" integrity="sha512-50ES0pHD7HOYd6jAZob9b+Es4JfIKLJE2YmsLE4dkKFYm0a7NXAE+O6LFagMVyjJpMDznWHn5wIzCNGoh9soWg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/timeline.esm.min.js" integrity="sha512-Pf2lUaGLbFRgTs4MBacHl9S8fFQk3ruxK5HPpTO+FWpSjFnC2/y8hijRPLbZNAJ2bnSG+BSH6mc49UJRFWLYfg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/spectrogram.min.js" integrity="sha512-bSA7lT30DvZuVmnrkTHhuu3ugs2FZYWp2OqbvrB05OV61n5Az2gSLl4Z7sVykrYtJYOtoN86Y6Sh/2+a4JOQlw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/spectrogram.esm.min.js" integrity="sha512-xc/DigQXwq81ZFsbupDh05HrsIWiF4vd2mcjSqH9/SzwFuHXgdhYhFoBrOwvkhAG0WHENFAVW15BcU78TE55Sg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/wavesurfer.js/7.8.11/plugins/regions.min.js" integrity="sha512-03bOyBXWMGMHmjlUCLmpypgiSiuqg/1rkhsQa78hpwKCp7dex6XWCUectkNyvoKviuSLU8yGCc98JMSCfDjd8w==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+     -->
+<script>/* RMS Formula Render */ renderFormula('formula-column',generateFormula('rms'));</script>
+</body>
+
+
+</html>
