@@ -1,6 +1,6 @@
 .latex-hover-spectrogram-button-alt {
     position: relative;
-    padding: 5px 5px;
+    padding: 5px 15px;
     font-size: 12px;
     border-radius: 4px;
     color: #1e2337;
@@ -29,9 +29,9 @@
 
 .latex-hover-spectrogram-button {
     position: relative;
-    padding: 5px 5px;
+    padding: 5px 15px;
     font-size: 12px;
-    border-radius: 4px;
+    /* border-radius: 4px; */
     color: #1e2337;
     float: right;
     display:  block;
@@ -51,7 +51,7 @@
 
 }
 
-.latex-hover-spectrogram-button:hover, .latex-hover-spectrogram-button-alt:hover {
+.latex-hover-spectrogram-button:active, .latex-hover-spectrogram-button-alt:active {
     background-color: #fff;
     color: #FFD700;
     border: #1e2337 1px solid;
@@ -76,6 +76,7 @@
    100% {   
         background-color:#fff;
         color: #1e2337;
+        border: #1e2337 2PX solid;
         box-shadow: 330px 100px 300px 1200px rgba(218, 214, 214, 0.836);
         transition: background-color 0.53s ease;
 
@@ -106,7 +107,7 @@
     font-size: 14px;
     z-index: 2;
     transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;  
-    animation: tooltipcanvas .1s forwards linear;
+    animation: tooltipcanvas 1.7s forwards linear;
 }
 .latex-hover-spectrogram-tooltip-alt {
     position: absolute;
@@ -127,7 +128,7 @@
     z-index: 2;
     margin:auto;
     transition: opacity 0.3s ease, visibility 0.2s ease, transform 0.2s ease;  
-    animation: tooltipcanvas .1s forwards linear;
+    animation: tooltipcanvas 1.7s forwards linear;
 }
 /* Tooltip Animation */
 .latex-hover-spectrogram-button:hover  .latex-hover-spectrogram-tooltip {
