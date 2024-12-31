@@ -1,16 +1,35 @@
-/* latex-tooltip.css
+.latex-hover-spectrogram-button-alt {
+    position: relative;
+    padding: 5px 5px;
+    font-size: 12px;
+    border-radius: 4px;
+    color: #1e2337;
+    float: right;
+    display:  block;
+    top: 0px;
+    font-variant-caps: titling-caps;
+    background-color: #FFD700;
+    right:100px;
+    margin-right: -100px;
+    border: #1e2337 1px solid;
+    cursor: pointer;
+    outline: none;
+    transition: background-color 0.53s ease;
+    
+    /* z-index: 1; */
+    box-shadow: 0 0 0 0;
+    box-shadow: 0 0 0 rgba(255, 255, 255, 0.589);
+    
 
-body {
-    font-family: Arial, sans-serif;
-    line-height: 1.6;
-    margin: 20px;
-  }
-   */
-/* Button Styling */
+}
+
+
+
+
 
 .latex-hover-spectrogram-button {
     position: relative;
-    padding: 1px 1px;
+    padding: 5px 5px;
     font-size: 12px;
     border-radius: 4px;
     color: #1e2337;
@@ -18,78 +37,113 @@ body {
     display:  block;
     top: -20px;
     font-variant-caps: titling-caps;
-    background-color: #fff;
+    background-color: #FFD700;
     right:100px;
     margin-right: -100px;
     border: #1e2337 1px solid;
     cursor: pointer;
     outline: none;
-    /* transition: background-color 0.53s ease; */
-    z-index: 9999999;
+    transition: background-color 0.53s ease;
+    /* z-index: 0; */
+    /* box-shadow: 0 0 0 0; */
     box-shadow: 0 0 0 rgba(255, 255, 255, 0.589);
-    ;
+    
 
 }
 
-.latex-hover-spectrogram-button:hover {
+.latex-hover-spectrogram-button:hover, .latex-hover-spectrogram-button-alt:hover {
     background-color: #fff;
-    color: #ffffff;
+    color: #FFD700;
     border: #1e2337 1px solid;
-    background-color: #ffffff;
-    padding: 1px 1px;
+    background-color: #1e2337;
+    padding: 5px 15px;
     /* margin-right: 400px; */
     opacity: 1;
+    border:#FFD700; 
     font-size: 12px;
-    box-shadow: 0 0 1300px 1300px rgb(255, 255, 255);
-    animation: tooltipcanvas .7s forwards linear;
+    box-shadow: 0 0 0 0;
+  
 }
 
 @keyframes tooltipcanvas {
     0% {
+        background-color:#FFD700;
         color:#1e2337;
         box-shadow: 43 43 432 700 #ffffff;
         transition: background-color 0.83s ease;
     }
 
-    59% {background-color:#1e2337; color: #fff;
-        box-shadow: 1330px 3100px 1300px 1300px rgba(255, 255, 255, 0.856);
+   100% {   
+        background-color:#fff;
+        color: #1e2337;
+        box-shadow: 330px 100px 300px 1200px rgba(218, 214, 214, 0.836);
         transition: background-color 0.53s ease;
 
     }
-
-    100% {color:rgb(30, 35, 55,.4);
+/* 
+    after {color:rgb(30, 35, 55,.4);
         box-shadow: 1330px 100px 1300px 1300px rgba(255, 255, 255, 0.849), 20 15 10 25  rgba(0,0,0,.6);
         transition: background-color 0.13s ease;
 
-    }
+    } */
 }
 
 /* Tooltip Container */
 .latex-hover-spectrogram-tooltip {
     position: absolute;
     top: 36px;
+    left: -250px ;
+    transform: translateX(-50%);
+    visibility: hidden;
+    opacity: 1;
+    background: #fff;
+    color: #1e2337;
+    padding: 15px;
+    border: #1e2337 2px solid;
+    border-radius: 5px;
+    box-shadow: 0px 4px 8px rgba(24, 24, 24, 0.801);
+    max-width: 400px;
+    font-size: 14px;
+    z-index: 2;
+    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;  
+    animation: tooltipcanvas .1s forwards linear;
+}
+.latex-hover-spectrogram-tooltip-alt {
+    position: absolute;
+    padding: 5px 5px;
+    top: 0px;
     left: -150px ;
     transform: translateX(-50%);
     visibility: hidden;
     opacity: 0;
     background: #fff;
     color: #1e2337;
-    padding: 15px;
+    /* padding: 15px; */
     border-radius: 5px;
+    border: #1e2337 2px solid;
     box-shadow: 0px 4px 8px rgba(39, 39, 39, 0.481);
-    max-width: 400px;
-    font-size: 16px;
-    z-index: 99999;
-    transition: opacity 0.3s ease, visibility 0.3s ease, transform 0.3s ease;
+    min-width: 400px;
+    font-size: 14px;
+    z-index: 2;
+    margin:auto;
+    transition: opacity 0.3s ease, visibility 0.2s ease, transform 0.2s ease;  
+    animation: tooltipcanvas .1s forwards linear;
 }
-
 /* Tooltip Animation */
-.latex-hover-spectrogram-button:hover .latex-hover-spectrogram-tooltip {
+.latex-hover-spectrogram-button:hover  .latex-hover-spectrogram-tooltip {
     visibility: visible;
     opacity: 1;
+    z-index:20;
     transform: translate(-50%, 10px);
+    box-shadow: 0px 4px 8px rgba(39, 39, 39, 0.481);
 }
-
+.latex-hover-spectrogram-button-alt:hover  .latex-hover-spectrogram-tooltip-alt {
+    visibility: visible;
+    opacity: 1;
+    padding: 5px 5px;
+    transform: translate(-50%, 10px);
+    box-shadow: 0px 4px 8px rgba(39, 39, 39, 0.481);
+}
 /* Tooltip Content Styling */
 .latex-hover-spectrogram-content {
     text-align: center;
@@ -104,7 +158,7 @@ body {
 }
 
 .latex-hover-spectrogram-content ul li {
-    margin: 5px 0;
+    margin: 0px 0;
 }
 
 .latex-render {
