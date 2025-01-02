@@ -3,12 +3,12 @@
     padding: 5px 15px;
     font-size: 12px;
     border-radius: 4px;
-    color: #1e2337;
+    color: #FFD700;
     float: right;
     display:  block;
     top: 0px;
     font-variant-caps: titling-caps;
-    background-color: #FFD700;
+    background-color: #1e2337;
     right:100px;
     margin-right: -100px;
     border: #1e2337 1px solid;
@@ -29,15 +29,15 @@
 
 .latex-hover-spectrogram-button {
     position: relative;
-    padding: 5px 15px;
+    padding: 5px 20px;
     font-size: 12px;
-    /* border-radius: 4px; */
-    color: #1e2337;
+    border-radius: .25em;
+    color: #FFD700;
     float: right;
     display:  block;
     top: -20px;
     font-variant-caps: titling-caps;
-    background-color: #FFD700;
+    background-color: #1e2337;
     right:100px;
     margin-right: -100px;
     border: #1e2337 1px solid;
@@ -51,7 +51,7 @@
 
 }
 
-.latex-hover-spectrogram-button:active, .latex-hover-spectrogram-button-alt:active {
+.latex-hover-spectrogram-button::selection, .latex-hover-spectrogram-button-alt:active:act {
     background-color: #fff;
     color: #FFD700;
     border: #1e2337 1px solid;
@@ -100,8 +100,8 @@
     background: #fff;
     color: #1e2337;
     padding: 15px;
-    border: #1e2337 2px solid;
-    border-radius: 5px;
+    /* border: #1e2337 2px solid; */
+    /* border-radius: 5px; */
     box-shadow: 0px 4px 8px rgba(24, 24, 24, 0.801);
     max-width: 400px;
     font-size: 14px;
@@ -120,7 +120,7 @@
     background: #fff;
     color: #1e2337;
     /* padding: 15px; */
-    border-radius: 5px;
+    /* border-radius: 5px; */
     border: #1e2337 2px solid;
     box-shadow: 0px 4px 8px rgba(39, 39, 39, 0.481);
     min-width: 400px;
