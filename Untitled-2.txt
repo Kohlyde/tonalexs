@@ -1,8 +1,0 @@
-C:\Users\coalesce\Documents\GitHub\EDMC-Audio-Metric-Quality-Analyser\index.html
-  260,15: // Create the AudioContext
-  261,7: const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  261,34: const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  261,63: const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-  265,9:     if (audioContext.state === 'suspended') {
-  266,9:         audioContext.resume().then(() => console.log('AudioContext resumed.'));
-  266,55:         audioContext.resume().then(() => console.log('AudioContext resumed.'));

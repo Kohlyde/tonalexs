@@ -7,8 +7,20 @@
   <title>tonalexs</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" />
-  <link rel="stylesheet" href="./css/tooltip.css">
+  <!-- <link rel="stylesheet" href="css/tooltip.css">
+  <link rel="stylesheet" href="css/main.css"> -->
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+  <script>
+    window.MathJax = {
+      tex: {
+        inlineMath: [['$', '$'], ['\\(', '\\)']],
+        displayMath: [['$$', '$$'], ['\\[', '\\]']] 
+      },
+      svg: {
+        fontCache: 'global'
+      }
+    };
+  </script>
   <script src="https://unpkg.com/wavesurfer.js"></script>
   <style>
      html, body { height: 100%; margin: 0; } /* Sets the height of the HTML and body to 100% and removes default margin. */
@@ -48,52 +60,71 @@
     ::-webkit-scrollbar-thumb{background-color:#000000;border-radius:10px;} /* Thumb with custom color and rounded corners. */
     ::-webkit-scrollbar-thumb:hover{background-color:#000000;} /* Darker thumb on hover. */
     ::-webkit-scrollbar-track{background:#000000;border-radius:10px;} /* Track with light background and rounded corners. */
-    *{scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar for Firefox with custom colors. */
+    *{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar for Firefox with custom colors. */
     .scrollable-container{-ms-overflow-style:-ms-autohiding-scrollbar;} /* Auto-hiding scrollbar for IE/Edge. */
     .scrollable-container{max-height:400px;overflow-y:auto;} /* Makes the container scrollable with a maximum height. */
     .scrollable-container::-webkit-scrollbar{width:6px;} /* Custom width for WebKit scrollbars inside container. */
     .scrollable-container::-webkit-scrollbar-thumb{background-color:#FFD700;border-radius:10px;} /* Thumb with rounded corners in container. */
-    .scrollable-container{scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar with colors for container in Firefox. */
+    .scrollable-container{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar with colors for container in Firefox. */
     h3{font-variant-caps:unicase}
+    .latex-hover-spectrogram-button-alt{position:relative;padding:5px 15px;font-size:12px;border-radius:4px;color:#FFD700;float:right;display:block;top:0;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 0;box-shadow:0 0 0 rgba(255,255,255,.589)}
+    .latex-hover-spectrogram-button{position:relative;padding:5px 20px;font-size:12px;border-radius:.25em;color:#FFD700;float:right;display:block;top:-20px;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 rgba(255,255,255,.589)}
+    .latex-hover-spectrogram-button::selection,.latex-hover-spectrogram-button-alt:active:act{background-color:#fff;color:#FFD700;border:#1e2337 1px solid;background-color:#1e2337;padding:5px 15px;opacity:1;border:#FFD700;font-size:12px;box-shadow:0 0 0 0;}@keyframes tooltipcanvas{0%{background-color:#FFD700;color:#1e2337;box-shadow:43 43 432 700 #ffffff;transition:background-color .83s ease}100%{background-color:#fff;color:#1e2337;border:#1e2337 2PX solid;box-shadow:330px 100px 300px 1200px rgba(218,214,214,.836);transition:background-color .53s ease}}
+    .latex-hover-spectrogram-tooltip{position:absolute;top:36px;left:-250px;transform:translateX(-50%);visibility:hidden;opacity:1;background:#fff;color:#1e2337;padding:15px;box-shadow:0 4px 8px rgba(24,24,24,.801);max-width:400px;font-size:14px;z-index:2;transition:opacity .3s ease,visibility .3s ease,transform .3s ease;animation:tooltipcanvas 1.7s forwards linear;}
+    .latex-hover-spectrogram-tooltip-alt{position:absolute;padding:5px 5px;top:0;left:-150px;transform:translateX(-50%);visibility:hidden;opacity:0;background:#fff;color:#1e2337;border:#1e2337 2px solid;box-shadow:0 4px 8px rgba(39,39,39,.481);min-width:400px;font-size:14px;z-index:2;margin:auto;transition:opacity .3s ease,visibility .2s ease,transform .2s ease;animation:tooltipcanvas 1.7s forwards linear;}
+    .latex-hover-spectrogram-button:hover .latex-hover-spectrogram-tooltip{visibility:visible;opacity:1;z-index:20;transform:translate(-50%,10px);box-shadow:0 4px 8px rgba(39,39,39,.481);}
+    .latex-hover-spectrogram-button-alt:hover .latex-hover-spectrogram-tooltip-alt{visibility:visible;opacity:1;padding:5px 5px;transform:translate(-50%,10px);box-shadow:0 4px 8px rgba(39,39,39,.481);}
+    .latex-hover-spectrogram-content{text-align:center;}
+    .latex-hover-spectrogram-content p{margin:10px 10px;}
+    .latex-hover-spectrogram-content ul{padding-left:20px;}
+    .latex-hover-spectrogram-content ul li{margin:0 0;}
+    .latex-render{display:auto!important;float:right!important;position:relative!important;align-items:right!important;top:-0px;gap:0!important;right:54px!important;letter-spacing:0;font-size:16px!important;transition-duration:0s}
+    .latex-hover-spectrogram-button-alt{position:relative;padding:5px 15px;font-size:12px;border-radius:4px;color:#FFD700;float:right;display:block;top:0;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 0;box-shadow:0 0 0 rgba(255,255,255,.589)}
+    .latex-hover-spectrogram-button{position:relative;padding:5px 20px;font-size:12px;border-radius:.25em;color:#FFD700;float:right;display:block;top:-20px;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 rgba(255,255,255,.589)}
+    .latex-hover-spectrogram-button::selection,.latex-hover-spectrogram-button-alt:active:act{background-color:#fff;color:#FFD700;border:#1e2337 1px solid;background-color:#1e2337;padding:5px 15px;opacity:1;border:#FFD700;font-size:12px;box-shadow:0 0 0 0;}@keyframes tooltipcanvas{0%{background-color:#FFD700;color:#1e2337;box-shadow:43 43 432 700 #ffffff;transition:background-color .83s ease}100%{background-color:#fff;color:#1e2337;border:#1e2337 2PX solid;box-shadow:330px 100px 300px 1200px rgba(218,214,214,.836);transition:background-color .53s ease}}
+    .latex-hover-spectrogram-tooltip{position:absolute;top:36px;left:-250px;transform:translateX(-50%);visibility:hidden;opacity:1;background:#fff;color:#1e2337;padding:15px;box-shadow:0 4px 8px rgba(24,24,24,.801);max-width:400px;font-size:14px;z-index:2;transition:opacity .3s ease,visibility .3s ease,transform .3s ease;animation:tooltipcanvas 1.7s forwards linear;}
+    .latex-hover-spectrogram-tooltip-alt{position:absolute;padding:5px 5px;top:0;left:-150px;transform:translateX(-50%);visibility:hidden;opacity:0;background:#fff;color:#1e2337;border:#1e2337 2px solid;box-shadow:0 4px 8px rgba(39,39,39,.481);min-width:400px;font-size:14px;z-index:2;margin:auto;transition:opacity .3s ease,visibility .2s ease,transform .2s ease;animation:tooltipcanvas 1.7s forwards linear;}
+    .latex-hover-spectrogram-button:hover .latex-hover-spectrogram-tooltip{visibility:visible;opacity:1;z-index:20;transform:translate(-50%,10px);box-shadow:0 4px 8px rgba(39,39,39,.481);}
+    .latex-hover-spectrogram-button-alt:hover .latex-hover-spectrogram-tooltip-alt{visibility:visible;opacity:1;padding:5px 5px;transform:translate(-50%,10px);box-shadow:0 4px 8px rgba(39,39,39,.481);}
+    .latex-hover-spectrogram-content{text-align:center;}
+    .latex-hover-spectrogram-content p{margin:10px 10px;}
+    .latex-hover-spectrogram-content ul{padding-left:20px;}
+    .latex-hover-spectrogram-content ul li{margin:0 0;}
+    .latex-render{display:auto!important;float:right!important;position:relative!important;align-items:right!important;top:-0px;gap:0!important;right:54px!important;letter-spacing:0;font-size:16px!important;transition-duration:0s}
+    .formula-column{font-family:"EB Garamond",serif;font-size:24px;text-align:center;color:#1e2337;padding:5px;letter-spacing:.02em;}
  </style>
-  
+  <!-- Place this tag in your head or just before your close body tag. --><script async defer src="js/buttons.js"></script>
 </head>
 <body>
+<!-- Navbar Section      --> <nav class="navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand text-white" href="https://kohlyde.github.io/tonalexs/">tonalexs</a><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><button id="frameworkToggle" class="btn btn-link text-white" style="margin-right:10px;">&#9673;</button></li><li class="nav-item"><a class="github-button" href="https://github.com/kohlyde" data-size="large" aria-label="Follow @kohlyde on GitHub">Follow @kohlyde</a></li></ul></div></div></nav>
+<!-- Modal Section       --> <div id="frameworkModal" class="modal hidden"><div class="modal-content"><div class="modal-sidebar"><ul class="icon-list"><li class="icon-item" title="Settings">&#9673;</li><li class="icon-item" title="Personalization">&#9673;</li><li class="icon-item" title="Data">&#9673;</li><li class="icon-item" title="Delete Account">&#9673;</li><li class="icon-item" title="Help">&#9673;</li><li class="icon-item" title="User Preferences">&#9673;</li><li class="icon-item" title="Notifications">&#9673;</li></ul></div><div class="modal-body"><h3>Choose Your Framework</h3><hr><div class="framework-options"><div class="column"><label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label><label><input type="radio" name="framework" value="Tone.js"> Tone.js</label><label><input type="radio" name="framework" value="Howler.js"> Howler.js</label><label><input type="radio" name="framework" value="P5.js"> P5.js</label><label><input type="radio" name="framework" value="PixiJS"> PixiJS</label></div><div class="column"><label><input type="radio" name="framework" value="GreenSock"> GreenSock</label><label><input type="radio" name="framework" value="Framer Motion"> Framer Motion</label><label><input type="radio" name="framework" value="TensorFlow.js"> TensorFlow.js</label><label><input type="radio" name="framework" value="Three.js"> Three.js</label><label><input type="radio" name="framework" value="Chart.js"> Chart.js</label></div><div class="column"><label><input type="radio" name="framework" value="D3.js"> D3.js</label><label><input type="radio" name="framework" value="Web Audio API"> Web Audio API</label><label><input type="radio" name="framework" value="SuperCollider"> SuperCollider</label><label><input type="radio" name="framework" value="AudioContext"> AudioContext</label><label><input type="radio" name="framework" value="OpenAL"> OpenAL</label></div></div><div class="modal-footer"><button id="resetButton" class="btn">Reset</button><button id="submitButton" class="btn">Submit</button></div></div></div></div>
 
-  <nav class="navbar navbar-expand-lg">
-    <div class="container-fluid">
-      <a class="navbar-brand text-white" href="#">Tonalexs</a>
-      <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </div>
-  </nav>
   <div class="main-content">
     <div class="file-display">
 
       <div class="visualization-container">
         <h2>Spectral Analysis Visualization</h2>
-        <button class="latex-hover-spectrogram-button">info
+        <button type="button" class="latex-hover-spectrogram-button">info
           <div class="latex-hover-spectrogram-tooltip">
             <div class="latex-hover-spectrogram-content">
               <p>The spectrum visualization is based on the <strong>Discrete Fourier Transform (DFT)</strong>, computed using the Fast Fourier Transform (FFT) algorithm:</p>
               <p>
-                \[
+                <script type="math/tex">
                 X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n}
-                \]
+                </script>
               </p>
               <p>Where:</p>
               <ul>
-                <li>\(x_n\): Signal in the time domain (e.g., audio samples)</li>
-                <li>\(N\): Number of samples in the signal</li>
-                <li>\(k\): Index of the frequency bin (0 to \(N-1\))</li>
-                <li>\(e^{-i \frac{2\pi}{N} k n}\): Complex sinusoid for each bin</li>
+                <li><script type="math/tex">x_n</script>: Signal in the time domain (e.g., audio samples)</li>
+                <li><script type="math/tex">N</script>: Number of samples in the signal</li>
+                <li><script type="math/tex">k</script>: Index of the frequency bin (0 to <script type="math/tex">N-1</script>)</li>
+                <li><script type="math/tex">e^{-i \frac{2\pi}{N} k n}</script>: Complex sinusoid for each bin</li>
               </ul>
-              <p>The magnitude of \(X_k\) determines the intensity of each frequency bin:</p>
+              <p>The magnitude of <script type="math/tex">X_k</script> determines the intensity of each frequency bin:</p>
               <p>
-                \[
+                <script type="math/tex">
                 \text{Magnitude} = |X_k| = \sqrt{\text{Re}(X_k)^2 + \text{Im}(X_k)^2}
-                \]
+                </script>
               </p>
             </div>
           </div>
@@ -113,8 +144,18 @@
           <source id="audioSource" src="" type="audio/mpeg">
           Your browser does not support the audio element.
         </audio>
-        <h3>Waveform</h3>
-        <div id="waveform"></div>
+        <h3 class="section-title">Waveform</h3>
+        <div id="waveform" class="waveform-container"></div>
+        <script>
+          document.addEventListener('DOMContentLoaded', function() {
+            var wavesurfer = WaveSurfer.create({
+              container: '#waveform',
+              waveColor: 'violet',
+              progressColor: 'purple'
+            });
+            wavesurfer.load('path/to/your/audio/file.mp3');
+          });
+        </script>
         <h3 class="section-title">Audio Properties (metadata)</h3>
         <!-- Metric table -->
         <table class="fl-table" id="combinedTable">
@@ -237,23 +278,285 @@
       <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
     </div>
   </div>
-  <!-- <script>
-    document.getElementById('fileInput').addEventListener('change', function(e) {
-      const file = e.target.files[0];
-      if (file && file.type.startsWith('audio/')) {
-        populateMetadata(file);
-      }
-    });
 
-    // /* RMS Formula Render */ renderFormula('formula-column',generateFormula('rms'));
-  </script> -->
 
+<!--   
   <script src="./js/metricas.js"></script>
   <script src="./js/metrics.js"></script>
-
-  <script src="./js/spectogram.js"></script>
+  <script src="./js/spectogram.js"></script> -->
   <!-- <script src="./js/Analytics.js"></script> -->
   <!-- <script src="./js/medadata.js"></script> -->
+<script>
+/* Open modal         */function openModal(){document.getElementById('frameworkModal').style.display='block';}
+/* Close modal        */function closeModal(){document.getElementById('frameworkModal').style.display='none';}
+/* Reset modal        */function resetModal(){const radios=document.querySelectorAll('[name="framework"]');radios.forEach(radio=>radio.checked=false);}
+/* Submit modal       */function submitModal(){if(confirm('Are you sure?')){closeModal();}}
+/* Outside click close*/function outsideClickClose(e){if(e.target===document.getElementById('frameworkModal')){closeModal();}}
+/* Initialize modal   */function initModal(){document.getElementById('frameworkSelectorBtn').addEventListener('click',openModal);document.getElementById('resetButton').addEventListener('click',resetModal);document.getElementById('submitButton').addEventListener('click',submitModal);window.addEventListener('click',outsideClickClose);}
+/* Start listeners    */initModal();
+</script>
+<script>
+/* DOM Content Loaded */ document.addEventListener('DOMContentLoaded',()=>{
+/* File Name          */ function processFileName(){const i=document.getElementById('fileInputFileName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileName_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});}
+/* File Size          */ function processFileSize(){const i=document.getElementById('fileInputFileSize');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileSize_primary').textContent=`${(f[0].size/(1024*1024)).toFixed(2)} MB`;console.log(`File Size: ${(f[0].size/(1024*1024)).toFixed(2)} MB`);});}
+/* Last Modified      */ function processLastModified(){const i=document.getElementById('fileInputLastModified');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLastModified_primary').textContent=new Date(f[0].lastModified).toLocaleDateString();console.log(`Last Modified: ${new Date(f[0].lastModified).toLocaleDateString()}`);});}
+/* MIME Type        */ function processMimeType(){const i=document.getElementById('fileInputMimeType');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaMimeType_primary').textContent=f[0].type||"Unknown";console.log(`MIME Type: ${f[0].type||"Unknown"}`);});}
+/* Extension         */ function processExtension(){const i=document.getElementById('fileInputExtension');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaExtension_primary').textContent=f[0].name.split('.').pop();console.log(`Extension: ${f[0].name.split('.').pop()}`);});}
+/* Encoding          */ function processEncoding(){const i=document.getElementById('fileInputEncoding');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaEncoding_primary').textContent="UTF-8";console.log("Encoding: UTF-8");});}
+/* Title             */ function processTitle(){const i=document.getElementById('fileInputTitle');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaTitle_primary').textContent="Processed Title";console.log("Title Processed: Processed Title");});}
+/* Artist            */ function processArtist(){const i=document.getElementById('fileInputArtist');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaArtist_primary').textContent="Processed Artist";console.log("Artist Processed: Processed Artist");});}
+/* Album            */ function processAlbum(){const i=document.getElementById('fileInputAlbum');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaAlbum_primary').textContent="Processed Album";console.log("Album Processed: Processed Album");});}
+/* Genre            */ function processGenre(){const i=document.getElementById('fileInputGenre');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaGenre_primary').textContent="Processed Genre";console.log("Genre Processed: Processed Genre");});}
+/* Year             */ function processYear(){const i=document.getElementById('fileInputYear');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaYear_primary').textContent="2024";console.log("Year Processed: 2024");});}
+/* Track Number     */ function processTrackNumber(){const i=document.getElementById('fileInputTrackNumber');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaTrack_primary').textContent="Track 1";console.log("Track Number Processed: Track 1");});}
+/* Composer         */ function processComposer(){const i=document.getElementById('fileInputComposer');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaComposer_primary').textContent="Processed Composer";console.log("Composer Processed: Processed Composer");});}
+/* Lyrics            */ function processLyrics(){const i=document.getElementById('fileInputLyrics');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLyrics_primary').textContent="Processed Lyrics";console.log("Lyrics Processed: Processed Lyrics");});}
+/* Publisher         */ function processPublisher(){const i=document.getElementById('fileInputPublisher');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaPublisher_primary').textContent="Processed Publisher";console.log("Publisher Processed: Processed Publisher");});}
+/* Disc Number       */ function processDiscNumber(){const i=document.getElementById('fileInputDiscNumber');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaDiscNumber_primary').textContent="Disc 1";console.log("Disc Number Processed: Disc 1");});}
+/* Encoder           */ function processEncoder(){const i=document.getElementById('fileInputEncoder');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaEncoder_primary').textContent="Processed Encoder";console.log("Encoder Processed: Processed Encoder");});}
+/* Language          */ function processLanguage(){const i=document.getElementById('fileInputLanguage');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLanguage_primary').textContent="English";console.log("Language Processed: English");});}
+/* Copyright          */ function processCopyright(){const i=document.getElementById('fileInputCopyright');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const copyright=analyzeCopyright(f[0]);document.getElementById('metaCopyright_primary').textContent=`Copyright: ${copyright}`;console.log(`Copyright Processed: ${copyright}`);});}
+/* ISRC              */ function processISRC(){const i=document.getElementById('fileInputISRC');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const isrc=analyzeISRC(f[0]);document.getElementById('metaISRC_primary').textContent=`ISRC: ${isrc}`;console.log(`ISRC Processed: ${isrc}`);});}
+/* UPC               */ function processUPC(){const i=document.getElementById('fileInputUPC');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const upc=analyzeUPC(f[0]);document.getElementById('metaUPC_primary').textContent=`UPC: ${upc}`;console.log(`UPC Processed: ${upc}`);});}
+/* Geolocation        */ function processGeolocation(){const i=document.getElementById('fileInputGeolocation');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const geo=analyzeGeolocation(f[0]);document.getElementById('metaGeolocation_primary').textContent=`Geo: ${geo}`;console.log(`Geolocation Processed: ${geo}`);});}
+/* Region Recording    */ function processRegionRecording(){const i=document.getElementById('fileInputRegionRecording');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const region=analyzeRegionRecording(f[0]);document.getElementById('metaRegionRecording_primary').textContent=`Region: ${region}`;console.log(`Region Processed: ${region}`);});}
+/* Creation Date     */ function processCreationDate(){const i=document.getElementById('fileInputCreationDate');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const date=analyzeCreationDate(f[0]);document.getElementById('metaCreationDate_primary').textContent=`Creation Date: ${date}`;console.log(`Creation Date Processed: ${date}`);});}
+/* Modification Date */ function processModificationDate(){const i=document.getElementById('fileInputModificationDate');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const date=analyzeModificationDate(f[0]);document.getElementById('metaModificationDate_primary').textContent=`Modification Date: ${date}`;console.log(`Modification Date Processed: ${date}`);});}
+/* License Type      */ function processLicenseType(){const i=document.getElementById('fileInputLicenseType');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const license=analyzeLicenseType(f[0]);document.getElementById('metaLicenseType_primary').textContent=`License: ${license}`;console.log(`License Type Processed: ${license}`);});}
+/* Creative Commons  */ function processCreativeCommons(){const i=document.getElementById('fileInputCreativeCommons');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const cc=analyzeCreativeCommons(f[0]);document.getElementById('metaCreativeCommons_primary').textContent=`CC: ${cc}`;console.log(`Creative Commons Info Processed: ${cc}`);});}
+/* Album Art URL     */ function processAlbumArtURL(){const i=document.getElementById('fileInputAlbumArtURL');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const url=analyzeAlbumArtURL(f[0]);document.getElementById('metaAlbumArtURL_primary').textContent=`URL: ${url}`;console.log(`Album Art URL Processed: ${url}`);});}
+/* Language          */ function processLanguage(){const i=document.getElementById('fileInputLanguage');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const language=analyzeLanguage(f[0]);document.getElementById('metaLanguage_primary').textContent=`Language: ${language}`;console.log(`Language Processed: ${language}`);});}
+/* Source URL        */ function processSourceURL(){const i=document.getElementById('fileInputSourceURL');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const url=analyzeSourceURL(f[0]);document.getElementById('metaSourceURL_primary').textContent=`Source: ${url}`;console.log(`Source URL Processed: ${url}`);});}
+/* Genre Subcategory */ function processGenreSubcategory(){const i=document.getElementById('fileInputGenreSubcategory');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const genre=analyzeGenreSubcategory(f[0]);document.getElementById('metaGenreSubcategory_primary').textContent=`Genre: ${genre}`;console.log(`Genre Subcategory Processed: ${genre}`);});}
+/* Explicit Content  */ function processExplicitContent(){const i=document.getElementById('fileInputExplicitContent');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const explicit=analyzeExplicitContent(f[0]);document.getElementById('metaExplicitContent_primary').textContent=`Explicit: ${explicit}`;console.log(`Explicit Content Processed: ${explicit}`);});}
+/* Keywords          */ function processKeywords(){const i=document.getElementById('fileInputKeywords');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const keywords=analyzeKeywords(f[0]);document.getElementById('metaKeywords_primary').textContent=`Keywords: ${keywords}`;console.log(`Keywords Processed: ${keywords}`);});}
+/* Geotag            */ function processGeotag(){const i=document.getElementById('fileInputGeotag');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const geotag=analyzeGeotag(f[0]);document.getElementById('metaGeotag_primary').textContent=`Geotag: ${geotag}`;console.log(`Geotag Processed: ${geotag}`);});}
+/* Recording Env     */ function processRecordingEnvironment(){const i=document.getElementById('fileInputRecordingEnvironment');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const env=analyzeRecordingEnvironment(f[0]);document.getElementById('metaRecordingEnvironment_primary').textContent=`Environment: ${env}`;console.log(`Recording Environment Processed: ${env}`);});}
+/* Audio Watermark   */ function processAudioWatermark(){const i=document.getElementById('fileInputAudioWatermark');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const watermark=analyzeAudioWatermark(f[0]);document.getElementById('metaAudioWatermark_primary').textContent=`Watermark: ${watermark}`;console.log(`Audio Watermark Processed: ${watermark}`);});}
+/* Frequency Peaks   */ function processFrequencyPeaks(){const i=document.getElementById('fileInputFrequencyPeaks');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const peaks=analyzeFrequencyPeaks(f[0]);document.getElementById('metaFrequencyPeaks_primary').textContent=`Peaks: ${peaks}`;console.log(`Frequency Peaks Processed: ${peaks}`);});}
+/* Octave Bands      */ function processOctaveBands(){const i=document.getElementById('fileInputOctaveBands');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const bands=analyzeOctaveBands(f[0]);document.getElementById('metaOctaveBands_primary').textContent=`Bands: ${bands} dB`;console.log(`Octave Bands Processed: ${bands} dB`);});}
+/* Harmonic Ratio    */ function processHarmonicRatio(){const i=document.getElementById('fileInputHarmonicRatio');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzeHarmonicRatio(f[0]);document.getElementById('metaHarmonicRatio_primary').textContent=`Ratio: ${ratio}%`;console.log(`Harmonic Ratio Processed: ${ratio}%`);});}
+/* Dominant Frequency*/ function processDominantFrequency(){const i=document.getElementById('fileInputDominantFrequency');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const freq=analyzeDominantFrequency(f[0]);document.getElementById('metaDominantFrequency_primary').textContent=`Freq: ${freq} Hz`;console.log(`Dominant Frequency Processed: ${freq} Hz`);});}
+/* Fundamental Freq  */ function processFundamentalFrequency(){const i=document.getElementById('fileInputFundamentalFrequency');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const freq=analyzeFundamentalFrequency(f[0]);document.getElementById('metaFundamentalFrequency_primary').textContent=`Freq: ${freq} Hz`;console.log(`Fundamental Frequency Processed: ${freq} Hz`);});}
+/* Harmonic Distort. */ function processHarmonicDistortion(){const i=document.getElementById('fileInputHarmonicDistortion');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const distortion=analyzeHarmonicDistortion(f[0]);document.getElementById('metaHarmonicDistortion_primary').textContent=`Distortion: ${distortion}%`;console.log(`Harmonic Distortion Processed: ${distortion}%`);});}
+/* Spectral Slope    */ function processSpectralSlope(){const i=document.getElementById('fileInputSpectralSlope');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const slope=analyzeSpectralSlope(f[0]);document.getElementById('metaSpectralSlope_primary').textContent=`Slope: ${slope} dB/octave`;console.log(`Spectral Slope Processed: ${slope} dB/octave`);});}
+/* Inharmonicity     */ function processInharmonicity(){const i=document.getElementById('fileInputInharmonicity');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const inharmonicity=analyzeInharmonicity(f[0]);document.getElementById('metaInharmonicity_primary').textContent=`Inharmonicity: ${inharmonicity}`;console.log(`Inharmonicity Processed: ${inharmonicity}`);});}
+/* Spectral Centroid */ function processSpectralCentroid(){const i=document.getElementById('fileInputSpectralCentroidUnique');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const centroid=analyzeSpectralCentroid(f[0]);document.getElementById('metaSpectralCentroid_primary').textContent=`Centroid: ${centroid} Hz`;console.log(`Spectral Centroid Processed: ${centroid} Hz`);});}
+/* Spectral Flatness */ function processSpectralFlatness(){const i=document.getElementById('fileInputSpectralFlatnessUnique');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const flatness=analyzeSpectralFlatness(f[0]);document.getElementById('metaSpectralFlatness_primary').textContent=`Flatness: ${flatness}`;console.log(`Spectral Flatness Processed: ${flatness}`);});}
+/* Spectral Kurtosis */ function processSpectralKurtosis(){const i=document.getElementById('fileInputSpectralKurtosis');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const kurtosis=analyzeSpectralKurtosis(f[0]);document.getElementById('metaSpectralKurtosis_primary').textContent=`Kurtosis: ${kurtosis}`;console.log(`Spectral Kurtosis Processed: ${kurtosis}`);});}
+/* Spectral Skewness */ function processSpectralSkewness(){const i=document.getElementById('fileInputSpectralSkewness');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const skewness=analyzeSpectralSkewness(f[0]);document.getElementById('metaSpectralSkewness_primary').textContent=`Skewness: ${skewness}`;console.log(`Spectral Skewness Processed: ${skewness}`);});}
+/* Noise-to-Harmonic */ function processNoiseToHarmonicRatio(){const i=document.getElementById('fileInputNoiseToHarmonic');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzeNoiseToHarmonicRatio(f[0]);document.getElementById('metaNoiseToHarmonic_primary').textContent=`NHR: ${ratio}`;console.log(`Noise-to-Harmonic Ratio Processed: ${ratio}`);});}
+/* Energy per Octave */ function processEnergyPerOctave(){const i=document.getElementById('fileInputEnergyPerOctave');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const energy=analyzeEnergyPerOctave(f[0]);document.getElementById('metaEnergyPerOctave_primary').textContent=`Energy: ${energy}%`;console.log(`Energy per Octave Processed: ${energy}%`);});}
+/* Total Energy      */ function processTotalEnergy(){const i=document.getElementById('fileInputTotalEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const energy=analyzeTotalEnergy(f[0]);document.getElementById('metaTotalEnergy_primary').textContent=`Total Energy: ${energy} J`;console.log(`Total Energy Processed: ${energy} J`);});}
+/* Mean Energy       */ function processMeanEnergy(){const i=document.getElementById('fileInputMeanEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const mean=analyzeMeanEnergy(f[0]);document.getElementById('metaMeanEnergy_primary').textContent=`Mean Energy: ${mean} J`;console.log(`Mean Energy Processed: ${mean} J`);});}
+/* Energy (Bass)     */ function processEnergyDistributionBass(){const i=document.getElementById('fileInputEnergyBass');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const bass=analyzeEnergyDistributionBass(f[0]);document.getElementById('metaEnergyBass_primary').textContent=`Bass Energy: ${bass}%`;console.log(`Energy Distribution (Bass) Processed: ${bass}%`);});}
+/* Energy (Treble)   */ function processEnergyDistributionTreble(){const i=document.getElementById('fileInputEnergyTreble');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const treble=analyzeEnergyDistributionTreble(f[0]);document.getElementById('metaEnergyTreble_primary').textContent=`Treble Energy: ${treble}%`;console.log(`Energy Distribution (Treble) Processed: ${treble}%`);});}
+/* Dynamic Range     */ function processDynamicRange(){const i=document.getElementById('fileInputDynamicRange');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const range=analyzeDynamicRange(f[0]);document.getElementById('metaDynamicRange_primary').textContent=`Dynamic Range: ${range} dB`;console.log(`Dynamic Range Processed: ${range} dB`);});}
+/* Crest Factor      */ function processCrestFactor(){const i=document.getElementById('fileInputCrestFactor');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const crest=analyzeCrestFactor(f[0]);document.getElementById('metaCrestFactor_primary').textContent=`Crest Factor: ${crest}`;console.log(`Crest Factor Processed: ${crest}`);});}
+/* Envelope Variance */ function processEnergyEnvelopeVariance(){const i=document.getElementById('fileInputEnergyEnvelopeVariance');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const variance=analyzeEnergyEnvelopeVariance(f[0]);document.getElementById('metaEnergyEnvelopeVariance_primary').textContent=`Variance: ${variance}`;console.log(`Energy Envelope Variance Processed: ${variance}`);});}
+/* Normalized Energy */ function processNormalizedEnergy(){const i=document.getElementById('fileInputNormalizedEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const normalized=analyzeNormalizedEnergy(f[0]);document.getElementById('metaNormalizedEnergy_primary').textContent=`Normalized Energy: ${normalized}`;console.log(`Normalized Energy Processed: ${normalized}`);});}
+/* Transient Energy  */ function processTransientEnergy(){const i=document.getElementById('fileInputTransientEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const transient=analyzeTransientEnergy(f[0]);document.getElementById('metaTransientEnergy_primary').textContent=`Transient Energy: ${transient}%`;console.log(`Transient Energy Processed: ${transient}%`);});}
+/* Sustain Energy    */ function processSustainEnergy(){const i=document.getElementById('fileInputSustainEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const sustain=analyzeSustainEnergy(f[0]);document.getElementById('metaSustainEnergy_primary').textContent=`Sustain Energy: ${sustain}%`;console.log(`Sustain Energy Processed: ${sustain}%`);});}
+/* Peak-to-Avg Ratio */ function processPeakToAverageRatio(){const i=document.getElementById('fileInputPAR');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzePeakToAverageRatio(f[0]);document.getElementById('metaPAR_primary').textContent=`PAR: ${ratio} dB`;console.log(`Peak-to-Average Ratio Processed: ${ratio} dB`);});}
+});
+
+
+/* DOM Content Loaded */ 
+document.addEventListener('DOMContentLoaded', () => {
+    /* Populate Metadata */ 
+    function populateMetadata(file, metaId, metaSourceId) {
+      if (!file) {
+        console.error(`No file provided for ${metaId}`);
+        return;
+      }
+      const element = document.getElementById(metaId);
+      const sourceElement = document.getElementById(metaSourceId);
+      if (element && sourceElement) {
+        element.textContent = file.name; // Set the file name or other property
+        sourceElement.textContent = file.type; // Example: Set MIME type
+        console.log(`Metadata populated for ${metaId}`);
+      } else {
+        console.error(`Element not found: ${metaId} or ${metaSourceId}`);
+      }
+    }
+  
+    /* Calls for Metadata Properties */
+    function handleFileInput(inputId, metaId, metaSourceId) {
+      const input = document.getElementById(inputId);
+      if (input) {
+        input.addEventListener('change', (event) => {
+          const file = event.target.files[0];
+          populateMetadata(file, metaId, metaSourceId);
+        });
+      } else {
+        console.error(`Input element not found: ${inputId}`);
+      }
+    }
+  
+    /* List of all metadata mappings */
+    const metadataMappings = [
+      { inputId: 'fileInputFileSize', metaId: 'metaFileSize_primary', metaSourceId: 'metaFileSizeSource_primary' },
+      { inputId: 'fileInputMimeType', metaId: 'metaMimeType_primary', metaSourceId: 'metaMimeTypeSource_primary' },
+      { inputId: 'fileInputExtension', metaId: 'metaExtension_primary', metaSourceId: 'metaExtensionSource_primary' },
+      { inputId: 'fileInputEncoding', metaId: 'metaEncoding_primary', metaSourceId: 'metaEncodingSource_primary' },
+      { inputId: 'fileInputTitle', metaId: 'metaTitle_primary', metaSourceId: 'metaTitleSource_primary' },
+      { inputId: 'fileInputArtist', metaId: 'metaArtist_primary', metaSourceId: 'metaArtistSource_primary' },
+      { inputId: 'fileInputAlbum', metaId: 'metaAlbum_primary', metaSourceId: 'metaAlbumSource_primary' },
+      { inputId: 'fileInputGenre', metaId: 'metaGenre_primary', metaSourceId: 'metaGenreSource_primary' },
+      { inputId: 'fileInputYear', metaId: 'metaYear_primary', metaSourceId: 'metaYearSource_primary' },
+      { inputId: 'fileInputTrack', metaId: 'metaTrack_primary', metaSourceId: 'metaTrackSource_primary' },
+      { inputId: 'fileInputComposer', metaId: 'metaComposer_primary', metaSourceId: 'metaComposerSource_primary' },
+      { inputId: 'fileInputLyrics', metaId: 'metaLyrics_primary', metaSourceId: 'metaLyricsSource_primary' },
+      { inputId: 'fileInputPublisher', metaId: 'metaPublisher_primary', metaSourceId: 'metaPublisherSource_primary' },
+      { inputId: 'fileInputDiscNumber', metaId: 'metaDiscNumber_primary', metaSourceId: 'metaDiscNumberSource_primary' },
+      { inputId: 'fileInputEncoder', metaId: 'metaEncoder_primary', metaSourceId: 'metaEncoderSource_primary' },
+      { inputId: 'fileInputLanguage', metaId: 'metaLanguage_primary', metaSourceId: 'metaLanguageSource_primary' },
+      { inputId: 'fileInputCopyright', metaId: 'metaCopyright_primary', metaSourceId: 'metaCopyrightSource_primary' },
+      { inputId: 'fileInputIsrc', metaId: 'metaIsrc_primary', metaSourceId: 'metaIsrcSource_primary' },
+      { inputId: 'fileInputBpm', metaId: 'metaBpm_primary', metaSourceId: 'metaBpmSource_primary' },
+      { inputId: 'fileInputAlbumArtist', metaId: 'metaAlbumArtist_primary', metaSourceId: 'metaAlbumArtistSource_primary' },
+      { inputId: 'fileInputKey', metaId: 'metaKey_primary', metaSourceId: 'metaKeySource_primary' },
+      { inputId: 'fileInputInitialKey', metaId: 'metaInitialKey_primary', metaSourceId: 'metaInitialKeySource_primary' },
+      { inputId: 'fileInputLength', metaId: 'metaLength_primary', metaSourceId: 'metaLengthSource_primary' },
+      { inputId: 'fileInputComments', metaId: 'metaComments_primary', metaSourceId: 'metaCommentsSource_primary' },
+      { inputId: 'fileInputSpectralCentroidUnique', metaId: 'metaSpectralCentroid_primary', metaSourceId: 'metaSpectralCentroidSource_primary' },
+      { inputId: 'fileInputSpectralFlatnessUnique', metaId: 'metaSpectralFlatness_primary', metaSourceId: 'metaSpectralFlatnessSource_primary' },
+      { inputId: 'fileInputSpectralBandwidth', metaId: 'metaSpectralBandwidth_primary', metaSourceId: 'metaSpectralBandwidthSource_primary' },
+      { inputId: 'fileInputSpectralRollOff', metaId: 'metaSpectralRollOff_primary', metaSourceId: 'metaSpectralRollOffSource_primary' },
+      { inputId: 'fileInputSpectralContrast', metaId: 'metaSpectralContrast_primary', metaSourceId: 'metaSpectralContrastSource_primary' },
+      { inputId: 'fileInputSpectralEnergy', metaId: 'metaSpectralEnergy_primary', metaSourceId: 'metaSpectralEnergySource_primary' },
+      { inputId: 'fileInputSpectralFlux', metaId: 'metaSpectralFlux_primary', metaSourceId: 'metaSpectralFluxSource_primary' },
+      { inputId: 'fileInputSpectralEntropy', metaId: 'metaSpectralEntropy_primary', metaSourceId: 'metaSpectralEntropySource_primary' },
+      { inputId: 'fileInputRMS', metaId: 'metaRMS_primary', metaSourceId: 'metaRMSSource_primary' },
+      { inputId: 'fileInputPeakAmplitude', metaId: 'metaPeakAmplitude_primary', metaSourceId: 'metaPeakAmplitudeSource_primary' },
+      { inputId: 'fileInputZeroCrossingRate', metaId: 'metaZeroCrossingRate_primary', metaSourceId: 'metaZeroCrossingRateSource_primary' },
+      { inputId: 'fileInputLowEnergyRatio', metaId: 'metaLowEnergyRatio_primary', metaSourceId: 'metaLowEnergyRatioSource_primary' },
+      { inputId: 'fileInputAttackTime', metaId: 'metaAttackTime_primary', metaSourceId: 'metaAttackTimeSource_primary' },
+      { inputId: 'fileInputDecayTime', metaId: 'metaDecayTime_primary', metaSourceId: 'metaDecayTimeSource_primary' },
+      { inputId: 'fileInputSustainLevel', metaId: 'metaSustainLevel_primary', metaSourceId: 'metaSustainLevelSource_primary' },
+      { inputId: 'fileInputReleaseTime', metaId: 'metaReleaseTime_primary', metaSourceId: 'metaReleaseTimeSource_primary' },
+      { inputId: 'fileInputTemporalCentroid', metaId: 'metaTemporalCentroid_primary', metaSourceId: 'metaTemporalCentroidSource_primary' },
+      { inputId: 'fileInputFrequencyPeaks', metaId: 'metaFrequencyPeaks_primary', metaSourceId: 'metaFrequencyPeaksSource_primary' },
+      { inputId: 'fileInputOctaveBands', metaId: 'metaOctaveBands_primary', metaSourceId: 'metaOctaveBandsSource_primary' },
+      { inputId: 'fileInputHarmonicRatio', metaId: 'metaHarmonicRatio_primary', metaSourceId: 'metaHarmonicRatioSource_primary' },
+      { inputId: 'fileInputDominantFrequency', metaId: 'metaDominantFrequency_primary', metaSourceId: 'metaDominantFrequencySource_primary' },
+      { inputId: 'fileInputFundamentalFrequency', metaId: 'metaFundamentalFrequency_primary', metaSourceId: 'metaFundamentalFrequencySource_primary' },
+      { inputId: 'fileInputHarmonicDistortion', metaId: 'metaHarmonicDistortion_primary', metaSourceId: 'metaHarmonicDistortionSource_primary' },
+      { inputId: 'fileInputSpectralSlope', metaId: 'metaSpectralSlope_primary', metaSourceId: 'metaSpectralSlopeSource_primary' },
+      { inputId: 'fileInputInharmonicity', metaId: 'metaInharmonicity_primary', metaSourceId: 'metaInharmonicitySource_primary' },
+      { inputId: 'fileInputEnergyPerOctave', metaId: 'metaEnergyPerOctave_primary', metaSourceId: 'metaEnergyPerOctaveSource_primary' },
+      { inputId: 'fileInputDynamicRange', metaId: 'metaDynamicRange_primary', metaSourceId: 'metaDynamicRangeSource_primary' },
+      { inputId: 'fileInputCrestFactor', metaId: 'metaCrestFactor_primary', metaSourceId: 'metaCrestFactorSource_primary' },
+      { inputId: 'fileInputEnergyEnvelopeVariance', metaId: 'metaEnergyEnvelopeVariance_primary', metaSourceId: 'metaEnergyEnvelopeVarianceSource_primary' },
+      { inputId: 'fileInputNormalizedEnergy', metaId: 'metaNormalizedEnergy_primary', metaSourceId: 'metaNormalizedEnergySource_primary' },
+      { inputId: 'fileInputTransientEnergy', metaId: 'metaTransientEnergy_primary', metaSourceId: 'metaTransientEnergySource_primary' },
+      { inputId: 'fileInputSustainEnergy', metaId: 'metaSustainEnergy_primary', metaSourceId: 'metaSustainEnergySource_primary' },
+      { inputId: 'fileInputPeakToAverageRatio', metaId: 'metaPeakToAverageRatio_primary', metaSourceId: 'metaPeakToAverageRatioSource_primary' }
+      
+    ];
+  
+    /* Initialize all metadata handlers */
+    metadataMappings.forEach(({ inputId, metaId, metaSourceId }) => {
+      handleFileInput(inputId, metaId, metaSourceId);
+    });
+  });
+
+/* File Name */ function processFileName(){const i=document.getElementById('fileInputName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileName_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});}
+/* File Size */ function processFileSize(){const i=document.getElementById('fileInputSize');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileSize_primary').textContent=`${(f[0].size/(1024*1024)).toFixed(2)} MB`;console.log(`File Size: ${(f[0].size/(1024*1024)).toFixed(2)} MB`);});}
+/* Last Modified */ function processLastModified(){const i=document.getElementById('fileInputModified');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLastModified_primary').textContent=new Date(f[0].lastModified).toLocaleDateString();console.log(`Last Modified: ${new Date(f[0].lastModified).toLocaleDateString()}`);});}
+/* MIME Type */ function processMimeType(){const i=document.getElementById('fileInputMime');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaMimeType_primary').textContent=f[0].type||"Unknown";console.log(`MIME Type: ${f[0].type||"Unknown"}`);});}
+/* Extension */ function processExtension(){const i=document.getElementById('fileInputExtension');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaExtension_primary').textContent=f[0].name.split('.').pop();console.log(`Extension: ${f[0].name.split('.').pop()}`);});}
+/* Encoding */ function processEncoding(){const i=document.getElementById('fileInputEncoding');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaEncoding_primary').textContent="UTF-8";console.log("Encoding: UTF-8");});}
+/* Title */ function processTitle(){const i=document.getElementById('fileInputTitle');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaTitle_primary').textContent="Placeholder Logic";console.log("Title: Placeholder Logic");});}
+/* Artist */ function processArtist(){const i=document.getElementById('fileInputArtist');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaArtist_primary').textContent="Placeholder Logic";console.log("Artist: Placeholder Logic");});}
+/* Album */ function processAlbum(){const i=document.getElementById('fileInputAlbum');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaAlbum_primary').textContent="Placeholder Logic";console.log("Album: Placeholder Logic");});}
+/* Genre */ function processGenre(){const i=document.getElementById('fileInputGenre');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaGenre_primary').textContent="Placeholder Logic";console.log("Genre: Placeholder Logic");});}
+/* Year */ function processYear(){const i=document.getElementById('fileInputYear');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaYear_primary').textContent="Placeholder Logic";console.log("Year: Placeholder Logic");});}
+/* Track Number */ function processTrackNumber(){const i=document.getElementById('fileInputTrack');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaTrack_primary').textContent="Placeholder Logic";console.log("Track Number: Placeholder Logic");});}
+/* Composer */ function processComposer(){const i=document.getElementById('fileInputComposer');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaComposer_primary').textContent="Placeholder Logic";console.log("Composer: Placeholder Logic");});}
+/* Lyrics */ function processLyrics(){const i=document.getElementById('fileInputLyrics');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLyrics_primary').textContent="Placeholder Logic";console.log("Lyrics: Placeholder Logic");});}
+/* Publisher */ function processPublisher(){const i=document.getElementById('fileInputPublisher');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaPublisher_primary').textContent="Placeholder Logic";console.log("Publisher: Placeholder Logic");});}
+/* Disc Number */ function processDiscNumber(){const i=document.getElementById('fileInputDisc');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaDiscNumber_primary').textContent="Placeholder Logic";console.log("Disc Number: Placeholder Logic");});}
+/* Encoder */ function processEncoder(){const i=document.getElementById('fileInputEncoder');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaEncoder_primary').textContent="Placeholder Logic";console.log("Encoder: Placeholder Logic");});}
+/* Language */ function processLanguage(){const i=document.getElementById('fileInputLanguage');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLanguage_primary').textContent="Placeholder Logic";console.log("Language: Placeholder Logic");});}
+/* Copyright */ function processCopyright(){const i=document.getElementById('fileInputCopyright');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaCopyright_primary').textContent="© Placeholder Logic";console.log("Copyright: © Placeholder Logic");});}
+/* ISRC */ function processIsrc(){const i=document.getElementById('fileInputIsrc');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaIsrc_primary').textContent="Placeholder Logic";console.log("ISRC: Placeholder Logic");});}
+   /* BPM */ function processBpm(){const i=document.getElementById('fileInputBpm');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaBpm_primary').textContent="Placeholder Logic";console.log("BPM: Placeholder Logic");});}
+/* Album Artist */ function processAlbumArtist(){const i=document.getElementById('fileInputAlbumArtist');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaAlbumArtist_primary').textContent="Placeholder Logic";console.log("Album Artist: Placeholder Logic");});}
+/* Key */ function processKey(){const i=document.getElementById('fileInputKey');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaKey_primary').textContent="Placeholder Logic";console.log("Key: Placeholder Logic");});}
+/* Initial Key */ function processInitialKey(){const i=document.getElementById('fileInputInitialKey');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaInitialKey_primary').textContent="Placeholder Logic";console.log("Initial Key: Placeholder Logic");});}
+/* Length */ function processLength(){const i=document.getElementById('fileInputLength');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaLength_primary').textContent="Placeholder Logic";console.log("Length: Placeholder Logic");});}
+/* Comments */ function processComments(){const i=document.getElementById('fileInputComments');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaComments_primary').textContent="Placeholder Logic";console.log("Comments: Placeholder Logic");});}
+/* Spectral Centroid */ function processSpectralCentroid(){const i=document.getElementById('fileInputSpectralCentroid');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralCentroid_primary').textContent="Placeholder Logic";console.log("Spectral Centroid Processed: Placeholder Logic");});}
+/* Spectral Flatness */ function processSpectralFlatness(){const i=document.getElementById('fileInputSpectralFlatness');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralFlatness_primary').textContent="Placeholder Logic";console.log("Spectral Flatness Processed: Placeholder Logic");});}
+/* Spectral Bandwidth*/ function processSpectralBandwidth(){const i=document.getElementById('fileInputSpectralBandwidth');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralBandwidth_primary').textContent="Placeholder Logic";console.log("Spectral Bandwidth Processed: Placeholder Logic");});}
+/* Spectral Roll-off */ function processSpectralRolloff(){const i=document.getElementById('fileInputSpectralRolloff');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralRolloff_primary').textContent="Placeholder Logic";console.log("Spectral Roll-off Processed: Placeholder Logic");});}
+/* Spectral Contrast */ function processSpectralContrast(){const i=document.getElementById('fileInputSpectralContrast');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralContrast_primary').textContent="Placeholder Logic";console.log("Spectral Contrast Processed: Placeholder Logic");});}
+/* Spectral Energy */ function processSpectralEnergy(){const i=document.getElementById('fileInputSpectralEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralEnergy_primary').textContent="Placeholder Logic";console.log("Spectral Energy Processed: Placeholder Logic");});}
+/* Spectral Flux */ function processSpectralFlux(){const i=document.getElementById('fileInputSpectralFlux');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralFlux_primary').textContent="Placeholder Logic";console.log("Spectral Flux Processed: Placeholder Logic");});}
+/* Spectral Entropy */ function processSpectralEntropy(){const i=document.getElementById('fileInputSpectralEntropy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralEntropy_primary').textContent="Placeholder Logic";console.log("Spectral Entropy Processed: Placeholder Logic");});}
+/* Spectral Centroid */ function processSpectralCentroid(){const i=document.getElementById('fileInputSpectralCentroid');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralCentroid_primary').textContent="Placeholder Logic";console.log("Spectral Centroid Processed: Placeholder Logic");});}
+/* Spectral Flatness */ function processSpectralFlatness(){const i=document.getElementById('fileInputSpectralFlatness');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralFlatness_primary').textContent="Placeholder Logic";console.log("Spectral Flatness Processed: Placeholder Logic");});}
+/* Spectral Bandwidth*/ function processSpectralBandwidth(){const i=document.getElementById('fileInputSpectralBandwidth');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralBandwidth_primary').textContent="Placeholder Logic";console.log("Spectral Bandwidth Processed: Placeholder Logic");});}
+/* Spectral Roll-off */ function processSpectralRolloff(){const i=document.getElementById('fileInputSpectralRolloff');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralRolloff_primary').textContent="Placeholder Logic";console.log("Spectral Roll-off Processed: Placeholder Logic");});}
+/* Spectral Contrast */ function processSpectralContrast(){const i=document.getElementById('fileInputSpectralContrast');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralContrast_primary').textContent="Placeholder Logic";console.log("Spectral Contrast Processed: Placeholder Logic");});}
+/* Spectral Energy */ function processSpectralEnergy(){const i=document.getElementById('fileInputSpectralEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralEnergy_primary').textContent="Placeholder Logic";console.log("Spectral Energy Processed: Placeholder Logic");});}
+   /* Spectral Flux */ function processSpectralFlux(){const i=document.getElementById('fileInputSpectralFlux');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralFlux_primary').textContent="Placeholder Logic";console.log("Spectral Flux Processed: Placeholder Logic");});}
+/* Spectral Entropy */ function processSpectralEntropy(){const i=document.getElementById('fileInputSpectralEntropy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaSpectralEntropy_primary').textContent="Placeholder Logic";console.log("Spectral Entropy Processed: Placeholder Logic");});}
+/* Frequency Peaks */ function processFrequencyPeaks(){const i=document.getElementById('fileInputFrequencyPeaks');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const peaks=analyzePeaks(f[0]);document.getElementById('metaFrequencyPeaks_primary').textContent=`Peaks: ${peaks}`;console.log(`Frequency Peaks: ${peaks}`);});}
+/* Octave Bands */ function processOctaveBands(){const i=document.getElementById('fileInputOctaveBands');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const bands=analyzeOctaveBands(f[0]);document.getElementById('metaOctaveBands_primary').textContent=`Bands: ${bands} dB`;console.log(`Octave Bands: ${bands} dB`);});}
+/* Harmonic Ratio */ function processHarmonicRatio(){const i=document.getElementById('fileInputHarmonicRatio');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzeHarmonicRatio(f[0]);document.getElementById('metaHarmonicRatio_primary').textContent=`Ratio: ${ratio}%`;console.log(`Harmonic Ratio: ${ratio}%`);});}
+/* Dominant Frequency*/ function processDominantFrequency(){const i=document.getElementById('fileInputDominantFrequency');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const freq=analyzeDominantFrequency(f[0]);document.getElementById('metaDominantFrequency_primary').textContent=`Freq: ${freq} Hz`;console.log(`Dominant Frequency: ${freq} Hz`);});}
+/* Fundamental Freq */ function processFundamentalFrequency(){const i=document.getElementById('fileInputFundamentalFrequency');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const freq=analyzeFundamentalFrequency(f[0]);document.getElementById('metaFundamentalFrequency_primary').textContent=`Freq: ${freq} Hz`;console.log(`Fundamental Frequency: ${freq} Hz`);});}
+/* Harmonic Distort. */ function processHarmonicDistortion(){const i=document.getElementById('fileInputHarmonicDistortion');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const distortion=analyzeHarmonicDistortion(f[0]);document.getElementById('metaHarmonicDistortion_primary').textContent=`Distortion: ${distortion}%`;console.log(`Harmonic Distortion: ${distortion}%`);});}
+/* Spectral Slope */ function processSpectralSlope(){const i=document.getElementById('fileInputSpectralSlope');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const slope=analyzeSpectralSlope(f[0]);document.getElementById('metaSpectralSlope_primary').textContent=`Slope: ${slope} dB/octave`;console.log(`Spectral Slope: ${slope} dB/octave`);});}
+/* Inharmonicity */ function processInharmonicity(){const i=document.getElementById('fileInputInharmonicity');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const inharmonicity=analyzeInharmonicity(f[0]);document.getElementById('metaInharmonicity_primary').textContent=`Inharmonicity: ${inharmonicity}`;console.log(`Inharmonicity: ${inharmonicity}`);});}
+/* Spectral Centroid */ function processSpectralCentroid(){const i=document.getElementById('fileInputSpectralCentroid');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const centroid=analyzeSpectralCentroid(f[0]);document.getElementById('metaSpectralCentroid_primary').textContent=`Centroid: ${centroid} Hz`;console.log(`Spectral Centroid: ${centroid} Hz`);});}
+/* Spectral Flatness */ function processSpectralFlatness(){const i=document.getElementById('fileInputSpectralFlatness');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const flatness=analyzeSpectralFlatness(f[0]);document.getElementById('metaSpectralFlatness_primary').textContent=`Flatness: ${flatness}`;console.log(`Spectral Flatness: ${flatness}`);});}
+/* Spectral Kurtosis */ function processSpectralKurtosis(){const i=document.getElementById('fileInputSpectralKurtosis');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const kurtosis=analyzeSpectralKurtosis(f[0]);document.getElementById('metaSpectralKurtosis_primary').textContent=`Kurtosis: ${kurtosis}`;console.log(`Spectral Kurtosis: ${kurtosis}`);});}
+/* Spectral Skewness */ function processSpectralSkewness(){const i=document.getElementById('fileInputSpectralSkewness');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const skewness=analyzeSpectralSkewness(f[0]);document.getElementById('metaSpectralSkewness_primary').textContent=`Skewness: ${skewness}`;console.log(`Spectral Skewness: ${skewness}`);});}
+/* Noise-to-Harmonic */ function processNoiseToHarmonicRatio(){const i=document.getElementById('fileInputNoiseToHarmonic');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzeNoiseToHarmonicRatio(f[0]);document.getElementById('metaNoiseToHarmonic_primary').textContent=`NHR: ${ratio}`;console.log(`Noise-to-Harmonic Ratio: ${ratio}`);});}
+/* Energy per Octave */ function processEnergyPerOctave(){const i=document.getElementById('fileInputEnergyPerOctave');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const energy=analyzeEnergyPerOctave(f[0]);document.getElementById('metaEnergyPerOctave_primary').textContent=`Energy: ${energy}%`;console.log(`Energy per Octave: ${energy}%`);});}
+/* Total Energy */ function processTotalEnergy(){const i=document.getElementById('fileInputTotalEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const energy=analyzeTotalEnergy(f[0]);document.getElementById('metaTotalEnergy_primary').textContent=`Energy: ${energy} J`;console.log(`Total Energy: ${energy} J`);});}
+/* Mean Energy */ function processMeanEnergy(){const i=document.getElementById('fileInputMeanEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const energy=analyzeMeanEnergy(f[0]);document.getElementById('metaMeanEnergy_primary').textContent=`Mean Energy: ${energy} J`;console.log(`Mean Energy: ${energy} J`);});}
+/* Energy Dist (Bass)*/ function processEnergyDistributionBass(){const i=document.getElementById('fileInputEnergyBass');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const bass=analyzeEnergyDistributionBass(f[0]);document.getElementById('metaEnergyBass_primary').textContent=`Bass: ${bass}%`;console.log(`Energy Distribution (Bass): ${bass}%`);});}
+/* Energy Dist (Treble)*/ function processEnergyDistributionTreble(){const i=document.getElementById('fileInputEnergyTreble');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const treble=analyzeEnergyDistributionTreble(f[0]);document.getElementById('metaEnergyTreble_primary').textContent=`Treble: ${treble}%`;console.log(`Energy Distribution (Treble): ${treble}%`);});}
+     /* Dynamic Range */ function processDynamicRange(){const i=document.getElementById('fileInputDynamicRange');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const range=analyzeDynamicRange(f[0]);document.getElementById('metaDynamicRange_primary').textContent=`Range: ${range} dB`;console.log(`Dynamic Range: ${range} dB`);});}
+/* Crest Factor */ function processCrestFactor(){const i=document.getElementById('fileInputCrestFactor');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const crest=analyzeCrestFactor(f[0]);document.getElementById('metaCrestFactor_primary').textContent=`Crest Factor: ${crest}`;console.log(`Crest Factor: ${crest}`);});}
+/* Energy Env Var */ function processEnergyEnvelopeVariance(){const i=document.getElementById('fileInputEnergyEnvVariance');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const variance=analyzeEnergyEnvelopeVariance(f[0]);document.getElementById('metaEnergyEnvVariance_primary').textContent=`Variance: ${variance}`;console.log(`Energy Envelope Variance: ${variance}`);});}
+/* Normalized Energy */ function processNormalizedEnergy(){const i=document.getElementById('fileInputNormalizedEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const normalized=analyzeNormalizedEnergy(f[0]);document.getElementById('metaNormalizedEnergy_primary').textContent=`Normalized: ${normalized}`;console.log(`Normalized Energy: ${normalized}`);});}
+/* Transient Energy */ function processTransientEnergy(){const i=document.getElementById('fileInputTransientEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const transient=analyzeTransientEnergy(f[0]);document.getElementById('metaTransientEnergy_primary').textContent=`Transient: ${transient}%`;console.log(`Transient Energy: ${transient}%`);});}
+/* Sustain Energy */ function processSustainEnergy(){const i=document.getElementById('fileInputSustainEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const sustain=analyzeSustainEnergy(f[0]);document.getElementById('metaSustainEnergy_primary').textContent=`Sustain: ${sustain}%`;console.log(`Sustain Energy: ${sustain}%`);});}
+/* Peak-to-Avg Ratio */ function processPeakToAverageRatio(){const i=document.getElementById('fileInputPAR');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzePeakToAverageRatio(f[0]);document.getElementById('metaPAR_primary').textContent=`PAR: ${ratio} dB`;console.log(`Peak-to-Average Ratio: ${ratio} dB`);});}
+/* Copyright */ function processCopyright(){const i=document.getElementById('fileInputCopyright');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const copyright=analyzeCopyright(f[0]);document.getElementById('metaCopyright_primary').textContent=`Copyright: ${copyright}`;console.log(`Copyright Processed: ${copyright}`);});}
+/* Publisher */ function processPublisher(){const i=document.getElementById('fileInputPublisher');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const publisher=analyzePublisher(f[0]);document.getElementById('metaPublisher_primary').textContent=`Publisher: ${publisher}`;console.log(`Publisher Processed: ${publisher}`);});}
+/* ISRC */ function processISRC(){const i=document.getElementById('fileInputISRC');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const isrc=analyzeISRC(f[0]);document.getElementById('metaISRC_primary').textContent=`ISRC: ${isrc}`;console.log(`ISRC Processed: ${isrc}`);});}
+/* UPC */ function processUPC(){const i=document.getElementById('fileInputUPC');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const upc=analyzeUPC(f[0]);document.getElementById('metaUPC_primary').textContent=`UPC: ${upc}`;console.log(`UPC Processed: ${upc}`);});}
+/* Geolocation */ function processGeolocation(){const i=document.getElementById('fileInputGeolocation');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const geo=analyzeGeolocation(f[0]);document.getElementById('metaGeolocation_primary').textContent=`Geo: ${geo}`;console.log(`Geolocation Processed: ${geo}`);});}
+/* Region Recording */ function processRegionOfRecording(){const i=document.getElementById('fileInputRegionRecording');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const region=analyzeRegionOfRecording(f[0]);document.getElementById('metaRegionRecording_primary').textContent=`Region: ${region}`;console.log(`Region of Recording Processed: ${region}`);});}
+/* Creation Date */ function processCreationDate(){const i=document.getElementById('fileInputCreationDate');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const date=analyzeCreationDate(f[0]);document.getElementById('metaCreationDate_primary').textContent=`Date: ${date}`;console.log(`Creation Date Processed: ${date}`);});}
+/* Modification Date */ function processModificationDate(){const i=document.getElementById('fileInputModificationDate');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const date=analyzeModificationDate(f[0]);document.getElementById('metaModificationDate_primary').textContent=`Date: ${date}`;console.log(`Modification Date Processed: ${date}`);});}
+/* License Type */ function processLicenseType(){const i=document.getElementById('fileInputLicenseType');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const license=analyzeLicenseType(f[0]);document.getElementById('metaLicenseType_primary').textContent=`License: ${license}`;console.log(`License Type Processed: ${license}`);});}
+/* Creative Commons */ function processCreativeCommons(){const i=document.getElementById('fileInputCreativeCommons');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const cc=analyzeCreativeCommons(f[0]);document.getElementById('metaCreativeCommons_primary').textContent=`CC: ${cc}`;console.log(`Creative Commons Info Processed: ${cc}`);});}
+/* Album Art URL */ function processAlbumArtURL(){const i=document.getElementById('fileInputAlbumArtURL');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const url=analyzeAlbumArtURL(f[0]);document.getElementById('metaAlbumArtURL_primary').textContent=`URL: ${url}`;console.log(`Album Art URL Processed: ${url}`);});}
+/* Language */ function processLanguage(){const i=document.getElementById('fileInputLanguage');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const language=analyzeLanguage(f[0]);document.getElementById('metaLanguage_primary').textContent=`Language: ${language}`;console.log(`Language Processed: ${language}`);});}
+/* Source URL */ function processOriginalSourceURL(){const i=document.getElementById('fileInputSourceURL');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const url=analyzeOriginalSourceURL(f[0]);document.getElementById('metaSourceURL_primary').textContent=`URL: ${url}`;console.log(`Original Source URL Processed: ${url}`);});}
+     /* Genre Subcategory */ function processGenreSubcategory(){const i=document.getElementById('fileInputGenreSubcategory');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const genre=analyzeGenreSubcategory(f[0]);document.getElementById('metaGenreSubcategory_primary').textContent=`Genre: ${genre}`;console.log(`Genre Subcategory Processed: ${genre}`);});}
+/* Explicit Content */ function processExplicitContent(){const i=document.getElementById('fileInputExplicitContent');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const explicit=analyzeExplicitContent(f[0]);document.getElementById('metaExplicitContent_primary').textContent=`Explicit: ${explicit}`;console.log(`Explicit Content Processed: ${explicit}`);});}
+/* Keywords */ function processKeywords(){const i=document.getElementById('fileInputKeywords');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const keywords=analyzeKeywords(f[0]);document.getElementById('metaKeywords_primary').textContent=`Keywords: ${keywords}`;console.log(`Keywords Processed: ${keywords}`);});}
+/* Geotag */ function processGeotag(){const i=document.getElementById('fileInputGeotag');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const geotag=analyzeGeotag(f[0]);document.getElementById('metaGeotag_primary').textContent=`Geotag: ${geotag}`;console.log(`Geotag Processed: ${geotag}`);});}
+/* Recording Env */ function processRecordingEnvironment(){const i=document.getElementById('fileInputRecordingEnvironment');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const environment=analyzeRecordingEnvironment(f[0]);document.getElementById('metaRecordingEnvironment_primary').textContent=`Environment: ${environment}`;console.log(`Recording Environment Processed: ${environment}`);});}
+/* Audio Watermark */ function processAudioWatermark(){const i=document.getElementById('fileInputAudioWatermark');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const watermark=analyzeAudioWatermark(f[0]);document.getElementById('metaAudioWatermark_primary').textContent=`Watermark: ${watermark}`;console.log(`Audio Watermark Processed: ${watermark}`);});}
+let dragDropContainer=document.getElementById('dragDropContainer');dragDropContainer.addEventListener('drop',function(event){event.preventDefault();const files=event.dataTransfer.files;if(files.length>0){analyzeFile(files[0]);}});dragDropContainer.addEventListener('dragover',function(event){event.preventDefault();});
+// const fileInput=document.getElementById('fileInput');fileInput.addEventListener('change',function(event){const files=event.target.files;if(files.length>0){analyzeFile(files[0]);}});
+// function analyzeFile(file){const audioContext=new(window.AudioContext||window.webkitAudioContext)();const reader=new FileReader();reader.onload=function(){audioContext.decodeAudioData(reader.result,function(buffer){const channelData=buffer.getChannelData(0);const rms=calculateRMS(channelData);const peakAmplitude=calculatePeakAmplitude(channelData);const zeroCrossingRate=calculateZeroCrossingRate(channelData);displayMetric("RMS",rms);displayMetric("PeakAmplitude",peakAmplitude);displayMetric("ZeroCrossingRate",zeroCrossingRate);});};reader.readAsArrayBuffer(file);}
+function calculateRMS(samples){const squaredSum=samples.reduce((sum,sample)=>sum+sample*sample,0);return Math.sqrt(squaredSum/samples.length).toFixed(2);}
+function calculatePeakAmplitude(samples){return Math.max(...samples).toFixed(2);}
+function calculateZeroCrossingRate(signal){let zeroCrossings=0;for(let i=1;i<signal.length;i++){if(signal[i-1]*signal[i]<0){zeroCrossings++;}}return((zeroCrossings/signal.length)*100).toFixed(2);}
+function displayMetric(metricName,value){const element=document.getElementById(metricName);if(element){element.innerText=`${metricName}: ${value}`;}}
+
+ 
+</script>    
  <script>
 // Create the AudioContext
 if (!window.audioContext) {
@@ -265,6 +568,208 @@ document.addEventListener('click', () => {
     if (window.audioContext && window.audioContext.state === 'suspended') {
         window.audioContext.resume().then(() => console.log('AudioContext resumed.'));
     }
+});
+
+
+/* Initialize audio ctx */
+const audioPlayer = document.getElementById("audioPlayer");
+/* Get canvas element */
+const canvas = document.getElementById("spectrogramCanvas");
+/* Get 2D context */
+const canvasCtx = canvas.getContext("2d");
+
+/* Ensure AudioContext is declared only once */
+if (!window.audioContext) {
+    window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
+}
+
+/* Check if AudioContext is suspended and resume it */
+document.addEventListener('click', () => {
+    if (window.audioContext.state === 'suspended') {
+        window.audioContext.resume().then(() => console.log('AudioContext resumed.'));
+    }
+});
+
+/* Initialize analyser */
+const analyser = window.audioContext.createAnalyser();
+/* Create gain node */
+const gainNode = window.audioContext.createGain();
+/* Create media source node */
+let sourceNode = window.audioContext.createMediaElementSource(audioPlayer);
+
+/* Connect audio nodes */
+sourceNode.connect(analyser);
+sourceNode.connect(gainNode);
+gainNode.connect(window.audioContext.destination);
+
+/* Set analyser parameters */
+analyser.fftSize = 2048;
+/* Get frequency bin count */
+const bufferLength = analyser.frequencyBinCount;
+/* Initialize data array */
+const dataArray = new Uint8Array(bufferLength);
+
+/* Function to draw spectrogram */
+function drawSpectrogram() {
+    /* Request animation frame */
+    requestAnimationFrame(drawSpectrogram);
+    /* Get frequency data */
+    analyser.getByteFrequencyData(dataArray);
+    /* Clear the canvas */
+    canvasCtx.fillStyle = "rgb(255, 255, 255)";
+    canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+    /* Draw zero-axis line */
+    const zeroLineY = canvas.height / 2 + 10;
+    canvasCtx.beginPath();
+    canvasCtx.setLineDash([5, 5]);
+    canvasCtx.strokeStyle = "#1E2337";
+    canvasCtx.lineWidth = 1;
+    canvasCtx.moveTo(0, zeroLineY);
+    canvasCtx.lineTo(canvas.width, zeroLineY);
+    canvasCtx.stroke();
+    canvasCtx.setLineDash([]);
+
+    /* Draw spectrogram bars */
+    const barWidth = (canvas.width / bufferLength) * 2.5;
+    let x = 0;
+    for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i];
+        canvasCtx.fillStyle = `rgb(30, 35, 55)`;
+        canvasCtx.fillRect(x, canvas.height - barHeight / 2, barWidth, barHeight / 2);
+        x += barWidth + 1;
+    }
+}
+
+/* Start drawing the spectrogram */
+drawSpectrogram();
+
+/* Event listeners for audio player */
+audioPlayer.addEventListener("play", () => {
+    if (window.audioContext.state === "suspended") {
+        window.audioContext.resume().catch((err) =>
+            console.error("Audio context resume failed:", err)
+        );
+    }
+    drawSpectrogram();
+});
+
+audioPlayer.addEventListener("pause", () => {
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+/* Handle file input for loading audio */
+document.getElementById("fileInput").addEventListener("change", (event) => {
+    const file = event.target.files[0];
+    if (file && file.type.startsWith("audio/")) {
+        const objectURL = URL.createObjectURL(file);
+        audioPlayer.src = objectURL;
+        audioPlayer.load();
+        audioPlayer.play();
+    } else {
+        alert("Please select a valid audio file.");
+    }
+});
+
+/* Resize canvas dynamically */
+window.addEventListener("resize", () => {
+    canvas.width = canvas.parentElement.offsetWidth;
+    canvas.height = 300;
+    canvasCtx.clearRect(0, 0, canvas.width, canvas.height);
+});
+
+/* Calculate Spectral Centroid */
+function calculateSpectralCentroid(frequencies, magnitudes) {
+    let weightedSum = 0;
+    let totalMagnitude = 0;
+    for (let i = 0; i < frequencies.length; i++) {
+        weightedSum += frequencies[i] * magnitudes[i];
+        totalMagnitude += magnitudes[i];
+    }
+    return totalMagnitude === 0 ? 0 : (weightedSum / totalMagnitude).toFixed(2);
+}
+
+/* Calculate RMS */
+function calculateRMS(samples) {
+    const squaredSum = samples.reduce((sum, sample) => sum + sample * sample, 0);
+    return Math.sqrt(squaredSum / samples.length).toFixed(2);
+}
+
+/* Calculate Zero-Crossing Rate */
+function calculateZeroCrossingRate(signal) {
+    let zeroCrossings = 0;
+    for (let i = 1; i < signal.length; i++) {
+        if (signal[i - 1] * signal[i] < 0) {
+            zeroCrossings++;
+        }
+    }
+    return ((zeroCrossings / signal.length) * 100).toFixed(2);
+}
+
+/* Detect Clipping */
+function detectClipping(channelData) {
+    const clippingThreshold = 1.0;
+    const clippingRegions = [];
+    for (let i = 0; i < channelData.length; i++) {
+        if (Math.abs(channelData[i]) >= clippingThreshold) {
+            clippingRegions.push(i);
+        }
+    }
+    return clippingRegions;
+}
+
+/* Display Calculated Metrics */
+function displayMetrics(analyser, dataArray, audioContext) {
+    analyser.getByteFrequencyData(dataArray);
+    const frequencies = Array.from({ length: dataArray.length }, (_, i) => i * (audioContext.sampleRate / analyser.fftSize));
+    const spectralCentroid = calculateSpectralCentroid(frequencies, dataArray);
+    const rms = calculateRMS(dataArray);
+    const peakAmplitude = calculatePeakAmplitude(dataArray);
+    const zeroCrossingRate = calculateZeroCrossingRate(dataArray);
+    console.log("Spectral Centroid:", spectralCentroid);
+    console.log("RMS:", rms);
+    console.log("Peak Amplitude:", peakAmplitude);
+    console.log("Zero-Crossing Rate:", zeroCrossingRate);
+}
+
+/* Periodically update metrics */
+function startMetricUpdates(analyser, dataArray, audioContext, audioPlayer) {
+    setInterval(() => {
+        if (!audioPlayer.paused) {
+            displayMetrics(analyser, dataArray, audioContext);
+        }
+    }, 1000);
+}
+
+/* Init WaveSurfer DOM */
+let waveSurfer;
+document.addEventListener('DOMContentLoaded', () => {
+    const container = document.querySelector('#waveform');
+    if (!container) {
+        console.error('WaveSurfer container not found!');
+        return;
+    }
+    waveSurfer = WaveSurfer.create({
+        container: '#waveform',
+        waveColor: 'gold',
+        progressColor: '#1e2337'
+    });
+
+    document.getElementById('fileInput').addEventListener('change', e => {
+        const file = e.target.files[0];
+        if (file && file.type.startsWith('audio/')) {
+            const fileURL = URL.createObjectURL(file);
+            waveSurfer.load(fileURL);
+            waveSurfer.on('ready', () => {
+                console.log('Waveform rendering complete!');
+            });
+            waveSurfer.on('error', err => {
+                console.error('WaveSurfer error:', err);
+            });
+        } else {
+            alert('Invalid audio file.');
+        }
+    });
 });
 </script>
 </body>

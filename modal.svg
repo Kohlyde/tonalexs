@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Advanced Framework Table</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f9f9f9;
+            margin: 0;
+            padding: 20px;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .icon-deck {
+            width: 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            align-items: center;
+            background-color: #e9e9e9;
+            border-radius: 10px;
+            padding: 10px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+
+        .icon-deck button {
+            background-color: #fff;
+            border: none;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            margin-bottom: 10px;
+            transition: background-color 0.2s, transform 0.2s;
+        }
+
+        .icon-deck button:hover {
+            background-color: #007bff;
+            transform: scale(1.1);
+        }
+
+        .icon-deck button svg {
+            fill: #333;
+            transition: fill 0.2s;
+        }
+
+        .icon-deck button:hover svg {
+            fill: #fff;
+        }
+
+        .content {
+            margin-left: 20px;
+            flex-grow: 1;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            border-radius: 8px;
+            overflow: hidden;
+            background: #fff;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        thead {
+            background-color: #007bff;
+            color: #fff;
+        }
+
+        th, td {
+            padding: 12px 16px;
+            text-align: left;
+            border-bottom: 1px solid #f1f1f1;
+        }
+
+        th {
+            font-weight: bold;
+        }
+
+        tbody tr:last-child td {
+            border-bottom: none;
+        }
+
+        td {
+            vertical-align: middle;
+        }
+
+        .icon-cell {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .icon-cell svg {
+            fill: #007bff;
+        }
+
+        .actions {
+            display: flex;
+            gap: 10px;
+        }
+
+        .actions svg {
+            cursor: pointer;
+            fill: #333;
+            transition: fill 0.2s;
+        }
+
+        .actions svg:hover {
+            fill: #007bff;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <!-- Icon Deck -->
+    <div class="icon-deck">
+        <button onclick="window.open('page1.html', '_blank')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+        </button>
+        <button onclick="window.open('page2.html', '_blank')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </button>
+        <button onclick="window.open('page3.html', '_blank')">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <polygon points="12,2 22,22 2,22" />
+            </svg>
+        </button>
+        <!-- Add more buttons up to 7 -->
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+        <table>
+            <thead>
+                <tr>
+                    <th>Framework</th>
+                    <th>Type</th>
+                    <th>Features</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Audio Visual JS</td>
+                    <td>Audio</td>
+                    <td>High-quality streaming, real-time analysis</td>
+                    <td class="actions">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <rect x="5" y="5" width="14" height="14" />
+                        </svg>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Total.js</td>
+                    <td>Web Framework</td>
+                    <td>Fast, scalable, lightweight</td>
+                    <td class="actions">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <rect x="5" y="5" width="14" height="14" />
+                        </svg>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Tonal.js</td>
+                    <td>Music</td>
+                    <td>Music theory and chord analysis</td>
+                    <td class="actions">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="10" />
+                        </svg>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                            <rect x="5" y="5" width="14" height="14" />
+                        </svg>
+                    </td>
+                </tr>
+              <tbody>
+    <tr>
+        <td>Audio Visual JS</td>
+        <td>Audio</td>
+        <td>High-quality streaming, real-time analysis</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>Total.js</td>
+        <td>Web Framework</td>
+        <td>Fast, scalable, lightweight</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>Tonal.js</td>
+        <td>Music</td>
+        <td>Music theory and chord analysis</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>Howler.js</td>
+        <td>Audio</td>
+        <td>Cross-browser audio playback</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>Three.js</td>
+        <td>Visuals</td>
+        <td>3D rendering and animation</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>PixiJS</td>
+        <td>Visuals</td>
+        <td>High-performance 2D rendering</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>Web Audio API</td>
+        <td>Audio</td>
+        <td>Native audio processing and synthesis</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>D3.js</td>
+        <td>Visuals</td>
+        <td>Data visualization and manipulation</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>React Three Fiber</td>
+        <td>Visuals</td>
+        <td>3D rendering in React using Three.js</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <tr>
+        <td>WaveSurfer.js</td>
+        <td>Audio</td>
+        <td>Interactive waveform visualization</td>
+        <td class="actions">
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <circle cx="12" cy="12" r="10" />
+            </svg>
+            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+                <rect x="5" y="5" width="14" height="14" />
+            </svg>
+        </td>
+    </tr>
+    <!-- Add 10 more rows here as needed -->
+</tbody>
+
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>

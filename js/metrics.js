@@ -1,10 +1,10 @@
-let dragDropContainer=document.getElementById('dragDropContainer');dragDropContainer.addEventListener('drop',function(event){event.preventDefault();const files=event.dataTransfer.files;if(files.length>0){analyzeFile(files[0]);}});dragDropContainer.addEventListener('dragover',function(event){event.preventDefault();});
-// const fileInput=document.getElementById('fileInput');fileInput.addEventListener('change',function(event){const files=event.target.files;if(files.length>0){analyzeFile(files[0]);}});
-// function analyzeFile(file){const audioContext=new(window.AudioContext||window.webkitAudioContext)();const reader=new FileReader();reader.onload=function(){audioContext.decodeAudioData(reader.result,function(buffer){const channelData=buffer.getChannelData(0);const rms=calculateRMS(channelData);const peakAmplitude=calculatePeakAmplitude(channelData);const zeroCrossingRate=calculateZeroCrossingRate(channelData);displayMetric("RMS",rms);displayMetric("PeakAmplitude",peakAmplitude);displayMetric("ZeroCrossingRate",zeroCrossingRate);});};reader.readAsArrayBuffer(file);}
-function calculateRMS(samples){const squaredSum=samples.reduce((sum,sample)=>sum+sample*sample,0);return Math.sqrt(squaredSum/samples.length).toFixed(2);}
-function calculatePeakAmplitude(samples){return Math.max(...samples).toFixed(2);}
-function calculateZeroCrossingRate(signal){let zeroCrossings=0;for(let i=1;i<signal.length;i++){if(signal[i-1]*signal[i]<0){zeroCrossings++;}}return((zeroCrossings/signal.length)*100).toFixed(2);}
-function displayMetric(metricName,value){const element=document.getElementById(metricName);if(element){element.innerText=`${metricName}: ${value}`;}}
+    let dragDropContainer=document.getElementById('dragDropContainer');dragDropContainer.addEventListener('drop',function(event){event.preventDefault();const files=event.dataTransfer.files;if(files.length>0){analyzeFile(files[0]);}});dragDropContainer.addEventListener('dragover',function(event){event.preventDefault();});
+    // const fileInput=document.getElementById('fileInput');fileInput.addEventListener('change',function(event){const files=event.target.files;if(files.length>0){analyzeFile(files[0]);}});
+    // function analyzeFile(file){const audioContext=new(window.AudioContext||window.webkitAudioContext)();const reader=new FileReader();reader.onload=function(){audioContext.decodeAudioData(reader.result,function(buffer){const channelData=buffer.getChannelData(0);const rms=calculateRMS(channelData);const peakAmplitude=calculatePeakAmplitude(channelData);const zeroCrossingRate=calculateZeroCrossingRate(channelData);displayMetric("RMS",rms);displayMetric("PeakAmplitude",peakAmplitude);displayMetric("ZeroCrossingRate",zeroCrossingRate);});};reader.readAsArrayBuffer(file);}
+    function calculateRMS(samples){const squaredSum=samples.reduce((sum,sample)=>sum+sample*sample,0);return Math.sqrt(squaredSum/samples.length).toFixed(2);}
+    function calculatePeakAmplitude(samples){return Math.max(...samples).toFixed(2);}
+    function calculateZeroCrossingRate(signal){let zeroCrossings=0;for(let i=1;i<signal.length;i++){if(signal[i-1]*signal[i]<0){zeroCrossings++;}}return((zeroCrossings/signal.length)*100).toFixed(2);}
+    function displayMetric(metricName,value){const element=document.getElementById(metricName);if(element){element.innerText=`${metricName}: ${value}`;}}
 
 
 
