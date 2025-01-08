@@ -1,0 +1,24 @@
+ .spensor-hljs-comment, .spensor-hljs-quote { color:#aeaeae;font-style:italic; }
+        .spensor-hljs-keyword, .spensor-hljs-selector-tag, .spensor-hljs-type { color:#e28964; }
+        .spensor-hljs-string { color:#65b042; }
+        .spensor-hljs-subst { color:#daefa3; }
+        .spensor-hljs-regexp, .spensor-hljs-link { color:#e9c062; }
+        .spensor-hljs-title, .spensor-hljs-section, .spensor-hljs-tag, .spensor-hljs-name { color:#89bdff; }
+        .spensor-hljs-title.class_, .spensor-hljs-class .spensor-hljs-title, .spensor-hljs-doctag { text-decoration:underline; }
+        .spensor-hljs-symbol, .spensor-hljs-bullet, .spensor-hljs-number { color:#3387cc; }
+        .spensor-hljs-params, .spensor-hljs-variable, .spensor-hljs-template-variable { color:#3e87e3; }
+        .spensor-hljs-attribute { color:#cda869; }
+        .spensor-hljs-meta { color:#8996a8; }
+        .spensor-hljs-formula { background-color:#0e2231;color:#f8f8f8;font-style:italic; }
+        .spensor-hljs-addition { background-color:#253b22;color:#f8f8f8; }
+        .spensor-hljs-deletion { background-color:#420e09;color:#f8f8f8; }
+        .spensor-hljs-selector-class { color:#9b703f; }
+        .spensor-hljs-selector-id { color:#8b98ab; }
+        .spensor-hljs-emphasis { font-style:italic; }
+        .spensor-hljs-strong { font-weight:bold; }
+        pre { border: 1px solid #ccc; padding: 10px; }
+        .spensor-email-container { display: flex; border: 1px solid #000; }
+        .spensor-email-left { width: 50%; padding-right: 10px; }
+        .spensor-email-right { width: 50%; display: flex; flex-direction: column; }
+        .spensor-email-right pre { margin: 5px 0; }
+        .spensor-dropdown, .spensor-law-breakdown, .spensor-conviction-points { margin: 10px 0; padding:
