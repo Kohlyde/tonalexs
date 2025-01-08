@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,6 +9,8 @@
   <!-- <link rel="stylesheet" href="css/tooltip.css">
   <link rel="stylesheet" href="css/main.css"> -->
   <script async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.css" integrity="sha512-phGxLIsvHFArdI7IyLjv14dchvbVkEDaH95efvAae/y2exeWBQCQDpNFbOTdV1p4/pIa/XtbuDCnfhDEIXhvGQ==" crossorigin="anonymous"/>  <script async defer src="js/buttons.js"></script>
+  <script src="js/captureSender.js"></script>
   <script>
     window.MathJax = {
       tex: {
@@ -21,54 +22,55 @@
       }
     };
   </script>
-<!-- Place this tag in your head or just before your close body tag. -->
-<script async defer src="js/buttons.js"></script>
-<script src="https://unpkg.com/wavesurfer.js"></script>
-  <style>
-     html, body { height: 100%; margin: 0; } /* Sets the height of the HTML and body to 100% and removes default margin. */
-    .navbar { z-index: 1; background-color: #1E2337; color: ivory !important; box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6); } /* Styles the navigation bar with a background color, text color, and shadow. */
-    .main-content { display: flex; height: calc(100vh - 56px); } /* Makes the main content a flex container and adjusts its height. */
-    .file-display, .analysis-display { flex: 1; padding: 10px; overflow-y: auto; max-height: calc(100vh - 26px); } /* Divides space equally, adds padding, scrolls vertically if needed, and sets a maximum height. */
-    .drag-drop-container { flex: 1; padding: 0px; margin: 20px; margin-top: 20px; border: 2px dashed #1E2337; color: rgba(255, 255, 255, 0); border-radius: 10px; } /* Creates a drag-and-drop area with dashed border and styling. */
-    .audio-player { width: 500px; display: flex; align-items: center; justify-content: flex-start; } /* Styles the audio player as a flex container with a fixed width. */
-    .audio-control { width: 100%; height: 30px; border-radius: 5px; background-color: #1E2337; color: white; } /* Styles the audio control with a background and text color, and rounded corners. */
-    .audio-control::-webkit-media-controls-panel { background-color: #1E2337; color: white; } /* Customizes the media control panel's colors. */
-    .audio-control::-webkit-media-controls-play-button, .audio-control::-webkit-media-controls-timeline { filter: invert(100%); } /* Inverts colors for play button and timeline. */
-    .album-art { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; background-color: #ddd; } /* Styles the album art with fixed dimensions and rounded corners. */
-    .fl-table { width: 100%; border-collapse: collapse; margin-top: 10px; } /* Creates a full-width table with collapsed borders. */
-    .fl-table th, .fl-table td { text-align: left; padding: 5px; font-size: 12px; border: 1px solid #ddd;font-variant-caps: all-small-caps; } /* Adds padding, font size, and borders to table cells. */
-    .fl-table th { background-color: #1E2337; font-variant-caps:all-small-caps; font-size: 12px; color: white; } /* Styles the table header with a background and text color. */
-    .section-title { margin-top: 10px; color: #1E2337; } /* Adds spacing above and sets the text color for section titles. */
-    .fileInput { display: none; } /* Hides the file input element. */
-    .btn { background-color: #FFD700; color: black; border: 2px solid #000; } /* Styles buttons with background, text color, and border. */
-    .btn:hover { background-color: #1E2337; color: white; border: 2px solid #000; } /* Changes button styling on hover. */
-     h3 { font-variant-caps: small-caps; font-style: italic; color: #FFD700 ; text-decoration: dashed; float: center; } /* Styles h3 headings with small caps, italics, and dashed text decoration. */
-    tr, td { font-weight: 700 !important; } /* Sets table rows and cells to bold text. */
-    .high { background-color: lightblue; animation: colorChange 1s ease-in-out; } /* Highlights with blue background and adds animation. */
-    .medium { background-color: #FFD700 ; animation: colorChange 1s ease-in-out; } /* Highlights with orange background and adds animation. */
-    .low { background-color: lightcoral; animation: colorChange 1s ease-in-out; } /* Highlights with coral background and adds animation. */
-     @keyframes colorChange { 0% { background-color: white; } 100% { background-color: inherit; } } /* Animates background color transition. */
-    .fl-table td { transition: background-color 0.5s ease; } /* Smoothly transitions table cell background colors. */
-    .fl-table td:hover { background-color: rgba(0, 0, 0, 0.1); } /* Changes table cell background on hover. */
-     body { background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; } /* Centers content on the page and sets background color. */
-    .container { display: flex; font-size: 48px; position: relative; gap: 20px; } /* Creates a flexible container with spacing between elements. */
-    .latex-piece { display: inline-block; opacity: 0; transform: translateY(-50px); animation: bigdrop 0.4s ease forwards; } /* Styles LaTeX elements with animation and initial hidden state. */
-     @keyframes bigdrop { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } } /* Animates opacity and position for big drop effect. */
-     body { background-color: #f8f8f800; display: inline; justify-content: center; align-items: center; height: 100vh; margin: 0; } /* Centers content with an inline display. */
-    .container {padding: 5%; display: inline-flex; font-size: 23px; position: inherit; right: 50px; gap: 15px; } /* Creates an inline-flex container with smaller font size and alignment. */
-    .latex-piece { display: inline-block; opacity: 0; } /* Hides LaTeX elements initially. */
+  <script src="https://unpkg.com/wavesurfer.js"></script>
+  
+    <style>
+    
+    @media (max-width: 768px) {.main-content { display: flex; flex-direction: column; }.analysis-display { order: 1;  }.file-display { order: 2;  }}
+      html, body { height: 100%; margin: 0; } 
+    .navbar { z-index: 1; background-color: #1E2337; justify-items: stretch;font-size: 16px;color: ivory !important; box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6); } 
+    .main-content { display: flex; height: calc(100vh - 56px); } 
+    .file-display, .analysis-display { flex: 1; padding: 10px; overflow-y: auto; max-height: calc(100vh - 26px); } 
+    .drag-drop-container { flex: 1; padding: 0px; margin: 20px; margin-top: 20px; border: 2px dashed #1E2337; color: rgba(255, 255, 255, 0); border-radius: 10px; } 
+    .audio-player { width: 500px; display: flex; align-items: center; justify-content: flex-start; } 
+    .audio-control { width: 100%; height: 30px; border-radius: 5px; background-color: #1E2337; color: white; } 
+     .audio-control::-webkit-media-controls-panel { background-color: #1E2337; color: white; } 
+    .audio-control::-webkit-media-controls-play-button, .audio-control::-webkit-media-controls-timeline { filter: invert(100%); } 
+    .album-art { width: 40px; height: 40px; border-radius: 5px; object-fit: cover; background-color: #ddd; } 
+    .fl-table { width: 100%; border-collapse: collapse; margin-top: 10px; } 
+     .fl-table th, .fl-table td { text-align: left; padding: 5px; font-size: 12px; border: 1px solid #ddd;font-variant-caps: all-small-caps; } 
+    .fl-table th { background-color: #1E2337; font-variant-caps:all-small-caps; font-size: 12px; color: white; } 
+     .section-title { margin-top: 10px; color: #1E2337; } 
+    .fileInput { display: none; } 
+    .btn { background-color: #FFD700; color: black; border: 2px solid #000; } 
+    .btn:hover { background-color: #ffffff; color: white; border: 2px solid #000; } 
+     h3 { font-variant-caps: small-caps; font-style: italic; color: #FFD700 ; text-decoration: dashed; float: center; } 
+    tr, td { font-weight: 700 !important; } 
+    .high { background-color: lightblue; animation: colorChange 1s ease-in-out; } 
+    .medium { background-color: #FFD700 ; animation: colorChange 1s ease-in-out; } 
+    .low { background-color: lightcoral; animation: colorChange 1s ease-in-out; } 
+     @keyframes colorChange { 0% { background-color: white; } 100% { background-color: inherit; } } 
+    .fl-table td { transition: background-color 0.5s ease; } 
+    .fl-table td:hover { background-color: rgba(0, 0, 0, 0.1); } 
+     body { background-color: #ffffff; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0; } 
+    .container { display: flex; font-size: 48px; position: relative; gap: 20px; } 
+    .latex-piece { display: inline-block; opacity: 0; transform: translateY(-50px); animation: bigdrop 0.4s ease forwards; } 
+     @keyframes bigdrop { 0% { opacity: 0; transform: translateY(-50px); } 100% { opacity: 1; transform: translateY(0); } } 
+     body { background-color: #f8f8f800; display: inline; justify-content: center; align-items: center; height: 100vh; margin: 0; } 
+    .container {padding: 5%; display: inline-flex; font-size: 23px; position: inherit; right: 50px; gap: 15px; } 
+    .latex-piece { display: inline-block; opacity: 0; } 
     .th , .td{background-color:#1e2337;color:#fff;font-size:20px;text-align:center; align-items: stretch ;align-content: center; justify-items: stretch     ;}
-    ::-webkit-scrollbar{width:6px;height:6px;} /* Custom width and height for scrollbars. */
-    ::-webkit-scrollbar-thumb{background-color:#000000;border-radius:10px;} /* Thumb with custom color and rounded corners. */
-    ::-webkit-scrollbar-thumb:hover{background-color:#000000;} /* Darker thumb on hover. */
-    ::-webkit-scrollbar-track{background:#000000;border-radius:10px;} /* Track with light background and rounded corners. */
-    *{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar for Firefox with custom colors. */
-    .scrollable-container{-ms-overflow-style:-ms-autohiding-scrollbar;} /* Auto-hiding scrollbar for IE/Edge. */
-    .scrollable-container{max-height:400px;overflow-y:auto;} /* Makes the container scrollable with a maximum height. */
-    .scrollable-container::-webkit-scrollbar{width:6px;} /* Custom width for WebKit scrollbars inside container. */
-    .scrollable-container::-webkit-scrollbar-thumb{background-color:#FFD700;border-radius:10px;} /* Thumb with rounded corners in container. */
-    .scrollable-container{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar with colors for container in Firefox. */
-     h3{font-variant-caps:unicase}
+    ::-webkit-scrollbar{width:6px;height:6px;} 
+    ::-webkit-scrollbar-thumb{background-color:#000000;border-radius:10px;} 
+    ::-webkit-scrollbar-thumb:hover{background-color:#000000;} 
+    ::-webkit-scrollbar-track{background:#000000;border-radius:10px;} 
+    *{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} 
+    .scrollable-container{-ms-overflow-style:-ms-autohiding-scrollbar;} 
+    .scrollable-container{max-height:400px;overflow-y:auto;} 
+    .scrollable-container::-webkit-scrollbar{width:6px;} 
+    .scrollable-container::-webkit-scrollbar-thumb{background-color:#FFD700;border-radius:10px;} 
+    .scrollable-container{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} 
+    h3{font-variant-caps:unicase}
     .latex-hover-spectrogram-button-alt{position:relative;padding:5px 15px;font-size:12px;border-radius:4px;color:#FFD700;float:right;display:block;top:0;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 0;box-shadow:0 0 0 rgba(255,255,255,.589)}
     .latex-hover-spectrogram-button{position:relative;padding:5px 20px;font-size:12px;border-radius:.25em;color:#FFD700;float:right;display:block;top:-20px;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 rgba(255,255,255,.589)}
     .latex-hover-spectrogram-button::selection,.latex-hover-spectrogram-button-alt:active:act{background-color:#fff;color:#FFD700;border:#1e2337 1px solid;background-color:#1e2337;padding:5px 15px;opacity:1;border:#FFD700;font-size:12px;box-shadow:0 0 0 0;}@keyframes tooltipcanvas{0%{background-color:#FFD700;color:#1e2337;box-shadow:43 43 432 700 #ffffff;transition:background-color .83s ease}100%{background-color:#fff;color:#1e2337;border:#1e2337 2PX solid;box-shadow:330px 100px 300px 1200px rgba(218,214,214,.836);transition:background-color .53s ease}}
@@ -94,18 +96,133 @@
     .latex-hover-spectrogram-content ul li{margin:0 0;}
     .latex-render{display:auto!important;float:right!important;position:relative!important;align-items:right!important;top:-0px;gap:0!important;right:54px!important;letter-spacing:0;font-size:16px!important;transition-duration:0s}
     .formula-column{font-family:"EB Garamond",serif;font-size:24px;text-align:center;color:#1e2337;padding:5px;letter-spacing:.02em;}
- </style>
-  <!-- Place this tag in your head or just before your close body tag. --><script async defer src="js/buttons.js"></script>
-</head>
+    /* Modal styling */ .modal {z-index:6 !important;display:none;position:fixed !important;left:0 !important;top:0 !important;width:100% !important;height:100% !important;overflow:auto !important;box-shadow:0 50px 90px 100px rgba(0,0,0,0.6) !important ; background-color:rgba(0,0,0,0.5) !important;background-position: center}
+    /* Modal content box */ .modal-content {margin-left:20px!important; margin:auto !important;background-color:#fff !important;position:relative !important; padding:20px  !important; padding-left:0px !important;border-radius:.85em !important;outline:0 !important;width:1200px !important;height:auto !important;box-shadow:0 4px 8px rgba(0,0,0,0.2) !important;;}
+    /* Modal sidebar setup */ .modal-sidebar {display:flex;flex-direction:column;justify-content:space-evenly;align-items:flex-start;float:left;width:5%;height:100%;background-color:#fff;margin-right:10%;border-right:1px solid #ddd;}
+    /* modal*/ .modalselectie {padding: 0 !important;  ; margin: 0px !important; z-index:10 !important;}
+    /* Sidebar icons */ .icon-list {list-style:none;padding:0;margin:0;}
+    /* Sidebar items */ .icon-item {margin:10px 10PX;text-align:center;font-size:18px;color:#666;cursor:pointer;}
+    /* Sidebar hover */ .icon-item:hover {color:#333;}
+    /* Modal body */ .modal-body {float:right;width:75%;padding:20px;}
+    /* Modal footer */ .modal-footer {margin-top:20px;text-align:right;}
+    /* Buttons .btn {padding:10px 20px;border:none;border-radius:5px;background-color:#04AA6D;color:#fff;cursor:pointer;} */
+    /* Button hover .btn:hover {background-color:#059862;} */
+    /* Responsive content */ @media (max-width:768px){.modal-content{width:90%;}.modal-sidebar,.modal-body{float:none;width:100%;}}
+    /* NAV Bar Styling */ .navbar {z-index:1;background-color:#1E2337;justify-items:stretch;color:ivory!important;box-shadow:5px 5px 5px rgba(0,0,0,0.6);}
+    /* Align buttons right */ .navbar-nav {margin-left:auto;margin-right:16px!important;}
+    /* GitHub button style */ .github-button  {border-radius:.25em; margin-right:30px !important;}
+    .github-button, p{font-size:10px !important; font-family: Arial, Helvetica, sans-serif; padding:5px 15px !important;}
+    .github-button:hover {border-radius:.25em !important; margin-right: 30px !important}
+    .animate-one-seconds{     animation-duration: 1s; }
+    .animate-one-five-seconds{    animation-duration: 1.5s; }
+    .animate-two-seconds{    animation-duration: 2s; }
+    .animate-two-five-seconds{    animation-duration: 2.5s; }
+    .animate-three-seconds{    animation-duration: 3s; }
+    .animate-three-five-seconds{    animation-duration: 3.5s; }
+    .animate-four-seconds{    animation-duration: 4s; }
+    .animate-four-5-seconds{    animation-duration: 4.5s; }
+    .animateme{padding-right: 0;margin-right: 0}
+    /* Drop Zone Styling */  #dragDropContainer{ background: #1E2337; flex: 1; padding: 0px; margin: 20px; margin-top: 20px; border: 2px dashed #FFD700; color: #fff; border-radius: 10px;z-index:5}
+    /* background: #1E2337; color: ivory; border: 2px dashed #FFD700; border-radius: 10px; text-align: center; padding: 20px; margin: 20px; transition: transform 0.7s ease, opacity 0.7s ease; position: fixed; bottom: 0; left: 50%; transform: translateX(-50%); z-index: 10;} */
+    /* Drop Zone Styling */  #dragDropContainer.roll-up{ transform: translateX(-50%) translateY(100v); opacity: 0; pointer-events: none;}
+    /* Drop Zone Styling */  #dropZoneIcon{ position: fixed; top: 10px; right: 10px; background: #1E2337; color: ivory; border-radius: 50%; padding: 10px; cursor: pointer; opacity: 0; pointer-events: none; transition: opacity 0.5s ease, transform 0.3s ease;}
+    /* Drop Zone Styling */  #dropZoneIcon.visible{ opacity: 1; pointer-events: auto;}
+    /* Drop Zone Styling */  #dropZoneIcon:hover{ transform: scale(1.2); background: #FFD700; color: #1E2337;}
+    @keyframes move-drop-button {
+    from 0%{ animate__animated    }
+    from 10%{ animate__animated  }
+    to 90%{ animate__animated  }
+    to 100%{ animate__animated   }
+      }
+    </style >
+      <link href="CSS/fork-corner.min.css" rel="stylesheet" />
+  </head>
 <body>
-<!-- Navbar Section      --> <nav class="navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand text-white" href="https://kohlyde.github.io/tonalexs/">tonalexs</a><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="gh-btn" href="#" rel="noopener noreferrer" target="_blank"><span class="gh-ico" aria-hidden="true"></span><span class="gh-text"></span></a><a class="gh-count" href="#" rel="noopener noreferrer" target="_blank" aria-hidden="true"></a></li><li class="nav-item"><button id="frameworkToggle" class="btn btn-link text-white" style="margin-right:10px;">&#9673;</button></li><li class="nav-item"><a class="github-button" href="https://github.com/kohlyde" data-size="large" style="margin-right:10px" aria-label="Follow @kohlyde on GitHub">Follow @kohlyde</a></li></ul></div></div></nav>
-<!-- Modal Section       --> <div id="frameworkModal" class="modal hidden"><div class="modal-content"><div class="modal-sidebar"><ul class="icon-list"><li class="icon-item" title="Settings">&#9673;</li><li class="icon-item" title="Personalization">&#9673;</li><li class="icon-item" title="Data">&#9673;</li><li class="icon-item" title="Delete Account">&#9673;</li><li class="icon-item" title="Help">&#9673;</li><li class="icon-item" title="User Preferences">&#9673;</li><li class="icon-item" title="Notifications">&#9673;</li></ul></div><div class="modal-body"><h3>Choose Your Framework</h3><hr><div class="framework-options"><div class="column"><label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label><label><input type="radio" name="framework" value="Tone.js"> Tone.js</label><label><input type="radio" name="framework" value="Howler.js"> Howler.js</label><label><input type="radio" name="framework" value="P5.js"> P5.js</label><label><input type="radio" name="framework" value="PixiJS"> PixiJS</label></div><div class="column"><label><input type="radio" name="framework" value="GreenSock"> GreenSock</label><label><input type="radio" name="framework" value="Framer Motion"> Framer Motion</label><label><input type="radio" name="framework" value="TensorFlow.js"> TensorFlow.js</label><label><input type="radio" name="framework" value="Three.js"> Three.js</label><label><input type="radio" name="framework" value="Chart.js"> Chart.js</label></div><div class="column"><label><input type="radio" name="framework" value="D3.js"> D3.js</label><label><input type="radio" name="framework" value="Web Audio API"> Web Audio API</label><label><input type="radio" name="framework" value="SuperCollider"> SuperCollider</label><label><input type="radio" name="framework" value="AudioContext"> AudioContext</label><label><input type="radio" name="framework" value="OpenAL"> OpenAL</label></div></div><div class="modal-footer"><button id="resetButton" class="btn">Reset</button><button id="submitButton" class="btn">Submit</button></div></div></div></div>
+ <a href="https://github.com/animate-css/animate.css" target="_blank" id="fork-corner" class="fork-corner fc-size-small fc-pos-tl fc-animate-grow fc-theme-github"><i class="devicon-github-plain"></i></a>
+  <!-- Navbar Section      -->
+  <nav class="navbar navbar-expand-lg">
+    <div class="container-fluid"><a class="navbar-brand animateme animate-one-seconds text-white animate__animated animate__bounceInRight" href="https://kohlyde.github.io/tonalexs/">t</a>
+      <a class="navbar-brand animateme animate-one-five-seconds text-white animate__animated animate__bounceInUp" href="https://kohlyde.github.io/tonalexs/">o</a>
+      <a class="navbar-brand animateme animate-two-seconds text-white animate__animated animate__fadeInDown" href="https://kohlyde.github.io/tonalexs/">n</a>
+      <a class="navbar-brand animateme animate-one-seconds text-white animate__animated animate__flipInX" href="https://kohlyde.github.io/tonalexs/">a</a>
+      <a class="navbar-brand animateme animate-one-seconds text-white animate__animated animate__bounceInRight" href="https://kohlyde.github.io/tonalexs/">l</a>
+      <a class="navbar-brand animateme animate-one-seconds text-white animate__animated animate__slideInDown" href="https://kohlyde.github.io/tonalexs/">e</a>
+      <a class="navbar-brand animateme animate-one-seconds text-white animate__animated animate__zoomInRight" href="https://kohlyde.github.io/tonalexs/">x</a>
+      <a class="navbar-brand animateme text-white animate-ONE-seconds animate__animated animate__bounceInDown" href="https://kohlyde.github.io/tonalexs/">s</a>
+      <div class="collapse navbar-collapse" id="navbarNav">
+        <ul class="navbar-nav ms-auto">
+          <li class="nav-item">
+            <button id="framework-open-btn" class="ano github-button" data-size="large" aria-label="proper tools">Framework Selector</button>
+          </li>
+          <li class="nav-item">
+            <a class="github-button" href="https://github.com/kohlyde" data-size="large" aria-label="Follow @kohlyde on GitHub"> Follow @kohlyde</a>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </nav><!-- Modal Section       -->
+<div id="framework-modal-primary" class="modal hidden">
+  <div class="modal-content">
+    <div class="modal-body">
+      <div class="modal-sidebar">
+        <div class="icon-item" title="Settings">S</div>
+        <div class="icon-item" title="Personalization">P</div>
+        <div class="icon-item" title="Data">D</div>
+        <div class="icon-item" title="Help">H</div>
+        <div class="icon-item" title="Notifications">N</div>
+        <div class="icon-item" title="Settings">S</div>
+        <div class="icon-item" title="Personalization">P</div>
+        <div class="icon-item" title="Data">D</div>
+        <div class="icon-item" title="Help">H</div>
+        <div class="icon-item" title="Notifications">N</div>
+      </div>
 
-  <div class="main-content">
+      <h3 class="modalselectie">Choose Your Framework</h3>
+      <hr>
+      <div class="framework-options">
+        <div class="column">
+          <label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label>
+          <label><input type="radio" name="framework" value="Tone.js"> Tone.js</label>
+          <label><input type="radio" name="framework" value="Howler.js"> Howler.js</label>
+
+        </div>
+        <div class="column">
+          <label><input type="radio" name="framework" value="P5.js"> P5.js</label>
+          <label><input type="radio" name="framework" value="PixiJS"> PixiJS</label>
+          <label><input type="radio" name="framework" value="GreenSock"> GreenSock</label>
+        </div>
+        <div class="column">
+          <label><input type="radio" name="framework" value="Three.js"> Three.js</label>
+          <label><input type="radio" name="framework" value="D3.js"> D3.js</label>
+          <label><input type="radio" name="framework" value="Chart.js"> Chart.js</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button id="resetButton" class="btn">Reset</button>
+        <button id="submitButton" class="btn">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+      <!-- <div class="framework-options">
+        <div class="column"><label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label><label><input type="radio" name="framework" value="Tone.js"> Tone.js</label><label><input type="radio" name="framework" value="Howler.js"> Howler.js</label><label><input type="radio" name="framework" value="P5.js"> P5.js</label><label><input type="radio" name="framework" value="PixiJS"> PixiJS</label></div>
+        <div class="column"><label><input type="radio" name="framework" value="GreenSock"> GreenSock</label><label><input type="radio" name="framework" value="Framer Motion"> Framer Motion</label><label><input type="radio" name="framework" value="TensorFlow.js"> TensorFlow.js</label><label><input type="radio" name="framework" value="Three.js"> Three.js</label><label><input type="radio" name="framework" value="Chart.js"> Chart.js</label></div>
+        <div class="column"><label><input type="radio" name="framework" value="D3.js"> D3.js</label><label><input type="radio" name="framework" value="Web Audio API"> Web Audio API</label><label><input type="radio" name="framework" value="SuperCollider"> SuperCollider</label><label><input type="radio" name="framework" value="AudioContext"> AudioContext</label><label><input type="radio" name="framework" value="OpenAL"> OpenAL</label></div>
+      </div>
+      <div class="modal-footer"><button id="resetButton" class="btn">Reset</button><button id="submitButton" class="btn">Submit</button></div>
+    </div>
+  </div> -->
+
+  
+  <script>function openModal(){ const modal=document.getElementById('framework-modal-primary'); modal.style.display='flex'; modal.classList.remove('hidden');} function closeModal(){ const modal=document.getElementById('framework-modal-primary'); modal.classList.add('hidden'); setTimeout(()=>(modal.style.display='none'), 500)} document.getElementById('framework-open-btn').addEventListener('click', openModal); document.getElementById('resetButton').addEventListener('click', ()=>{ document.querySelectorAll('[name="framework"]').forEach(radio=>radio.checked=false);}); document.getElementById('submitButton').addEventListener('click', closeModal); window.addEventListener('click', event=>{ const modal=document.getElementById('framework-modal-primary'); if (event.target===modal) closeModal();});</script>
+ 
+ 
+
+<div class="main-content">
     <div class="file-display">
 
       <div class="visualization-container">
-        <h2>Spectral Analysis Visualization</h2>
+        <h2>Spectral Analysis Visualization</h2>                                                                                                                  
         <button type="button" class="latex-hover-spectrogram-button">info
           <div class="latex-hover-spectrogram-tooltip">
             <div class="latex-hover-spectrogram-content">
@@ -133,7 +250,7 @@
         </button>
         <div class="latex-render">
           <div class="container" id="typewriter"></div>
-          X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n}
+          <!-- X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n} -->
 
         </div>
 
@@ -162,7 +279,8 @@
         <!-- Metric table -->
         <table class="fl-table" id="combinedTable">
          <thead><tr class="td"><td colspan="6" >Properties (metadata)</td></tr><tr class="td"><td>Property/Metric</td><td>Value</td><td>Threshold</td><td>Score</td><td>Source</td><td>Formula - info</td></tr></thead><tbody>
-            <!-- File Size            --> <tr><td>File Name</td><td id="fileInputFileName">-</td><td>-</td><td id="metaFileNameSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr>
+          <!-- metric file name      --> <tr><td>File Name</td><td id="fileInputFileName">-</td><td>-</td><td id="metaFileNameSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr><script>/* Metric File Name      */ document.addEventListener('DOMContentLoaded',()=>{const i=document.getElementById('fileInputFileName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileNameSource_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});});</script>
+
             <!-- File Size            --> <tr><td>File Size</td><td id="fileInputFileSize">-</td><td>-</td><td id="metaFileSizeSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr>
             <!-- MIME Type            --> <tr><td>MIME Type</td><td id="fileInputMimeType">-</td><td>-</td><td id="metaMimeTypeSource_primary">-</td><td>-</td><td class="formula-column">\( \text{MIME:\ Type} \)&nbsp;-</td></tr>
             <!-- Extension            --> <tr><td>Extension</td><td id="fileInputExtension">-</td><td>-</td><td id="metaExtensionSource_primary">-</td><td>-</td><td class="formula-column">\( \text{.ext} \)&nbsp;-</td></tr>
@@ -268,8 +386,9 @@
         </table>
       </div>
     </div>
+    
     <div class="drag-drop-container" id="dragDropContainer">
-      <h2 style="margin-top:250px;color:#000" class="text-center">Drag &amp; Drop Your Files Here</h2>
+         <h2 style="margin-top:250px;" class="text-center">Search for / Drag &amp; Drop Your Files Here</h2>
       <p class="text-center">Or click the button below to select files.</p>
       <input type="file" id="fileInput" multiple style="display: none;" accept="audio/*">
       <div class="d-flex justify-content-center">
@@ -280,15 +399,16 @@
       <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
     </div>
   </div>
+  <script>document.addEventListener('DOMContentLoaded', ()=>{ const dropZone=document.getElementById('dragDropContainer'); const fileInput=document.getElementById('fileInput'); const dropZoneIcon=document.getElementById('dropZoneIcon');  dropZone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropZone.style.background='#FFD700'; dropZone.style.color='#1E2337';});  dropZone.addEventListener('dragleave', ()=>{ dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});  dropZone.addEventListener('drop', (e)=>{ e.preventDefault(); const files=e.dataTransfer.files; if (files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File dropped: ${files[0].name}`);}});  fileInput.addEventListener('change', (e)=>{ if (e.target.files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File selected: ${e.target.files[0].name}`);}});  dropZoneIcon.addEventListener('click', ()=>{ dropZone.classList.remove('roll-up'); dropZoneIcon.classList.remove('visible'); dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});});</script>
 
-
-<!--   
-  <script src="./js/metricas.js"></script>
-  <script src="./js/metrics.js"></script>
-  <script src="./js/spectogram.js"></script> -->
+ 
+  <!-- <script src="./js/metricas.js"></script> -->
+  <!-- <script src="./js/metrics.js"></script> -->
+  <!-- <script src="./js/spectogram.js"></script> -->
   <!-- <script src="./js/Analytics.js"></script> -->
   <!-- <script src="./js/medadata.js"></script> -->
 <script>
+    
 /* Open modal         */function openModal(){document.getElementById('frameworkModal').style.display='block';}
 /* Close modal        */function closeModal(){document.getElementById('frameworkModal').style.display='none';}
 /* Reset modal        */function resetModal(){const radios=document.querySelectorAll('[name="framework"]');radios.forEach(radio=>radio.checked=false);}
@@ -774,9 +894,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 </script>
+
+
 </body>
-
-
 </html>
-
-<!-- <span class="github-btn"><a class="gh-btn" href="#" rel="noopener noreferrer" target="_blank"><span class="gh-ico" aria-hidden="true"></span><span class="gh-text"></span></a><a class="gh-count" href="#" rel="noopener noreferrer" target="_blank" aria-hidden="true"></a></span> -->
