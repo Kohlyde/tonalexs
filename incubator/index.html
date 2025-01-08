@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amplitude vs. Time (Peak Meter)</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #222;
+            overflow: hidden;
+        }
+        canvas {
+            background: #333;
+            border: 1px solid #aaa;
+        }
+        audio {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            z-index: 100;
+        }
+    </style>
+</head>
+<body>
+    <!-- The audio element for playback -->
+    <audio id="audioElement" src="your-audio-file.mp3" controls autoplay></audio>
+    
+    <!-- The canvas for visualizing the peak meter -->
+    <canvas id="visualizationCanvas" width="800" height="200"></canvas>
+
+    <script>
+        const canvas = document.getElementById('visualizationCanvas');
+        const ctx = canvas.getContext('2d');
+
+        const audioElement = document.getElementById('audioElement');
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaElementSource(audioElement);
+
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        // Set up the analyser with real-time data
+        analyser.fftSize = 256;
+
+        // Smoothing for the amplitude
+        let previousAmplitude = 0;
+        const smoothingFactor = 0.8;
+
+        // Function to calculate and update amplitude
+        function updateAmplitude() {
+            analyser.getByteFrequencyData(dataArray);
+
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                sum += dataArray[i];
+            }
+            const averageAmplitude = sum / dataArray.length;
+
+            // Apply smoothing to the amplitude
+            const smoothedAmplitude = previousAmplitude * smoothingFactor + averageAmplitude * (1 - smoothingFactor);
+            previousAmplitude = smoothedAmplitude;
+
+            return smoothedAmplitude;
+        }
+
+        // Function to visualize the amplitude
+        function drawVisualization() {
+            const amplitude = updateAmplitude();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = canvas.width / bufferLength;
+
+            // Function to get color based on amplitude
+            function getColorBasedOnAmplitude(amplitude) {
+                if (amplitude < 50) return 'rgb(0, 255, 0)';  // Low amplitude (Green)
+                if (amplitude < 100) return 'rgb(255, 255, 0)';  // Mid amplitude (Yellow)
+                return 'rgb(255, 0, 0)';  // High amplitude (Red)
+            }
+
+            // Loop through each frequency band to visualize
+            for (let i = 0; i < bufferLength; i++) {
+                const height = (dataArray[i] / 255) * canvas.height;
+                ctx.fillStyle = getColorBasedOnAmplitude(height);  // Set color dynamically
+                ctx.fillRect(i * barWidth, canvas.height - height, barWidth, height);
+            }
+
+            // Request the next frame for animation
+            requestAnimationFrame(drawVisualization);
+        }
+
+        // Start visualizing once the audio is ready to play
+        audioElement.onplay = () => {
+            audioContext.resume().then(() => {
+                drawVisualization();
+            });
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,115 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <title>Title</title>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <style>
+        /* Modal styling        */ .modal {z-index:3;display:none;padding-top:100px;position:fixed;left:0;top:0;width:100%;height:100%;overflow:auto;background-color:rgba(0,0,0,0.4);}
+        /* Modal content box    */ .modal-content {margin:auto;background-color:#fff;position:relative;padding:20px;border-radius:10px;outline:0;width:600px;box-shadow:0 4px 8px rgba(0,0,0,0.2);}
+        /* Modal sidebar        */ .modal-sidebar {float:left;width:25%;padding:10px;background-color:#f9f9f9;border-right:1px solid #ddd;}
+        /* Sidebar icons        */ .icon-list {list-style:none;padding:0;margin:0;}
+        /* Sidebar items        */ .icon-item {margin:10px 0;text-align:center;font-size:18px;color:#666;cursor:pointer;}
+        /* Sidebar hover        */ .icon-item:hover {color:#333;}
+        /* Modal body           */ .modal-body {float:left;width:75%;padding:20px;}
+        /* Modal footer         */ .modal-footer {margin-top:20px;text-align:right;}
+        /* Buttons              */ .btn {padding:10px 20px;border:none;border-radius:5px;background-color:#04AA6D;color:#fff;cursor:pointer;}
+        /* Button hover         */ .btn:hover {background-color:#059862;}
+        /* Responsive content   */ @media (max-width:768px){.modal-content{width:90%;}.modal-sidebar,.modal-body{float:none;width:100%;}}
+        /* NAV Bar Styling       */ .navbar {z-index:1;background-color:#1E2337;justify-items:stretch;color:ivory!important;box-shadow:5px 5px 5px rgba(0,0,0,0.6);}
+        /* Align buttons right   */ .navbar-nav {margin-left:auto;margin-right:10px!important;}
+        /* GitHub button style   */ .github-button {margin-right:10px!important;}
+        
+        </style>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="https://buttons.github.io/buttons.js"></script>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  </head>
+  <body>
+      
+
+
+
+<nav class="navbar navbar-expand-lg navbar-dark">
+  <div class="container-fluid">
+    <a class="navbar-brand text-white" href="https://kohlyde.github.io/tonalexs/">tonalexs</a>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <p class="github-button" href="modal-reset-btn-primary" data-size="large">Framework Selector</p>
+        </li>
+        <li class="nav-item">
+          <a class="github-button" href="https://github.com/kohlyde" data-size="large" aria-label="Follow @kohlyde on GitHub">Follow @kohlyde</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<div id="framework-modal-primary" class="modal hidden">
+    <div class="modal-content">
+      <div class="modal-sidebar">
+        <ul class="icon-list">
+          <li class="icon-item" title="Settings">&#9673;</li>
+          <li class="icon-item" title="Personalization">&#9673;</li>
+          <li class="icon-item" title="Data">&#9673;</li>
+          <li class="icon-item" title="Delete Account">&#9673;</li>
+          <li class="icon-item" title="Help">&#9673;</li>
+          <li class="icon-item" title="User Preferences">&#9673;</li>
+          <li class="icon-item" title="Notifications">&#9673;</li>
+        </ul>
+      </div>
+      <div class="modal-body">
+        <h3>Choose Your Framework</h3>
+        <hr>
+        <div class="framework-options">
+          <div class="column">
+            <label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label>
+            <label><input type="radio" name="framework" value="Tone.js"> Tone.js</label>
+            <label><input type="radio" name="framework" value="Howler.js"> Howler.js</label>
+            <label><input type="radio" name="framework" value="P5.js"> P5.js</label>
+            <label><input type="radio" name="framework" value="PixiJS"> PixiJS</label>
+          </div>
+          <div class="column">
+            <label><input type="radio" name="framework" value="GreenSock"> GreenSock</label>
+            <label><input type="radio" name="framework" value="Framer Motion"> Framer Motion</label>
+            <label><input type="radio" name="framework" value="TensorFlow.js"> TensorFlow.js</label>
+            <label><input type="radio" name="framework" value="Three.js"> Three.js</label>
+            <label><input type="radio" name="framework" value="Chart.js"> Chart.js</label>
+          </div>
+          <div class="column">
+            <label><input type="radio" name="framework" value="D3.js"> D3.js</label>
+            <label><input type="radio" name="framework" value="Web Audio API"> Web Audio API</label>
+            <label><input type="radio" name="framework" value="SuperCollider"> SuperCollider</label>
+            <label><input type="radio" name="framework" value="AudioContext"> AudioContext</label>
+            <label><input type="radio" name="framework" value="OpenAL"> OpenAL</label>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button id="resetButton" class="btn">Reset</button>
+          <button id="submitButton" class="btn">Submit</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    /* Open modal         */ function openModal(){const m=document.getElementById('framework-modal-primary');m.classList.add('visible');m.classList.remove('hidden');m.setAttribute('aria-hidden','false');}
+    /* Close modal        */ function closeModal(){const m=document.getElementById('framework-modal-primary');m.classList.add('hidden');m.classList.remove('visible');m.setAttribute('aria-hidden','true');}
+    /* Reset modal        */ function resetModal(){document.querySelectorAll('[name="framework"]').forEach(r=>r.checked=false);}
+    /* Submit modal       */ function submitModal(){if(confirm('Are you sure?')){closeModal();}}
+    /* Outside click close*/ function outsideClickClose(e){const m=document.getElementById('framework-modal-primary');if(e.target===m){closeModal();}}
+    /* Trap focus modal   */ function trapFocus(e){const m=document.getElementById('framework-modal-primary');if(m.classList.contains('visible')){const focusable=m.querySelectorAll('button, [tabindex]');const first=focusable[0],last=focusable[focusable.length-1];if(e.shiftKey&&e.target===first){e.preventDefault();last.focus();}else if(!e.shiftKey&&e.target===last){e.preventDefault();first.focus();}}}
+    /* Initialize modal   */ function initModal(){const m=document.getElementById('framework-modal-primary');document.getElementById('modal-reset-btn-primary').addEventListener('click',resetModal);document.getElementById('modal-submit-btn-primary').addEventListener('click',submitModal);window.addEventListener('click',outsideClickClose);m.addEventListener('keydown',trapFocus);}
+    /* Start listeners    */ initModal();
+    </script>
+    
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+  </body>
+</html>

@@ -21,7 +21,9 @@
       }
     };
   </script>
-  <script src="https://unpkg.com/wavesurfer.js"></script>
+<!-- Place this tag in your head or just before your close body tag. -->
+<script async defer src="js/buttons.js"></script>
+<script src="https://unpkg.com/wavesurfer.js"></script>
   <style>
      html, body { height: 100%; margin: 0; } /* Sets the height of the HTML and body to 100% and removes default margin. */
     .navbar { z-index: 1; background-color: #1E2337; color: ivory !important; box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.6); } /* Styles the navigation bar with a background color, text color, and shadow. */
@@ -66,7 +68,7 @@
     .scrollable-container::-webkit-scrollbar{width:6px;} /* Custom width for WebKit scrollbars inside container. */
     .scrollable-container::-webkit-scrollbar-thumb{background-color:#FFD700;border-radius:10px;} /* Thumb with rounded corners in container. */
     .scrollable-container{-webkit-scrollbar-width:thin;-moz-scrollbar-width:thin;scrollbar-width:thin;scrollbar-color:#FFD700 #1E2337;} /* Thin scrollbar with colors for container in Firefox. */
-    h3{font-variant-caps:unicase}
+     h3{font-variant-caps:unicase}
     .latex-hover-spectrogram-button-alt{position:relative;padding:5px 15px;font-size:12px;border-radius:4px;color:#FFD700;float:right;display:block;top:0;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 0;box-shadow:0 0 0 rgba(255,255,255,.589)}
     .latex-hover-spectrogram-button{position:relative;padding:5px 20px;font-size:12px;border-radius:.25em;color:#FFD700;float:right;display:block;top:-20px;font-variant-caps:titling-caps;background-color:#1e2337;right:100px;margin-right:-100px;border:#1e2337 1px solid;cursor:pointer;outline:none;transition:background-color .53s ease;box-shadow:0 0 0 rgba(255,255,255,.589)}
     .latex-hover-spectrogram-button::selection,.latex-hover-spectrogram-button-alt:active:act{background-color:#fff;color:#FFD700;border:#1e2337 1px solid;background-color:#1e2337;padding:5px 15px;opacity:1;border:#FFD700;font-size:12px;box-shadow:0 0 0 0;}@keyframes tooltipcanvas{0%{background-color:#FFD700;color:#1e2337;box-shadow:43 43 432 700 #ffffff;transition:background-color .83s ease}100%{background-color:#fff;color:#1e2337;border:#1e2337 2PX solid;box-shadow:330px 100px 300px 1200px rgba(218,214,214,.836);transition:background-color .53s ease}}
@@ -96,7 +98,7 @@
   <!-- Place this tag in your head or just before your close body tag. --><script async defer src="js/buttons.js"></script>
 </head>
 <body>
-<!-- Navbar Section      --> <nav class="navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand text-white" href="https://kohlyde.github.io/tonalexs/">tonalexs</a><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><button id="frameworkToggle" class="btn btn-link text-white" style="margin-right:10px;">&#9673;</button></li><li class="nav-item"><a class="github-button" href="https://github.com/kohlyde" data-size="large" aria-label="Follow @kohlyde on GitHub">Follow @kohlyde</a></li></ul></div></div></nav>
+<!-- Navbar Section      --> <nav class="navbar navbar-expand-lg"><div class="container-fluid"><a class="navbar-brand text-white" href="https://kohlyde.github.io/tonalexs/">tonalexs</a><div class="collapse navbar-collapse" id="navbarNav"><ul class="navbar-nav ms-auto"><li class="nav-item"><a class="gh-btn" href="#" rel="noopener noreferrer" target="_blank"><span class="gh-ico" aria-hidden="true"></span><span class="gh-text"></span></a><a class="gh-count" href="#" rel="noopener noreferrer" target="_blank" aria-hidden="true"></a></li><li class="nav-item"><button id="frameworkToggle" class="btn btn-link text-white" style="margin-right:10px;">&#9673;</button></li><li class="nav-item"><a class="github-button" href="https://github.com/kohlyde" data-size="large" style="margin-right:10px" aria-label="Follow @kohlyde on GitHub">Follow @kohlyde</a></li></ul></div></div></nav>
 <!-- Modal Section       --> <div id="frameworkModal" class="modal hidden"><div class="modal-content"><div class="modal-sidebar"><ul class="icon-list"><li class="icon-item" title="Settings">&#9673;</li><li class="icon-item" title="Personalization">&#9673;</li><li class="icon-item" title="Data">&#9673;</li><li class="icon-item" title="Delete Account">&#9673;</li><li class="icon-item" title="Help">&#9673;</li><li class="icon-item" title="User Preferences">&#9673;</li><li class="icon-item" title="Notifications">&#9673;</li></ul></div><div class="modal-body"><h3>Choose Your Framework</h3><hr><div class="framework-options"><div class="column"><label><input type="radio" name="framework" value="Wavesurfer.js"> Wavesurfer.js</label><label><input type="radio" name="framework" value="Tone.js"> Tone.js</label><label><input type="radio" name="framework" value="Howler.js"> Howler.js</label><label><input type="radio" name="framework" value="P5.js"> P5.js</label><label><input type="radio" name="framework" value="PixiJS"> PixiJS</label></div><div class="column"><label><input type="radio" name="framework" value="GreenSock"> GreenSock</label><label><input type="radio" name="framework" value="Framer Motion"> Framer Motion</label><label><input type="radio" name="framework" value="TensorFlow.js"> TensorFlow.js</label><label><input type="radio" name="framework" value="Three.js"> Three.js</label><label><input type="radio" name="framework" value="Chart.js"> Chart.js</label></div><div class="column"><label><input type="radio" name="framework" value="D3.js"> D3.js</label><label><input type="radio" name="framework" value="Web Audio API"> Web Audio API</label><label><input type="radio" name="framework" value="SuperCollider"> SuperCollider</label><label><input type="radio" name="framework" value="AudioContext"> AudioContext</label><label><input type="radio" name="framework" value="OpenAL"> OpenAL</label></div></div><div class="modal-footer"><button id="resetButton" class="btn">Reset</button><button id="submitButton" class="btn">Submit</button></div></div></div></div>
 
   <div class="main-content">
@@ -131,7 +133,7 @@
         </button>
         <div class="latex-render">
           <div class="container" id="typewriter"></div>
-          <!-- X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n} -->
+          X_k = \sum_{n=0}^{N-1} x_n \cdot e^{-i \frac{2\pi}{N} k n}
 
         </div>
 
@@ -776,3 +778,5 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 </html>
+
+<!-- <span class="github-btn"><a class="gh-btn" href="#" rel="noopener noreferrer" target="_blank"><span class="gh-ico" aria-hidden="true"></span><span class="gh-text"></span></a><a class="gh-count" href="#" rel="noopener noreferrer" target="_blank" aria-hidden="true"></a></span> -->

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amplitude Visualizer</title>
+    <style>
+        body {
+            margin: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #222;
+            flex-direction: column;
+        }
+        canvas {
+            background-color: #333;
+            border: 1px solid #aaa;
+        }
+        input[type="file"] {
+            margin-bottom: 20px;
+            padding: 10px;
+            background-color: #444;
+            color: white;
+            border: none;
+            cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- File input for uploading audio -->
+    <input lable="amplitude" type="file" id="fileInput" accept="audio/*" />
+
+    <!-- Canvas for visualizing the amplitude -->
+    <canvas id="visualizationCanvas" width="800" height="200"></canvas>
+
+    <script>
+        const canvas = document.getElementById('visualizationCanvas');
+        const ctx = canvas.getContext('2d');
+        const fileInput = document.getElementById('fileInput');
+
+        // Create AudioContext but do not start it immediately
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        let audioElement = new Audio();  // Dynamic audio element
+        const analyser = audioContext.createAnalyser();
+        const source = audioContext.createMediaElementSource(audioElement);
+
+        source.connect(analyser);
+        analyser.connect(audioContext.destination);
+
+        const bufferLength = analyser.frequencyBinCount;
+        const dataArray = new Uint8Array(bufferLength);
+
+        analyser.fftSize = 256;
+
+        // Function to update amplitude
+        function updateAmplitude() {
+            analyser.getByteFrequencyData(dataArray);
+
+            let sum = 0;
+            for (let i = 0; i < dataArray.length; i++) {
+                sum += dataArray[i];
+            }
+            return sum / dataArray.length;
+        }
+
+        // Function to visualize the amplitude
+        function drawVisualization() {
+            const amplitude = updateAmplitude();
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+            const barWidth = canvas.width / bufferLength;
+
+            // Color function based on amplitude
+            function getColor(amplitude) {
+                if (amplitude < 50) return 'rgb(0, 255, 0)';   // Low amplitude (Green)
+                if (amplitude < 100) return 'rgb(255, 255, 0)'; // Mid amplitude (Yellow)
+                return 'rgb(255, 0, 0)';   // High amplitude (Red)
+            }
+
+            // Draw bars for each frequency bin
+            for (let i = 0; i < bufferLength; i++) {
+                const height = (dataArray[i] / 255) * canvas.height;
+                ctx.fillStyle = getColor(height);
+                ctx.fillRect(i * barWidth, canvas.height - height, barWidth, height);
+            }
+
+            // Call the next frame
+            requestAnimationFrame(drawVisualization);
+        }
+
+        // Handle file input (audio upload)
+        fileInput.addEventListener('change', (event) => {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('audio/')) {
+                const url = URL.createObjectURL(file);
+                audioElement.src = url;
+
+                // Resume the AudioContext only after the user interacts
+                audioContext.resume().then(() => {
+                    audioElement.play();  // Start playing after resume
+                    drawVisualization();  // Start visualization once audio starts
+                });
+            }
+        });
+
+        // Add an event listener to trigger AudioContext resume after user gesture
+        window.addEventListener('click', () => {
+            if (audioContext.state === 'suspended') {
+                audioContext.resume(); // Ensure AudioContext is resumed
+            }
+        });
+    </script>
+
+</body>
+</html>
