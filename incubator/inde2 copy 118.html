@@ -1,0 +1,610 @@
+1
+9.3.2020.
+Data and Web Science Group
+Fakultät für Wirtschaftsinformatik und Wirtschaftsmathematik
+Universität Mannheim
+CreativeCommons Attribution-NonCommercial-ShareAlike 4.0 International
+4. Term Weighting and Vector Space Model
+Prof. Dr. Goran Glavaš
+2
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+After this lecture, you’ll...
+ Be familiar with your first ranked retrieval model (VSM)
+ Understand the TF-IDF term weighting scheme
+ Know how to rank documents according to cosine similarity
+ Know about some methods for speeding up VSM’s ranking
+ Be familiar with the multi-criteria ranking
+3
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+4
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Recap of the previous lecture
+ Data structures for inverted index
+ Q: What are the different data structures we may use for indexing?
+ Q: How do we build index with a hash table (pros and cons)?
+ Q: How do we build index with a balanced tree (pros and cons)?
+ Tolerant retrieval: wild-card queries
+ Q: What are the different options for handling wild-card queries?
+ Q: What is a permuterm index and how do we use it for wild-card queries?
+ Q: How to use character indexes to support wild-card queries?
+ Tolerant retrieval: error correction
+ Q: How to correct the spelling by observing the terms in isolation?
+ Q: How do we use the edit distance to fix for misspellings?
+ Q: What are the different options for spelling correction in context?
+5
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Recap of the previous lecture(s)
+ Inverted index is a data structure for computationally efficient retrieval
+ We’ve examined different variants of the inverted index for different queries
+ Regular inverted index for simple Boolean queries
+ Positional index for phrase and proximity queries
+ Permuterm index for tolerant retrieval
+ Boolean retrieval has a major drawback
+ The results are not ranked
+ Without ranking: either too few or too many results
+ Document dj is represented by term vector [w1j, w2j, ..., wtj] where t is the number of
+index terms
+ Let g be the function that computes the weights, i.e., wij = g(ki, dj)
+ Different choices for the weight-computation function g and the ranking function r define
+different IR models
+ Today, we examine the first model for ranked retrieval – vector space model (VSM)
+ We examine what g and r are for VSM
+6
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+7
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Beyond Boolean retrieval
+ So far, all our queries were some variant of Boolean (simple, phrase, positional)
+ Document either match or not
+ Suitable for expert users with precise understanding of both
+ Their information needs
+ The document collection against which they spawn queries
+ Also suitable for applications: easily consume 1000s of results
+ Not suitable for most human users
+ Most users find it difficult (unnatural) to write Boolean queries
+ Most users cannot go through thousands of results the Boolean retrieval engine
+returns on large collections (e.g., web)
+8
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Beyond Boolean retrieval
+ Boolean queries often yield either too few (even 0) or too many (1000s) results
+ Q1: „standard user dlink 650”
+ 200K hits
+ Q2: „standard user dlink 650 no card found”
+ 0 hits
+ It takes a lot of skill, experience, and sometimes time to design a query that
+produces a manageable number of hits
+ AND operator often drastically reduces the number of hits
+ OR operator often drastically increases the number of hits
+ Hard to find the balance
+ Solution: rank the documents and return the top N ranked hits
+ User directly chooses N, i.e., how many hits to process
+9
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Ranked retrieval
+ IR models for ranked retrieval
+ Produce the ordering over the documents in the collection
+ Selection of top-ranked documents
+ May be done by the IR system
+ Cut the documents below rank N (i.e., top N)
+ Cut documents below some treshold score value
+ May be left to the user
+ Entire ranking is returned (e.g., with paging)
+ Free text search
+ No query language with operators and expressions
+ Query is simply one or more words in natural language
+ Two separate design-decisions, but often go together
+ Free text search & ranked retrieval
+10
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Ranked retrieval
+ Assumption: The ranking of the documents is based on the relevance
+ The ranking/scoring function (r) captures the extent of relevance of the document
+for the query
+ All IR models that we will cover from now onwards are ranked retrieval models
+ They differ in the scoring function r they use
+ Common-sense assumptions
+ Let’s start from a single-term query qt
+ If the term does not occur in the document d – r(qt, d) = 0
+ The more frequent the query term in the document, the higher the score should be
+ r(q, d) ∝ ft,d
+11
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Ranked retrieval: naive approach
+ First idea: use Jaccard coefficient – a measure of overlap of two sets A and B:
+Jaccard(A, B) = |A ∩ B| / |A ∪ B|
+Jaccard(A, A) = 1
+Jaccard(A, B) = 0 iff A ∩ B = Ø
+ The Jaccard index is always between 0 and 1
+ Sets A and B don’t have to be of the same size
+ Shortcomings of using Jaccard coefficient as a scoring function
+1. Term frequency in each of the documents is not taken into account
+2. The overall frequency of the term in the collection (or language in general) is not
+accounted for – rare terms are more informative
+3. There are more sophisticated ways to normalize for the document length
+12
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+13
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Term frequency
+ Term frequency tf(t,d) is a measure that denotes how frequently the term t
+appears in the document d
+ Q: Shall we use the raw frequency (i.e., raw number of occurrences of t in d) as a
+measure of term frequency?
+ A document d1 with 10 occurrences of a query term t is probably more relevant than
+a document d2 with 1 occurrence. But is it 10 times more relevant?
+ A document d1 contains 100.000 tokens and 4 occurrences of term t whereas the
+document d2 contains 500 tokens and 3 occurrences of term t. Which document is
+more relevant?
+ Relevance does not increase linearly with term frequency
+ Raw term frequency does not account for document length
+14
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Term frequency
+ Let’s fix for the previous two observations
+1. Relevance does not increase linearly with term frequency
+ Let’s take the logarithm of the raw frequency
+tf(t,d) = 1 + log10(ft,d), if ft,d > 0, otherwise 0
+2. Raw term frequency does not account for document length
+ Let’s normalize with the frequency of the most frequent term in the document
+tf(t,d) = ft,d / max{ft’,d : t’ ∈ d}
+ Combining the two:
+tf(t,d) = (1 + log10(ft,d)) / (1 + log10 (max{ft’,d : t’ ∈ d}))
+ if ft,d > 0, otherwise 0
+15
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Global frequency
+ Assumption: rare terms are more informative/important than frequent terms
+ Consider the query „arachnocentric shop”
+ A document containing rare term „arachnocentric” is more likely to be relevant than
+the document containing the more frequent term „shop”
+ We want a higher weight for rare terms like „arachnocentric”
+ We will use document frequency, i.e., the number of documents in the collection
+to account for global rarity/frequency of the terms
+16
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Inverse document frequency
+ Assumption: the informativeness of the term t is inversely proportional to the
+number of documents in the collection in which the term appears
+ The less documents in which the term appears – the bigger weight
+ Inverse document frequency (on the document collection D)
+idf(t) = log10(|D| / |{d’ ∈ D : t ∈ d’}|)
+ The logarithm is used to „dampen” the effect for terms that appear in very few
+documents
+ E.g., only in one or two documents
+ The base of the logarithm is not particularly important
+17
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Inverse document frequency – example
+ Term frequency (TF) value of the term is computed for every document
+ N documents (d1, d2, ..., dN) N different TF scores for some term ti
+ tf(ti, d1), tf(ti, d2), ..., tf(ti, dN)
+ Inverse document frequency (IDF) is a single value for the term on the whole
+document collection D (does not depend on particular document)
+ idf(ti) = idf(ti, D)
+ Example: N = 1 million documents
+ Q: What is the effect of idf for
+single-term queries?
+ A: None. Q: Why?
+term df(term) idf(term)
+Frodo 10000 2
+Sam 1000 3
+stab 100 4
+the 1000000 1
+18
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Collection frequency vs. Document frequency
+ Collection frequency is the total number of occurrences of the term in the entire
+collection, i.e., in all of the documents
+ I.e., counting multiple occurrences in documents
+ Using (inverse) collection frequency could be an alternative to (inverse)
+document frequency
+ Q: Which is better?
+ Q: Should „Frodo” or „blue”
+get a higher weight?
+Word Collection
+frequency
+Document
+frequency
+Frodo 100442 5135
+blue 100350 20452
+19
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+TF-IDF
+ Finally, the weight for the term ti within the document dj is computed by
+multiplying the TF (local) and IDF (global) components:
+wij = tf(ti, dj) * idf(ti)
+tf(ti, dj) = (1 + log10(fti,dj)) / (1 + log10 (max{ft’,dj : t’ ∈ dj}))
+idf(ti) = log10(|D| / |{d’ ∈ D : ti ∈ d’}|)
+ TF-IDF is the best known weighting scheme in IR
+ TF-IDF score of term t within document d is larger
+ The larger the number of occurrences of t within d
+ The smaller the number of other documents d’ in which t occurs
+20
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+21
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Vector space model
+ Vector space model
+ Documents and queries considered to be bags of words
+ Both documents and queries are represented as vectors of TF-IDF weights of
+vocabulary terms
+ TF-IDF score of vocabulary term not contained in the query/document is 0
+ Ranking function: similarity/distance between the two TF-IDF vectors (i.e., the
+vector of the document and the vector of the query)
+ Q: What distance metric to use?
+ Euclidean distance?
+ Any other distance/similarity metric?
+22
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Euclidean distance
+ Euclidean distance
+ Measures the distance between the ends (points) of the two vectors
+ The Euclidean distance between q and d2 is large
+ But the distribution of terms in the query q
+and the distribution of terms in the document d2
+are very similar.
+ E.g., q = [1, 2, 3, 4, 5],
+d2 = [2, 4, 6, 8, 10]
+23
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Euclidean distance – shortcomings
+ Take a document d and append it N times to itself – the obtained document is d’
+ Semantically, d and d’ have the same content
+ If N is large (i.e., we appended d to itself many times) the Euclidean distance
+between d and d’ is going to be large
+ Yet, d and d’ are semantically identical – d’ is as relevant for any query q as d is
+ However, the angle between vectors of d and d’ is going to be zero
+ These two vectors have exactly the same direction
+ Angle between the vectors better captures the actual similarity
+ Key idea: rank documents according to the angle their vectors close with the
+vector of the query
+24
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Cosine similarity
+ The smaller the angle between two vectors is, the larger is the value of the cosine
+of that angle
+ Cosine is a monotonically decreasing function on the [0°, 180°] interval
+25
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Cosine similarity
+ Cosine similarity of two vectors is the cosine of the angle between them
+ Cosine similarity is not affected by the length of the input vectors (norms in the
+denominator)
+ Cosine distance dC is simply computed as dC(x, y) = 1 – cos(x, y)
+26
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Normalization of vector length
+ Q: If the length is the issue for Euclidean distance, why don’t we simply compute the
+Euclidean distance between unit-normalized vectors?
+ Q: What is the relation between Euclidean distance of unit-normalized vectors and
+cosine distance?
+ A: Cosine distance between two vectors is quadratically proportional to the Euclidean
+distance between unit-normalized versions of those vectors
+ A: The ranking produced by cosine distance is going to be the same as the ranking
+produced by Euclidean distance between unit-normalized vectors
+ Cosine similarity between unit-normalized vectors amounts to their dot (scalar) product
+27
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Normalized Euclidean vs. Cosine distance
+28
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Ranking based on cosine similarity
+29
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Vector space model – example
+ Query: „Frodo stabs orc”
+ Document collection
+ D1: „Frodo accidentally stabbed Sam and then some orcs”
+ d2: „Frodo was stabbing regular orcs but never stabbed super orcs – Uruk-Hais”
+ d3: „Sam was having a barbecue with some friendly orcs”
+1. For all documents, compute the TF-IDF score for each query term
+idf(„Frodo”) = log10(3/2) = 0.176; tf(„Frodo”, d1) = 1, tf(„Frodo”, d2) = 1, tf(„Frodo”, d3) = 0
+idf(„stab”) = log10(3/2) = 0.176; tf(„stab”, d1) = 1, tf(„stab”, d2) = 2, tf(„stab”, d3) = 0
+idf(„orc”) = log10(3/3) = 0; tf(„orc”, d1) = 1, tf(„orc”, d2) = 2, tf(„orc”, d3) = 1
+tf(„Frodo”, q) = 1, tf(„stab”, q) = 1, tf(„orc”, q) = 1
+2. Compute cosine similarities between vectors of q and each document
+ Q: Which term can we ignore for cosine similarity?
+ Q: Do we need to compute the norm of the query vector?
+30
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Alternative weighting and normalization schemes
+ Most commonly implemented in IR systems:
+ TF: logarithmic, augmented, log average / log max – equally common
+ IDF: logarithmic
+ Normalization: L2 (Euclidian) norm (cosine similarity does it implicitly)
+ Sometimes, the weighting schemes for query and documents may differ
+31
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+32
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Speeding up retrieval with VSM
+ Ranking all documents in the collection
+ Requires comparing the query TF-IDF vector with TF-IDF vectors of all documents
+ Infeasible for real-time querying on large collections
+ We need to reduce the cost of cosine (dot product) computations
+1. By reducing the total number of cosines we compute
+a) Prefiltering candidate documents for ranking (e.g., via Boolean retrieval)
+b) By pre-clustering documents (based on their mutual similarity)
+2. By reducing the set of query terms we consider (e.g., according to IDF scores)
+ Smaller set of candidate documents
+ Faster cosine computation (shorter vectors for dot product)
+33
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Index-based elimination
+ Documents that do not contain any of the query terms will have the cosine
+similarity of 0 with the query anyway
+ Idea: Fetch only the documents that contain at least one query term
+ Using the inverted index
+ For the free text query „t1 t2 ... tn” we spawn the Boolean query „t1 OR t2 OR ... OR tn”
+ Further possible speed-ups:
+1. Fetch only documents that contain more than N query terms
+2. Do not consider query terms with low IDF values
+ Q: Why?
+ A: Terms with low IDF scores appear in many (all?) documents in the collection, thus
+matching such terms between query and documents does not affect the ranking much
+ A: Posting lists of terms with low IDF are long – cosine computation for many docs
+34
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Pre-clustering documents
+ If the document collection contains N documents, we randomly select N
+documents, which we call leaders
+ For every other document in the collection
+1. Compute the similarities (cosine of the angle between TF-IDF vectors) with all
+leaders
+2. Add the document to the cluster of the most similar leader
+ On average, a cluster will have N documents
+ Random sampling of clusters is desirable (reflects the document distribution)
+ Faster than any other strategy for selecting leaders
+ Leaders reflect the data distribution
+ Dense regions will have more leaders than sparse regions
+35
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Pre-clustering documents
+ Retrieval with document pre-clustering is much faster
+1. Measure the similarity of the query with cluster leaders
+ N cosine computations
+2. Select the leader document dL which is most similar to the query
+3. Compute the cosine similarities between the query vector and all documents in
+the selected leader’s (dL) cluster
+ N cosine computations
+4. (optional) if the users requires more results than there is documents in the cluster
+of the most similar leader dL, proceed to the cluster of the next most similar leader
+ With pre-clustering, total of 2 N cosine computations  O( N)
+ Quadratically lower complexity than before (without preclustering  O(N))
+ Shortcoming: pre-clustering may lead to lower recall
+ Some relevant documents may not be in the cluster of the most similar leader
+36
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Approximate cosine similarity
+ Idea: reduce the length of the vectors on which we compute cosine similarity
+ Only makes sense for queries with very many terms
+ If query has |V| terms, the cosine computation has complexity O(|V|)
+ Goal is to represent the query and document with a significantly shorter vector of
+length M, M << V
+ Cosine computation on lower dimensional vectors is then faster, O(M)
+ Key question: how to select the lower-dimensional vector space in such a way
+that relations between the original cosine similarities are preserved?
+37
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Locality sensitive hashing
+ A vector space of lower dimensions that (perfectly or imperfectly) retains the
+distances from the original space is called a low-dimensional embedding
+ Locality sensitive hashing (LSH)
+ A family of dimensionality reduction techniques that map the original vector space
+into a lower-dimensional space
+ Maximizing the extent to which the new vector space retains the topology of the
+original one
+ One simple LSH method we will examine closer:
+ Random projections
+38
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Random projections
+ A locality sensitive hashing method based on similarities with random vectors
+ Hashing algorithm
+1. Choose a set of M random vectors {r1, r2, ..., rM} in the original high-dimensional
+vectors space (vector length |V|)
+2. For each document TF-IDF vector d do
+ Compute the inner (dot) product of d and each random vector r: θ(r, d) = 𝑖
+|𝑉| 𝑟𝑖 ∗ 𝑑𝑖
+ Hash each inner product: h(d, rk) = 1 if θ(r, d) > t (treshold), else 0
+3. Compute a new vector of hashes:
+ d’ = [h(d, r1), h(d, r2), ..., h(d, rM)]
+ The number of selected random vectors, M, is the dimensionality of hashed vectors
+ Q: How does this hashing method preserve the relations between document
+distances of the original space?
+ If d1 and d2 are more similar than d2 and d3 in original space, why is it likely that d’1
+and d’2 will be more similar than d’2 and d’3 in the projected space?
+39
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Champion lists
+ For each term ti store only the docs dj with highest scores wij
+ I.e., Store only the documents for which this term is relatively informative
+ Since idf(ti) is the same for all documents, we rank documents according to the TF
+values, i.e., tf(ti, dj)
+ Put differently, if the term is relatively rare in the document, we treat it like it didn’t
+appear in the document at all
+ Don’t keep that document index in the term posting
+ Such reduced term posting lists are called champion lists (also fancy lists)
+ The documents in the champion list can be decided in two different ways
+1. Taking the top N documents with highest tf(ti, dj) scores
+ Posting lists of terms of same length N (unless the original posting was shorter)
+2. Taking all documents for which the tf(ti, dj) is above some treshold value
+ Different lengths of postings for different terms
+40
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Champion lists
+ Building the champion lists during indexing
+ Independent of any query that will be posed
+ When query is posed, it is possible that users wants more ranked results than what is
+the length of the champion list for some term
+ If champion lists are the only postings we kept, we cannot provide more results
+ Solution: two-layer indexing
+ Champion lists and regular (full) posting lists
+1. We try to answer the query using only the champion lists first
+2. If the number of hits using champion lists is smaller than the number of results
+user is looking for, return the hits using full posting lists
+41
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Tiered index
+ Generalization of the two layer index
+ We can have posting lists of more than two layers (several segments)
+ Tiered index is the index in which the postings are broken down hierarchically
+into several lists
+ Tiers of decreasing importance
+ For term ti, break-down of documents is usually done according to the tf(ti, d) scores
+ In each tier, however, the documents are sorted according to docID, not tf(ti, d)
+ We still need to perform posting merges in linear time
+ Look-up in tiered index
+ We first look into the the top tier, i.e., merge the term postings of the first tier
+ If the merges over the top-tier postings result in too few hits, we continue to merge
+lists of the lower tiers
+42
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Tiered index – example
+ „Frodo” -> T1: [2, 19, 24, 126]
+-> T2: [1, 3, 12, 27, 69, 111]
+-> T3: [7, 20, 76]
+ „Sam” -> T1: [2, 18, 24, 158]
+-> T2: [1, 6, 69, 126]
+-> T3: [44, 90]
+ Query: „Frodo and Sam”, we need to return at least 3 results!
+ Merge at T1: [2, 24]  only 2 results, we need to go to T2 as well
+ Second iteration
+ Q: merge(„Frodo”, „Sam”, T1) ∪ merge(„Frodo”, „Sam”, T2)?
+ A: No, we have to do – merge(sort(„Frodo”, T1, T2), sort(„Sam”, T1, T2))
+ Final result: [1, 2, 24, 69, 126]
+43
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Outline
+ Recap of Lecture #3
+ Ranked retrieval and scoring
+ Vector space model
+ Term weighting (TF-IDF)
+ Ranking with cosine similarity
+ Speeding up VSM retrieval
+ Query parsing and multi-criteria ranking
+44
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Phrase queries and scoring function
+ Remember the phrase queries from Lecture 2?
+ E.g., „Frodo Baggins”, „Las Angeles”, „hot potato”
+ We handled the phrase queries with the positional index
+ The vanilla vector space model uses the regular index
+ No positional information, bag-of-words document representation
+ How can we account for phrase queries with VSM ranking?
+1. If proximity is a hard requirement from the users
+ Build the positional index and combine it with VSM ranking
+2. If the proximity is a soft requirement (i.e., documents where query terms are
+closer together are preferred)
+ Incorporate a „measure of query term proximity” into a ranking function for documents
+ We still need the positional index . Q: Why?
+45
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Query parsing and multiple query spawning
+ IR systems often have query parsing components to analyse the queries
+ Based on the results of the analysis, the initial query can be „rewritten”
+ Some terms might be ommitted
+ Your original query might not be the actual query to be matched against
+document collection
+ Your original query may be replaced with several queries
+ E.g., „rising interest rates”  „rising interest” and „interest rates”
+ Example sequence of queries by query parser:
+1. Run the query as a phrase query „rising interest rates”
+ If enough hits, proceed to ranking
+2. If not enough hits in 1., spawn „rising interest” and „interest rates”
+ If enough hits, proceed to ranking of all documents fetched in 1. and 2.
+3. If still not enough hits, spawn „rising”, „interest”, and „rates”
+ Rank all retrieved documents in 1., 2., and 3. with VSM
+46
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Document quality
+ Intuitive assumptions:
+ Documents have intrinsic quality which is independent of a particular query
+ E.g., more reliable (e.g., Wikipedia) vs. less reliable sources (spam sites)
+ In case when two documents have similar relevance for the query, we would like to
+rank one with higher quality above the one with lower quality
+ Static document quality
+ Intrinsic property of the document itself, does not depend on other documents
+ E.g., digitally born documents have higher quality than OCR-ed ones
+ E.g., on the Web, we might consider Wikipedia pages to be of high quality
+ Dynamic document quality
+ Depends on the associations with other documents
+ Link analysis based quality: crucial in web search (more in Lecture 11 )
+47
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Aggregating different scores
+ What if our ranking function needs to take into account several scores? For
+example:
+ Cosine similarity of TF-IDF vectors
+ Proximity of query terms in documents
+ Static quality of documents
+ Relevant questions:
+ What is the relative importance of different scores?
+ Are different scores even on the same scale (order of magnitude)?
+ Methods
+ Expert designed aggregate function
+ Learning to rank: aggregate function learned with machine-learning algorithms
+ More in Lecture 9 
+48
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+Putting it all together
+ Free text queries vs. Boolean queries (ranked retrieval vs. Boolean retrieval)
+ Query: „Frodo and Sam saw orcs”
+ Boolean: document relevant only if contains „Frodo” and „Sam” and „see” and „orc”
+ Ranked: document may be relevant if it, e.g., contains only „Frodo” and „orc”
+ But the indexing mechanisms we introduced with Boolean retrieval are employed
+for ranked retrieval as well
+ Computing ranking scores for all documents is expensive
+ Using inverted index to obtain a smaller subset of documents, which are then ranked
+ But not too small – recall the tiered index
+ We may have several different ranking criteria
+ We need to learn how to combine them into a single relevance score
+49
+9.3.2020.IR & WS, Lecture 4: Term Weighting and Vector Space Model
+After this lecture, you are...
+ Are familiar with your first ranked retrieval model (VSM)
+ Understand the TF-IDF term weighting scheme
+ Know how to rank documents according to cosine similarity
+ Know about some methods for speeding up VSM’s ranking
+ Are familiar with multi-criteria ranking

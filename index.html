@@ -258,11 +258,11 @@
         <h3>Spectrogram</h3>
         <canvas id="spectrogramCanvas" width="900" height="200"></canvas>
         <p class="text-muted">Spectrogram: Frequency over time with energy intensity.</p>
-        <audio id="audioPlayer" controls class="audio-control">
+        <!-- <audio id="audioPlayer" controls class="audio-control">
           <img id="albumArt" src="https://via.placeholder.com/40" alt="Album Art" class="album-art me-2">
           <source id="audioSource" src="" type="audio/mpeg">
           Your browser does not support the audio element.
-        </audio>
+        </audio> -->
         <h3 class="section-title">Waveform</h3>
         <div id="waveform" class="waveform-container"></div>
         <script>
@@ -272,15 +272,14 @@
               waveColor: 'violet',
               progressColor: 'purple'
             });
-            wavesurfer.load('path/to/your/audio/file.mp3');
+            wavesurfer.load('audio.wav');
           });
         </script>
         <h3 class="section-title">Audio Properties (metadata)</h3>
-        <!-- Metric table -->
+        <!-- Metric table <script>/* Metric File Name      */ document.addEventListener('DOMContentLoaded',()=>{const i=document.getElementById('fileInputFileName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileNameSource_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});});</script>-->
         <table class="fl-table" id="combinedTable">
          <thead><tr class="td"><td colspan="6" >Properties (metadata)</td></tr><tr class="td"><td>Property/Metric</td><td>Value</td><td>Threshold</td><td>Score</td><td>Source</td><td>Formula - info</td></tr></thead><tbody>
-          <!-- metric file name      --> <tr><td>File Name</td><td id="fileInputFileName">-</td><td>-</td><td id="metaFileNameSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr><script>/* Metric File Name      */ document.addEventListener('DOMContentLoaded',()=>{const i=document.getElementById('fileInputFileName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileNameSource_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});});</script>
-
+          <!-- metric file name      --> <tr><td>File Name</td><td id="metaFileName_primary">-</td><td>-</td><td id="metaFileNameSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr>
             <!-- File Size            --> <tr><td>File Size</td><td id="fileInputFileSize">-</td><td>-</td><td id="metaFileSizeSource_primary">-</td><td>-</td><td class="formula-column">\( \text{Size:\ MB,\ GB} \)&nbsp;-</td></tr>
             <!-- MIME Type            --> <tr><td>MIME Type</td><td id="fileInputMimeType">-</td><td>-</td><td id="metaMimeTypeSource_primary">-</td><td>-</td><td class="formula-column">\( \text{MIME:\ Type} \)&nbsp;-</td></tr>
             <!-- Extension            --> <tr><td>Extension</td><td id="fileInputExtension">-</td><td>-</td><td id="metaExtensionSource_primary">-</td><td>-</td><td class="formula-column">\( \text{.ext} \)&nbsp;-</td></tr>
@@ -361,7 +360,7 @@
               <!-- Sustain Energy      --> <tr><td>Sustain Energy</td><td id="fileInputSustainEnergy">-</td><td>Medium: 30–60%</td><td>-</td><td>-</td><td>\( \frac{E_{\text{sustain}}}{E_{\text{total}}} \times 100 \)&nbsp;<button class="latex-hover-spectrogram-button-alt">info <div class="latex-hover-spectrogram-tooltip-alt"><div class="latex-hover-spectrogram-content"><p>Sustain Energy represents the percentage of total energy contained during the sustain phase of a signal:</p><p>\[ \frac{E_{\text{sustain}}}{E_{\text{total}}} \times 100 \]</p><p>Where:</p><ul><li>\(E_{\text{sustain}}\): Energy during the sustain phase</li><li>\(E_{\text{total}}\): Total energy of the signal</li></ul></div></div></button></td></tr>
               <!-- Peak2Average Ratio  --> <tr><td>Peak-to-Average Ratio</td><td id="fileInputPeakToAverageRatio">-</td><td>High: &gt; 3 dB</td><td>-</td><td>-</td><td>\( \text{PAR} = \frac{P_{\text{peak}}}{P_{\text{average}}} \)&nbsp;<button class="latex-hover-spectrogram-button-alt">info <div class="latex-hover-spectrogram-tooltip-alt"><div class="latex-hover-spectrogram-content"><p>Peak-to-Average Ratio (PAR) is the ratio of the peak power to the average power of the signal:</p><p>\[ \text{PAR} = \frac{P_{\text{peak}}}{P_{\text{average}}} \]</p><p>Where:</p><ul><li>\(P_{\text{peak}}\): Peak power of the signal</li><li>\(P_{\text{average}}\): Average power of the signal</li></ul></div></div></button></td></tr>
             </tbody>
-            <tr><th colspan="6" style="background-color: #6e6e6e ;">Custom Metrics</th></tr><tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th><th>Formula - Info</th></tr>
+            <tr><th colspan="6" style="background-color:#6e6e6e; ">Custom Metrics</th></tr><tr><th>Property/Metric</th><th>Value</th><th>Threshold</th><th>Formula</th><th>Source</th><th>Formula - Info</th></tr>
            <tbody>
               <!-- Copyright             --> <tr><td>Copyright</td><td id="fileInputCopyrightUnique">-</td><td>-</td><td>-</td><td>-</td><td>\( \text{Legal\ Protection\ \copyright} \)&nbsp;-</td></tr>
               <!-- Publisher             --> <tr><td>Publisher</td><td id="fileInputPublisherUnique">-</td><td>-</td><td>-</td><td>-</td><td>\( \text{Publishing\ Entity} \)&nbsp;-</td></tr>
@@ -399,7 +398,7 @@
       <p class="mt-3 text-center text-muted">Accepted formats: MP3, WAV, FLAC, AAC, OGG, M4A, WMA, AIFF, ALAC, etc.</p>
     </div>
   </div>
-  <script>document.addEventListener('DOMContentLoaded', ()=>{ const dropZone=document.getElementById('dragDropContainer'); const fileInput=document.getElementById('fileInput'); const dropZoneIcon=document.getElementById('dropZoneIcon');  dropZone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropZone.style.background='#FFD700'; dropZone.style.color='#1E2337';});  dropZone.addEventListener('dragleave', ()=>{ dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});  dropZone.addEventListener('drop', (e)=>{ e.preventDefault(); const files=e.dataTransfer.files; if (files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File dropped: ${files[0].name}`);}});  fileInput.addEventListener('change', (e)=>{ if (e.target.files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File selected: ${e.target.files[0].name}`);}});  dropZoneIcon.addEventListener('click', ()=>{ dropZone.classList.remove('roll-up'); dropZoneIcon.classList.remove('visible'); dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});});</script>
+  <script></script>
 
  
   <!-- <script src="./js/metricas.js"></script> -->
@@ -409,13 +408,16 @@
   <!-- <script src="./js/medadata.js"></script> -->
 <script>
     
-/* Open modal         */function openModal(){document.getElementById('frameworkModal').style.display='block';}
-/* Close modal        */function closeModal(){document.getElementById('frameworkModal').style.display='none';}
-/* Reset modal        */function resetModal(){const radios=document.querySelectorAll('[name="framework"]');radios.forEach(radio=>radio.checked=false);}
-/* Submit modal       */function submitModal(){if(confirm('Are you sure?')){closeModal();}}
-/* Outside click close*/function outsideClickClose(e){if(e.target===document.getElementById('frameworkModal')){closeModal();}}
-/* Initialize modal   */function initModal(){document.getElementById('frameworkSelectorBtn').addEventListener('click',openModal);document.getElementById('resetButton').addEventListener('click',resetModal);document.getElementById('submitButton').addEventListener('click',submitModal);window.addEventListener('click',outsideClickClose);}
-/* Start listeners    */initModal();
+if (typeof chrome !== 'undefined' && chrome.runtime) {
+  // Safe to use chrome.runtime
+  chrome.runtime.sendMessage({ request: 'messageType' }, function(response) {
+    console.log('Message sent:', response);
+  });
+} else {
+  console.error('chrome.runtime is not available, skipping message.');
+}
+
+
 </script>
 <script>
 /* DOM Content Loaded */ document.addEventListener('DOMContentLoaded',()=>{
@@ -480,12 +482,20 @@
 /* Transient Energy  */ function processTransientEnergy(){const i=document.getElementById('fileInputTransientEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const transient=analyzeTransientEnergy(f[0]);document.getElementById('metaTransientEnergy_primary').textContent=`Transient Energy: ${transient}%`;console.log(`Transient Energy Processed: ${transient}%`);});}
 /* Sustain Energy    */ function processSustainEnergy(){const i=document.getElementById('fileInputSustainEnergy');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const sustain=analyzeSustainEnergy(f[0]);document.getElementById('metaSustainEnergy_primary').textContent=`Sustain Energy: ${sustain}%`;console.log(`Sustain Energy Processed: ${sustain}%`);});}
 /* Peak-to-Avg Ratio */ function processPeakToAverageRatio(){const i=document.getElementById('fileInputPAR');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}const ratio=analyzePeakToAverageRatio(f[0]);document.getElementById('metaPAR_primary').textContent=`PAR: ${ratio} dB`;console.log(`Peak-to-Average Ratio Processed: ${ratio} dB`);});}
+/* Open modal         */function openModal(){document.getElementById('frameworkModal').style.display='block';}
+/* Close modal        */function closeModal(){document.getElementById('frameworkModal').style.display='none';}
+/* Reset modal        */function resetModal(){const radios=document.querySelectorAll('[name="framework"]');radios.forEach(radio=>radio.checked=false);}
+/* Submit modal       */function submitModal(){if(confirm('Are you sure?')){closeModal();}}
+/* Outside click close*/function outsideClickClose(e){if(e.target===document.getElementById('frameworkModal')){closeModal();}}
+/* Initialize modal   */function initModal(){document.getElementById('frameworkSelectorBtn').addEventListener('click',openModal);document.getElementById('resetButton').addEventListener('click',resetModal);document.getElementById('submitButton').addEventListener('click',submitModal);window.addEventListener('click',outsideClickClose);}
+/* Start listeners    */initModal();
+/* draganddrop  */const dropZone=document.getElementById('dragDropContainer'); const fileInput=document.getElementById('fileInput'); const dropZoneIcon=document.getElementById('dropZoneIcon');  dropZone.addEventListener('dragover', (e)=>{ e.preventDefault(); dropZone.style.background='#FFD700'; dropZone.style.color='#1E2337';});  dropZone.addEventListener('dragleave', ()=>{ dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});  dropZone.addEventListener('drop', (e)=>{ e.preventDefault(); const files=e.dataTransfer.files; if (files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File dropped: ${files[0].name}`);}});  fileInput.addEventListener('change', (e)=>{ if (e.target.files.length >0){ dropZone.classList.add('roll-up');  dropZoneIcon.classList.add('visible');  console.log(`File selected: ${e.target.files[0].name}`);}});  dropZoneIcon.addEventListener('click', ()=>{ dropZone.classList.remove('roll-up'); dropZoneIcon.classList.remove('visible'); dropZone.style.background='#1E2337'; dropZone.style.color='ivory';});
 });
 
 
-/* DOM Content Loaded */ 
-document.addEventListener('DOMContentLoaded', () => {
-    /* Populate Metadata */ 
+// /* DOM Content Loaded */ 
+// document.addEventListener('DOMContentLoaded', () => {
+//     /* Populate Metadata */ 
     function populateMetadata(file, metaId, metaSourceId) {
       if (!file) {
         console.error(`No file provided for ${metaId}`);
@@ -581,7 +591,7 @@ document.addEventListener('DOMContentLoaded', () => {
     metadataMappings.forEach(({ inputId, metaId, metaSourceId }) => {
       handleFileInput(inputId, metaId, metaSourceId);
     });
-  });
+
 
 /* File Name */ function processFileName(){const i=document.getElementById('fileInputName');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileName_primary').textContent=f[0].name;console.log(`File Name: ${f[0].name}`);});}
 /* File Size */ function processFileSize(){const i=document.getElementById('fileInputSize');i.addEventListener('change',e=>{const f=e.target.files;if(f.length===0){console.log("No file selected.");return;}document.getElementById('metaFileSize_primary').textContent=`${(f[0].size/(1024*1024)).toFixed(2)} MB`;console.log(`File Size: ${(f[0].size/(1024*1024)).toFixed(2)} MB`);});}
@@ -678,8 +688,7 @@ function calculateZeroCrossingRate(signal){let zeroCrossings=0;for(let i=1;i<sig
 function displayMetric(metricName,value){const element=document.getElementById(metricName);if(element){element.innerText=`${metricName}: ${value}`;}}
 
  
-</script>    
- <script>
+
 // Create the AudioContext
 if (!window.audioContext) {
     window.audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -706,12 +715,15 @@ if (!window.audioContext) {
 }
 
 /* Check if AudioContext is suspended and resume it */
+// document.addEventListener('click', () => {
+//     if (window.audioContext.state === 'suspended') {
+//         window.audioContext.resume().then(() => console.log('AudioContext resumed.'));
+//     }
+// });
 document.addEventListener('click', () => {
     if (window.audioContext.state === 'suspended') {
         window.audioContext.resume().then(() => console.log('AudioContext resumed.'));
-    }
-});
-
+      }
 /* Initialize analyser */
 const analyser = window.audioContext.createAnalyser();
 /* Create gain node */
@@ -892,6 +904,8 @@ document.addEventListener('DOMContentLoaded', () => {
             alert('Invalid audio file.');
         }
     });
+});
+
 });
 </script>
 
